@@ -63,6 +63,34 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
                 message = 'Staff reviews retrieved successfully';
                 break;
             }
+
+            case 'STAFF_GET_INSPECTION_REPORTS': {
+                const { staffId } = payload;
+                validateId(staffId, 'staffId');
+
+                responseData = await StaffService.getInspectionReportsByStaff(staffId);
+                message = 'Inspection reports retrieved successfully';
+                break;
+            }
+
+            case 'STAFF_GET_INSPECTION_DETAIL': {
+                const { bookingId } = payload;
+                validateId(bookingId, 'bookingId');
+
+                responseData = await StaffService.getInspectionReportByBooking(bookingId);
+                message = 'Inspection report detail retrieved successfully';
+                break;
+            }
+
+            case 'UPDATE_INSPECTION_REPORT': {
+                const { bookingId, data } = payload;
+                validateId(bookingId, 'bookingId');
+                validateUpdateData(data, 'inspectionReport');
+
+                responseData = await StaffService.updateInspectionReport(bookingId, data);
+                message = 'Inspection report updated successfully';
+                break;
+            }
             default:
                 throw new AppError(
                     'Error.UnknownRequestType',
@@ -148,54 +176,6 @@ function validateUpdateData(data: any, entityType: string): void {
     }
 }
 
-function validatePasswordData(data: any): void {
-    if (!data || typeof data !== 'object') {
-        throw new AppError(
-            'Error.InvalidPasswordData',
-            [{ message: 'Invalid password data', path: ['data'] }],
-            { receivedType: typeof data },
-            400
-        );
-    }
-
-    const { currentPassword, newPassword } = data;
-
-    if (!currentPassword || typeof currentPassword !== 'string') {
-        throw new AppError(
-            'Error.InvalidCurrentPassword',
-            [{ message: 'Invalid current password', path: ['data', 'currentPassword'] }],
-            {},
-            400
-        );
-    }
-
-    if (!newPassword || typeof newPassword !== 'string') {
-        throw new AppError(
-            'Error.InvalidNewPassword',
-            [{ message: 'Invalid new password', path: ['data', 'newPassword'] }],
-            {},
-            400
-        );
-    }
-
-    if (newPassword.length < 6) {
-        throw new AppError(
-            'Error.WeakPassword',
-            [{ message: 'Password is too weak', path: ['data', 'newPassword'] }],
-            { minLength: 6 },
-            400
-        );
-    }
-
-    if (currentPassword === newPassword) {
-        throw new AppError(
-            'Error.SamePassword',
-            [{ message: 'New password must be different from current password', path: ['data', 'newPassword'] }],
-            {},
-            400
-        );
-    }
-}
 
 function capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);

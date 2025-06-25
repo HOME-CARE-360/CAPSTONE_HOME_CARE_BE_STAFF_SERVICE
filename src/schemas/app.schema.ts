@@ -20,3 +20,10 @@ export const UpdateInspectionStatusSchema = z.object({
     inspectionStatus: InspectionStatusSchema,
     inspectionNote: z.string().optional()
 });
+
+export const updateInspectionReportSchema = z.object({
+  note: z.string().optional(),
+  images: z.array(z.string().url()).optional(),
+  estimatedTime: z.number().int().min(1).max(600).optional(),
+});
+

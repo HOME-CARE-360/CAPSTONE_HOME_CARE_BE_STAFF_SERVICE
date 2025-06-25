@@ -13,22 +13,6 @@ function logResponse(title: string, result: any, timestamp = new Date().toISOStr
     }
 }
 
-/**
- * Test lấy thông tin staff theo userId
- */
-export async function testGetStaff(staffId: number) {
-    const timestamp = new Date().toISOString();
-    try {
-        const result = await sendTCPRequest({
-            type: "GET_STAFF",
-            staffId,
-        });
-        logResponse("GET_STAFF", result, timestamp);
-    } catch (error) {
-        console.error(`❌ [${timestamp}] GET_STAFF Error:`, error);
-    }
-}
-
 async function testGetBookingsList(staffId: number, status?: string, page = 1, limit = 10) {
     const res = await sendTCPRequest({
         type: 'STAFF_GET_BOOKINGS',
@@ -75,15 +59,56 @@ async function testGetReviews(staffId: number) {
     logResponse("STAFF_GET_REVIEWS", res);
 }
 
+async function testGetInspectionReportsByStaff(staffId: number) {
+    try {
+        const res = await sendTCPRequest({
+            type: 'STAFF_GET_INSPECTION_REPORTS',
+            staffId,
+        });
+        logResponse('STAFF_GET_INSPECTION_REPORTS', res);
+    } catch (err) {
+        console.error('❌ STAFF_GET_INSPECTION_REPORTS failed:', err);
+    }
+}
+
+async function testGetInspectionReportDetail(bookingId: number) {
+    try {
+        const res = await sendTCPRequest({
+            type: 'STAFF_GET_INSPECTION_DETAIL',
+            bookingId,
+        });
+        logResponse('STAFF_GET_INSPECTION_DETAIL', res);
+    } catch (err) {
+        console.error('❌ STAFF_GET_INSPECTION_DETAIL failed:', err);
+    }
+}
+
+async function testUpdateInspectionReport(bookingId: number) {
+    try {
+        const res = await sendTCPRequest({
+            type: 'UPDATE_INSPECTION_REPORT',
+            bookingId,
+            data: {
+                note: 'Đã sửa đường ống bị rò rỉ, mất 90 phút',
+                images: [
+                    'https://example.com/fix1.jpg',
+                    'https://example.com/fix2.jpg',
+                ],
+                estimatedTime: 90,
+            },
+        });
+        logResponse('UPDATE_INSPECTION_REPORT', res);
+    } catch (err) {
+        console.error('❌ UPDATE_INSPECTION_REPORT failed:', err);
+    }
+}
 
 (async () => {
     const staffId = 5;
     const bookingId = 1;
 
-    // await testGetStaff(staffId);
     // await testGetBookingsList(staffId);
-        await testGetBookingDetail(bookingId);
-
+    // await testGetBookingDetail(bookingId);
     // await testUpdateInspectionStatus(bookingId, "DONE", "Khách hàng hài lòng, thiết bị hoạt động tốt");
     // await testCreateInspectionReport({
     //     staffId,
@@ -93,4 +118,7 @@ async function testGetReviews(staffId: number) {
     //     estimatedTime: 90,
     // });
     // await testGetReviews(staffId);
+    await testGetInspectionReportsByStaff(5);
+    await testGetInspectionReportDetail(1);
+    // await testUpdateInspectionReport(1);
 })();

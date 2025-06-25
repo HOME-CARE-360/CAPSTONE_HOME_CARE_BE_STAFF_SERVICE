@@ -1,6 +1,7 @@
 import { StaffRepository } from '../repositories/staff.repository';
 import {
   CreateInspectionReportDto,
+  UpdateInspectionReportDto,
   UpdateInspectionStatusDto,
 } from '../schemas/type';
 import { AppError } from '../handlers/error';
@@ -105,5 +106,69 @@ export const StaffService = {
    */
   async getReviews(staffId: number) {
     return StaffRepository.getReviews(staffId);
+  },
+
+
+  /**
+   * Lấy chi tiết báo cáo kiểm tra của 1 booking
+   */
+  async getInspectionReportByBooking(bookingId: number) {
+    if (!bookingId || typeof bookingId !== 'number' || bookingId <= 0) {
+      throw new AppError(
+        'Invalid booking ID',
+        [{ message: 'Error.InvalidBookingId', path: ['bookingId'] }],
+        { bookingId },
+        400
+      );
+    }
+
+    return StaffRepository.getInspectionReportByBooking(bookingId);
+  },
+
+  /**
+   * Lấy danh sách báo cáo kiểm tra của staff
+   */
+  async getInspectionReportsByStaff(staffId: number) {
+    if (!staffId || typeof staffId !== 'number' || staffId <= 0) {
+      throw new AppError(
+        'Invalid staff ID',
+        [{ message: 'Error.InvalidStaffId', path: ['staffId'] }],
+        { staffId },
+        400
+      );
+    }
+
+    return StaffRepository.getInspectionReportsByStaff(staffId);
+  },
+
+  /**
+   * Cập nhật nội dung báo cáo kiểm tra
+   */
+  async updateInspectionReport(bookingId: number, dto: UpdateInspectionReportDto) {
+    if (!bookingId || typeof bookingId !== 'number' || bookingId <= 0) {
+      throw new AppError(
+        'Invalid booking ID',
+        [{ message: 'Error.InvalidBookingId', path: ['bookingId'] }],
+        { bookingId },
+        400
+      );
+    }
+
+    const { note, images, estimatedTime } = dto;
+
+    if (!note && !images?.length && !estimatedTime) {
+      throw new AppError(
+        'Missing update data for inspection report',
+        [{ message: 'Error.MissingUpdateData', path: ['note', 'images', 'estimatedTime'] }],
+        { bookingId, dto },
+        400
+      );
+    }
+
+    return StaffRepository.updateInspectionReport(bookingId, {
+      ...(note && { note }),
+      ...(images && images.length > 0 && { images }),
+      ...(estimatedTime && { estimatedTime }),
+    });
   },
 };

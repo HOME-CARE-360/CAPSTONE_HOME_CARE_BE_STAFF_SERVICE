@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, BookingStatus } from '../generated/prisma';
+import { PrismaClient, Prisma, BookingStatus, InspectionStatus } from '../generated/prisma';
 import { AppError } from '../handlers/error';
 
 const prisma = new PrismaClient();
@@ -102,7 +102,7 @@ export const StaffRepository = {
       phone?: string;
       address?: string;
     };
-     serviceRequest?: {
+    serviceRequest?: {
       id: number;
       preferredDate: Date | null;
       note: string | null;
@@ -126,7 +126,7 @@ export const StaffRepository = {
               },
             },
           },
-           ServiceRequest: {
+          ServiceRequest: {
             select: {
               id: true,
               preferredDate: true,
@@ -189,72 +189,234 @@ export const StaffRepository = {
    * Cập nhật trạng thái kiểm tra của 1 booking
    */
   async updateInspectionStatus(
-  bookingId: number,
-  data: Partial<Pick<Prisma.BookingUpdateInput, 'inspectionStatus' | 'inspectionNote'>>
-) {
-  try {
-    return await prisma.booking.update({
-      where: { id: bookingId },
-      data,
-    });
-  } catch (error) {
-    throw new AppError(
-      'Failed to update inspection status',
-      [{ message: 'Repo.UpdateInspectionStatusError', path: ['bookingId'] }],
-      { bookingId, data, error },
-      500
-    );
-  }
-},
+    bookingId: number,
+    data: Partial<Pick<Prisma.BookingUpdateInput, 'inspectionStatus' | 'inspectionNote'>>
+  ) {
+    try {
+      return await prisma.booking.update({
+        where: { id: bookingId },
+        data,
+      });
+    } catch (error) {
+      throw new AppError(
+        'Failed to update inspection status',
+        [{ message: 'Repo.UpdateInspectionStatusError', path: ['bookingId'] }],
+        { bookingId, data, error },
+        500
+      );
+    }
+  },
 
   /**
    * Tạo báo cáo kiểm tra
    */
   async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
-  try {
-    return await prisma.inspectionReport.create({ data });
-  } catch (error) {
-    throw new AppError(
-      'Failed to create inspection report',
-      [{ message: 'Repo.CreateInspectionReportError', path: ['bookingId'] }],
-      { data, error },
-      500
-    );
-  }
-},
+    try {
+      return await prisma.$transaction(async (tx) => {
+        const report = await tx.inspectionReport.create({ data });
+
+        if (!data.Booking || !data.Booking.connect || typeof data.Booking.connect.id !== 'number') {
+          throw new AppError(
+            'Booking connection is missing or invalid in inspection report data',
+            [{ message: 'Repo.CreateInspectionReportBookingConnectError', path: ['Booking.connect.id'] }],
+            { data },
+            400
+          );
+        }
+
+        await tx.booking.update({
+          where: { id: data.Booking.connect.id },
+          data: {
+            inspectionStatus: InspectionStatus.IN_PROGRESS,
+          },
+        });
+
+        return report;
+      });
+    } catch (error) {
+      throw new AppError(
+        'Failed to create inspection report',
+        [{ message: 'Repo.CreateInspectionReportError', path: ['bookingId'] }],
+        { data, error },
+        500
+      );
+    }
+  },
 
   /**
    * Lấy các đánh giá từ khách hàng
    */
   async getReviews(staffId: number) {
-  try {
-    return await prisma.review.findMany({
-      where: { staffId },
-      include: {
-        CustomerProfile: true,
-        Service: true,
-      },
-    });
-  } catch (error) {
-    throw new AppError(
-      'Failed to get staff reviews',
-      [{ message: 'Repo.GetReviewsError', path: ['staffId'] }],
-      { staffId, error },
-      500
-    );
-  }
-},
+    try {
+      return await prisma.review.findMany({
+        where: { staffId },
+        include: {
+          CustomerProfile: true,
+          Service: true,
+        },
+      });
+    } catch (error) {
+      throw new AppError(
+        'Failed to get staff reviews',
+        [{ message: 'Repo.GetReviewsError', path: ['staffId'] }],
+        { staffId, error },
+        500
+      );
+    }
+  },
 
   async countBookings(
-  staffId: number,
-  status ?: BookingStatus
-): Promise < number > {
-  return prisma.booking.count({
-    where: {
-      staffId,
-      ...(status && { status }),
-    },
-  });
-},
+    staffId: number,
+    status?: BookingStatus
+  ): Promise<number> {
+    return prisma.booking.count({
+      where: {
+        staffId,
+        ...(status && { status }),
+      },
+    });
+  },
+
+  /**
+ * Lấy thông tin inspection report theo bookingId
+ */
+  async getInspectionReportByBooking(bookingId: number) {
+    try {
+      const report = await prisma.inspectionReport.findUnique({
+        where: { bookingId },
+        include: {
+          Staff: {
+            include: {
+              User: {
+                select: { name: true, avatar: true },
+              },
+            },
+          },
+        },
+      });
+
+      if (!report) return null;
+
+      return {
+        id: report.id,
+        bookingId: report.bookingId,
+        staffId: report.staffId,
+        estimatedTime: report.estimatedTime,
+        note: report.note,
+        images: report.images,
+        createdAt: report.createdAt,
+        staff: {
+          id: report.Staff.id,
+          name: report.Staff.User?.name,
+          avatar: report.Staff.User?.avatar,
+        },
+      };
+    } catch (error) {
+      throw new AppError(
+        'Failed to get inspection report',
+        [{ message: 'Repo.GetInspectionReportError', path: ['bookingId'] }],
+        { bookingId, error },
+        500
+      );
+    }
+  },
+  
+  /**
+ * Lấy danh sách báo cáo kiểm tra của 1 staff
+ */
+  async getInspectionReportsByStaff(staffId: number) {
+    try {
+      const reports = await prisma.inspectionReport.findMany({
+        where: { staffId },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          Booking: {
+            select: {
+              id: true,
+              status: true,
+              inspectionStatus: true,
+              inspectedAt: true,
+              inspectionNote: true,
+              createdAt: true,
+              CustomerProfile: {
+                include: {
+                  User: {
+                    select: { name: true, phone: true },
+                  },
+                },
+              },
+              ServiceRequest: {
+                select: {
+                  preferredDate: true,
+                  location: true,
+                  phoneNumber: true,
+                  Category: {
+                    select: { name: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return reports.map((report) => ({
+        id: report.id,
+        createdAt: report.createdAt,
+        estimatedTime: report.estimatedTime ?? null,
+        note: report.note ?? '',
+        images: report.images ?? [],
+        booking: {
+          id: report.Booking.id,
+          status: report.Booking.status,
+          inspectionStatus: report.Booking.inspectionStatus,
+          inspectedAt: report.Booking.inspectedAt,
+          inspectionNote: report.Booking.inspectionNote,
+          createdAt: report.Booking.createdAt,
+          customer: {
+            name: report.Booking.CustomerProfile?.User?.name,
+            phone: report.Booking.CustomerProfile?.User?.phone,
+          },
+          serviceRequest: report.Booking.ServiceRequest
+            ? {
+              preferredDate: report.Booking.ServiceRequest.preferredDate,
+              location: report.Booking.ServiceRequest.location,
+              phoneNumber: report.Booking.ServiceRequest.phoneNumber,
+              categoryName: report.Booking.ServiceRequest.Category?.name,
+            }
+            : undefined,
+        },
+      }));
+    } catch (error) {
+      throw new AppError(
+        'Failed to fetch inspection reports for staff',
+        [{ message: 'Repo.GetInspectionReportsByStaffError', path: ['staffId'] }],
+        { staffId, error },
+        500
+      );
+    }
+  },
+
+  /**
+   * Cập nhật nội dung báo cáo kiểm tra
+   */
+  async updateInspectionReport(
+    bookingId: number,
+    data: Partial<Pick<Prisma.InspectionReportUpdateInput, 'note' | 'images' | 'estimatedTime'>>
+  ) {
+    try {
+      return await prisma.inspectionReport.update({
+        where: { bookingId },
+        data,
+      });
+    } catch (error) {
+      throw new AppError(
+        'Failed to update inspection report',
+        [{ message: 'Repo.UpdateInspectionReportError', path: ['bookingId'] }],
+        { bookingId, data, error },
+        500
+      );
+    }
+  },
 
 };
