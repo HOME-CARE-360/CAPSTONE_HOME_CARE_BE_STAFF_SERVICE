@@ -10,28 +10,23 @@ datasource db {
 }
 
 model Booking {
-  id                                 Int               @id @default(autoincrement())
-  customerId                         Int
-  providerId                         Int
-  status                             BookingStatus
-  deletedAt                          DateTime?
-  createdAt                          DateTime          @default(now())
-  updatedAt                          DateTime
-  inspectedAt                        DateTime?
-  inspectedById                      Int?
-  inspectionNote                     String?
-  inspectionStatus                   InspectionStatus  @default(NOT_YET)
-  staffId                            Int?              @unique
-  serviceRequestId                   Int?              @unique
-  CustomerProfile                    CustomerProfile   @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  Staff_Booking_inspectedByIdToStaff Staff?            @relation("Booking_inspectedByIdToStaff", fields: [inspectedById], references: [id])
-  ServiceProvider                    ServiceProvider   @relation(fields: [providerId], references: [id], onDelete: Cascade)
-  ServiceRequest                     ServiceRequest?   @relation(fields: [serviceRequestId], references: [id])
-  Staff_Booking_staffIdToStaff       Staff?            @relation("Booking_staffIdToStaff", fields: [staffId], references: [id], onDelete: Cascade)
-  InspectionReport                   InspectionReport?
-  ProposedService                    ProposedService[]
-  Transaction                        Transaction?
-  WorkLog                            WorkLog[]
+  id                           Int               @id @default(autoincrement())
+  customerId                   Int
+  providerId                   Int
+  status                       BookingStatus
+  deletedAt                    DateTime?
+  createdAt                    DateTime          @default(now())
+  updatedAt                    DateTime
+  staffId                      Int?              @unique
+  serviceRequestId             Int?              @unique
+  CustomerProfile              CustomerProfile   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  ServiceProvider              ServiceProvider   @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  ServiceRequest               ServiceRequest?   @relation(fields: [serviceRequestId], references: [id])
+  Staff_Booking_staffIdToStaff Staff?            @relation("Booking_staffIdToStaff", fields: [staffId], references: [id], onDelete: Cascade)
+  InspectionReport             InspectionReport?
+  ProposedService              ProposedService[]
+  Transaction                  Transaction?
+  WorkLog                      WorkLog[]
 }
 
 model Category {
@@ -333,20 +328,19 @@ model ServiceTranslation {
 }
 
 model Staff {
-  id                                   Int                @id @default(autoincrement())
-  userId                               Int                @unique
-  providerId                           Int
-  createdAt                            DateTime           @default(now())
-  updatedAt                            DateTime
-  isActive                             Boolean            @default(true)
-  Booking_Booking_inspectedByIdToStaff Booking[]          @relation("Booking_inspectedByIdToStaff")
-  Booking_Booking_staffIdToStaff       Booking?           @relation("Booking_staffIdToStaff")
-  InspectionReport                     InspectionReport[]
-  Review                               Review[]
-  ServiceProvider                      ServiceProvider    @relation(fields: [providerId], references: [id], onDelete: Cascade)
-  User                                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  StaffCategory                        StaffCategory[]
-  WorkLog                              WorkLog[]
+  id                             Int                @id @default(autoincrement())
+  userId                         Int                @unique
+  providerId                     Int
+  createdAt                      DateTime           @default(now())
+  updatedAt                      DateTime
+  isActive                       Boolean            @default(true)
+  Booking_Booking_staffIdToStaff Booking?           @relation("Booking_staffIdToStaff")
+  InspectionReport               InspectionReport[]
+  Review                         Review[]
+  ServiceProvider                ServiceProvider    @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  User                           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  StaffCategory                  StaffCategory[]
+  WorkLog                        WorkLog[]
 }
 
 model StaffCategory {

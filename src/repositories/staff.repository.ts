@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, BookingStatus, InspectionStatus } from '../generated/prisma';
+import { PrismaClient, Prisma, BookingStatus, InspectionStatus, RequestStatus } from '../generated/prisma';
 import { AppError } from '../handlers/error';
 
 const prisma = new PrismaClient();
@@ -84,9 +84,6 @@ export const StaffRepository = {
       data: bookings.map((b) => ({
         id: b.id,
         status: b.status,
-        inspectionStatus: b.inspectionStatus ?? null,
-        inspectionNote: b.inspectionNote ?? null,
-        inspectedAt: b.inspectedAt ?? null,
         createdAt: b.createdAt,
         serviceRequestId: b.serviceRequestId ?? null,
         customer: {
@@ -131,9 +128,6 @@ export const StaffRepository = {
       return {
         id: b.id,
         status: b.status,
-        inspectionStatus: b.inspectionStatus ?? null,
-        inspectedAt: b.inspectedAt,
-        inspectionNote: b.inspectionNote,
         createdAt: b.createdAt,
         customer: {
           id: b.CustomerProfile?.id,
@@ -159,43 +153,48 @@ export const StaffRepository = {
     }
   },
 
-  async updateInspectionStatus(bookingId: number, data: Partial<Pick<Prisma.BookingUpdateInput, 'inspectionStatus' | 'inspectionNote'>>) {
-    try {
-      const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
-      if (!booking || booking.status !== BookingStatus.CONFIRMED) {
-        throw new AppError('Cannot update inspection for booking not in confirmed status', [{ message: 'Error.InvalidBookingStatusForInspection', path: ['bookingId'] }], { bookingId, status: booking?.status }, 400);
-      }
-      return await prisma.booking.update({ where: { id: bookingId }, data });
-    } catch (error) {
-      throw new AppError('Failed to update inspection status', [{ message: 'Repo.UpdateInspectionStatusError', path: ['bookingId'] }], { bookingId, data, error }, 500);
-    }
-  },
-
   async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
     try {
       return await prisma.$transaction(async (tx) => {
-        if (!data.Booking || !data.Booking.connect || typeof data.Booking.connect.id !== 'number') {
-          throw new AppError('Booking connection is missing or invalid in inspection report data', [{ message: 'Repo.CreateInspectionReportBookingConnectError', path: ['Booking.connect.id'] }], { data }, 400);
+        if (
+          !data.Booking ||
+          !data.Booking.connect ||
+          typeof data.Booking.connect.id !== 'number'
+        ) {
+          throw new AppError(
+            'Booking connection is missing or invalid in inspection report data',
+            [{ message: 'Error.CreateInspectionReportBookingConnectError', path: ['Booking.connect.id'] }],
+            { data },
+            400
+          );
         }
 
-        const existing = await tx.inspectionReport.findUnique({ where: { bookingId: data.Booking.connect.id } });
+        const bookingId = data.Booking.connect.id;
+
+        const existing = await tx.inspectionReport.findUnique({
+          where: { bookingId }
+        });
+
         if (existing) {
-          throw new AppError('Inspection report already exists for this booking', [{ message: 'Error.InspectionReportExists', path: ['bookingId'] }], { bookingId: data.Booking.connect.id }, 400);
-        }
-
-        const booking = await tx.booking.findUnique({ where: { id: data.Booking.connect.id } });
-        if (booking?.inspectionStatus === InspectionStatus.DONE) {
-          throw new AppError('Cannot create inspection report for completed inspection', [{ message: 'Error.InspectionAlreadyCompleted', path: ['bookingId'] }], { bookingId: data.Booking.connect.id }, 400);
+          throw new AppError(
+            'Inspection report already exists for this booking',
+            [{ message: 'Error.InspectionReportExists', path: ['bookingId'] }],
+            { bookingId },
+            400
+          );
         }
 
         const report = await tx.inspectionReport.create({ data });
 
-        await tx.booking.update({ where: { id: data.Booking.connect.id }, data: { inspectionStatus: InspectionStatus.IN_PROGRESS } });
-
         return report;
       });
     } catch (error) {
-      throw new AppError('Failed to create inspection report', [{ message: 'Repo.CreateInspectionReportError', path: ['bookingId'] }], { data, error }, 500);
+      throw new AppError(
+        'Failed to create inspection report',
+        [{ message: 'Error.CreateInspectionReportError', path: ['bookingId'] }],
+        { data, error },
+        500
+      );
     }
   },
 
@@ -272,7 +271,7 @@ export const StaffRepository = {
     } catch (error) {
       throw new AppError(
         'Failed to get staff reviews',
-        [{ message: 'Repo.GetReviewsError', path: ['staffId'] }],
+        [{ message: 'Error.GetReviewsError', path: ['staffId'] }],
         { staffId, error },
         500
       );
@@ -331,9 +330,6 @@ export const StaffRepository = {
         booking: {
           id: report.Booking.id,
           status: report.Booking.status,
-          inspectionStatus: report.Booking.inspectionStatus,
-          inspectionNote: report.Booking.inspectionNote,
-          inspectedAt: report.Booking.inspectedAt,
           createdAt: report.Booking.createdAt,
           customer: {
             name: report.Booking.CustomerProfile?.User?.name,
@@ -353,7 +349,7 @@ export const StaffRepository = {
     } catch (error) {
       throw new AppError(
         'Failed to get inspection report by id',
-        [{ message: 'Repo.GetInspectionReportByIdError', path: ['id'] }],
+        [{ message: 'Error.GetInspectionReportByIdError', path: ['id'] }],
         { inspectionId, error },
         500
       );
@@ -384,9 +380,6 @@ export const StaffRepository = {
               select: {
                 id: true,
                 status: true,
-                inspectionStatus: true,
-                inspectedAt: true,
-                inspectionNote: true,
                 createdAt: true,
                 CustomerProfile: {
                   include: { User: { select: { name: true, phone: true } } },
@@ -414,9 +407,6 @@ export const StaffRepository = {
         booking: {
           id: report.Booking.id,
           status: report.Booking.status,
-          inspectionStatus: report.Booking.inspectionStatus,
-          inspectedAt: report.Booking.inspectedAt,
-          inspectionNote: report.Booking.inspectionNote,
           createdAt: report.Booking.createdAt,
           customer: {
             name: report.Booking.CustomerProfile?.User?.name,
@@ -445,7 +435,7 @@ export const StaffRepository = {
     } catch (error) {
       throw new AppError(
         'Failed to fetch inspection reports for staff',
-        [{ message: 'Repo.GetInspectionReportsByStaffError', path: ['staffId'] }],
+        [{ message: 'Error.GetInspectionReportsByStaffError', path: ['staffId'] }],
         { staffId, error },
         500
       );
@@ -483,7 +473,7 @@ export const StaffRepository = {
     } catch (error) {
       throw new AppError(
         'Failed to update inspection report',
-        [{ message: 'Repo.UpdateInspectionReportError', path: ['id'] }],
+        [{ message: 'Error.UpdateInspectionReportError', path: ['id'] }],
         { id, data, error },
         500
       );
@@ -512,7 +502,7 @@ export const StaffRepository = {
 
       return { staffId, totalBookings, totalHoursWorked: Number(totalHoursWorked.toFixed(2)), totalReviews, averageRating };
     } catch (error) {
-      throw new AppError('Failed to get staff performance', [{ message: 'Repo.GetStaffPerformanceError', path: ['staffId'] }], { staffId, error }, 500);
+      throw new AppError('Failed to get staff performance', [{ message: 'Error.GetStaffPerformanceError', path: ['staffId'] }], { staffId, error }, 500);
     }
   },
 
@@ -574,7 +564,7 @@ export const StaffRepository = {
     } catch (error) {
       throw new AppError(
         'Failed to fetch recent work logs',
-        [{ message: 'Repo.GetRecentWorkLogsError', path: ['staffId'] }],
+        [{ message: 'Error.GetRecentWorkLogsError', path: ['staffId'] }],
         { staffId, error },
         500
       );
@@ -590,7 +580,7 @@ export const StaffRepository = {
       }, {} as Record<number, number>);
       return summary;
     } catch (error) {
-      throw new AppError('Failed to summarize reviews', [{ message: 'Repo.GetReviewSummaryError', path: ['staffId'] }], { staffId, error }, 500);
+      throw new AppError('Failed to summarize reviews', [{ message: 'Error.GetReviewSummaryError', path: ['staffId'] }], { staffId, error }, 500);
     }
   },
 
@@ -599,7 +589,7 @@ export const StaffRepository = {
       return await prisma.$transaction(async (tx) => {
         const booking = await tx.booking.findUnique({
           where: { id: bookingId },
-          include: { ServiceRequest: { select: { preferredDate: true } } },
+          include: { ServiceRequest: { select: { id: true, preferredDate: true } } },
         });
 
         if (!booking) {
@@ -607,12 +597,22 @@ export const StaffRepository = {
         }
 
         if (booking.status === BookingStatus.COMPLETED || booking.status === BookingStatus.CANCELLED) {
-          throw new AppError('Cannot check in to a completed or canceled booking', [{ message: 'Error.InvalidBookingStatusForCheckIn', path: ['bookingId'] }], { bookingId, status: booking.status }, 400);
+          throw new AppError(
+            'Cannot check in to a completed or canceled booking',
+            [{ message: 'Error.InvalidBookingStatusForCheckIn', path: ['bookingId'] }],
+            { bookingId, status: booking.status },
+            400
+          );
         }
 
         const existingLog = await tx.workLog.findFirst({ where: { bookingId, staffId } });
         if (existingLog) {
-          throw new AppError('Staff already checked in for this booking', [{ message: 'Error.AlreadyCheckedIn', path: ['bookingId'] }], { bookingId, staffId }, 400);
+          throw new AppError(
+            'Staff already checked in for this booking',
+            [{ message: 'Error.AlreadyCheckedIn', path: ['bookingId'] }],
+            { bookingId, staffId },
+            400
+          );
         }
 
         const today = new Date();
@@ -620,7 +620,12 @@ export const StaffRepository = {
         if (preferredDate) {
           const diffDays = Math.abs(Math.floor((today.getTime() - new Date(preferredDate).getTime()) / (1000 * 60 * 60 * 24)));
           if (diffDays > 1) {
-            throw new AppError('Cannot check in far from preferred date', [{ message: 'Error.DateMismatchPreferredDate', path: ['bookingId'] }], { bookingId, preferredDate, today }, 400);
+            throw new AppError(
+              'Cannot check in far from preferred date',
+              [{ message: 'Error.DateMismatchPreferredDate', path: ['bookingId'] }],
+              { bookingId, preferredDate, today },
+              400
+            );
           }
         }
 
@@ -633,108 +638,137 @@ export const StaffRepository = {
           },
         });
 
-        await tx.booking.update({
-          where: { id: bookingId },
-          data: { status: BookingStatus.CANCELLED },
+        if (!booking.ServiceRequest?.id) {
+          throw new AppError('Missing ServiceRequest ID', [{ message: 'Error.MissingServiceRequestId', path: ['bookingId'] }], { bookingId }, 500);
+        }
+
+        await tx.serviceRequest.update({
+          where: { id: booking.ServiceRequest.id },
+          data: { status: RequestStatus.IN_PROGRESS },
         });
 
         return workLog;
       });
     } catch (error) {
-      throw new AppError('Failed to create work log and update booking status', [{ message: 'Repo.CreateWorkLogError', path: ['bookingId'] }], { bookingId, staffId, error },
+      throw new AppError(
+        'Failed to create work log and update service request status',
+        [{ message: 'Error.CreateWorkLogError', path: ['bookingId'] }],
+        { bookingId, staffId, error },
         500
       );
     }
   },
 
   async checkOutWorkLogByBookingId(bookingId: number) {
-    const log = await prisma.workLog.findFirst({
-      where: { bookingId },
-    });
+    return await prisma.$transaction(async (tx) => {
+      const log = await tx.workLog.findFirst({
+        where: { bookingId },
+      });
 
-    if (!log) {
-      throw new AppError(
-        'Work log not found',
-        [{ message: 'NotFound', path: ['bookingId'] }],
-        { bookingId },
-        404
-      );
-    }
+      if (!log) {
+        throw new AppError(
+          'Work log not found',
+          [{ message: 'NotFound', path: ['bookingId'] }],
+          { bookingId },
+          404
+        );
+      }
 
-    if (log.checkOut) {
-      throw new AppError(
-        'Already checked out',
-        [{ message: 'Error.AlreadyCheckedOut', path: ['bookingId'] }],
-        { bookingId },
-        400
-      );
-    }
+      if (log.checkOut) {
+        throw new AppError(
+          'Already checked out',
+          [{ message: 'Error.AlreadyCheckedOut', path: ['bookingId'] }],
+          { bookingId },
+          400
+        );
+      }
 
-    if (!log.checkIn) {
-      throw new AppError(
-        'Check-in time is missing',
-        [{ message: 'Error.MissingCheckIn', path: ['bookingId'] }],
-        { bookingId },
-        400
-      );
-    }
+      if (!log.checkIn) {
+        throw new AppError(
+          'Check-in time is missing',
+          [{ message: 'Error.MissingCheckIn', path: ['bookingId'] }],
+          { bookingId },
+          400
+        );
+      }
 
-    const now = new Date();
-    const hoursPassed = (now.getTime() - new Date(log.checkIn).getTime()) / (1000 * 60 * 60);
+      const now = new Date();
+      const hoursPassed = (now.getTime() - new Date(log.checkIn).getTime()) / (1000 * 60 * 60);
 
-    if (hoursPassed > 24) {
-      throw new AppError(
-        'Check-out expired',
-        [{ message: 'Error.CheckOutTooLate', path: ['bookingId'] }],
-        { bookingId, hoursPassed },
-        400
-      );
-    }
+      if (hoursPassed > 24) {
+        throw new AppError(
+          'Check-out expired',
+          [{ message: 'Error.CheckOutTooLate', path: ['bookingId'] }],
+          { bookingId, hoursPassed },
+          400
+        );
+      }
 
-    return prisma.workLog.update({
-      where: { id: log.id },
-      data: { checkOut: now, updatedAt: now },
+      // Cập nhật WorkLog + Booking.status = COMPLETED
+      await tx.workLog.update({
+        where: { id: log.id },
+        data: { checkOut: now, updatedAt: now },
+      });
+
+      await tx.booking.update({
+        where: { id: bookingId },
+        data: { status: BookingStatus.COMPLETED },
+      });
+
+      return { message: 'Check-out successful', bookingId, updatedAt: now };
     });
   },
 
-  async getBookingsByDate(staffId: number, date: string) {
+  async getBookingsByDate(staffId: number, date: string, page = 1, limit = 10) {
     const target = new Date(date);
     const nextDay = new Date(target);
     nextDay.setDate(target.getDate() + 1);
 
-    const bookings = await prisma.booking.findMany({
-      where: {
-        staffId,
-        createdAt: {
-          gte: target,
-          lt: nextDay,
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-      include: {
-        CustomerProfile: {
-          include: { User: { select: { name: true, phone: true } } },
-        },
-        ServiceRequest: {
-          select: {
-            id: true,
-            preferredDate: true,
-            note: true,
-            location: true,
-            phoneNumber: true,
-            status: true,
-            Category: { select: { id: true, name: true } },
+    const skip = (page - 1) * limit;
+
+    const [bookings, total] = await Promise.all([
+      prisma.booking.findMany({
+        where: {
+          staffId,
+          createdAt: {
+            gte: target,
+            lt: nextDay,
           },
         },
-      },
-    });
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+        include: {
+          CustomerProfile: {
+            include: { User: { select: { name: true, phone: true } } },
+          },
+          ServiceRequest: {
+            select: {
+              id: true,
+              preferredDate: true,
+              note: true,
+              location: true,
+              phoneNumber: true,
+              status: true,
+              Category: { select: { id: true, name: true } },
+            },
+          },
+        },
+      }),
+      prisma.booking.count({
+        where: {
+          staffId,
+          createdAt: {
+            gte: target,
+            lt: nextDay,
+          },
+        },
+      }),
+    ]);
 
-    return bookings.map((b) => ({
+    const data = bookings.map((b) => ({
       id: b.id,
       status: b.status,
-      inspectionStatus: b.inspectionStatus ?? null,
-      inspectionNote: b.inspectionNote ?? null,
-      inspectedAt: b.inspectedAt ?? null,
       createdAt: b.createdAt,
       serviceRequestId: b.serviceRequestId ?? null,
       customer: {
@@ -755,6 +789,16 @@ export const StaffRepository = {
         }
         : undefined,
     }));
+
+    return {
+      data,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   },
 
   async getMonthlyStats(staffId: number, month: number, year: number) {
@@ -815,7 +859,4 @@ export const StaffRepository = {
       lastCheckOut,
     };
   }
-
-
-
 };

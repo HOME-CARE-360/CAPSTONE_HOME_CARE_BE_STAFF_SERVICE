@@ -43,13 +43,6 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
                 break;
             }
 
-            case 'STAFF_UPDATE_INSPECTION_STATUS': {
-                validateUpdateData(data, 'inspectionStatus');
-                responseData = await StaffService.updateInspectionStatus(data as UpdateInspectionStatusDto);
-                message = 'Inspection status updated successfully';
-                break;
-            }
-
             case 'STAFF_CREATE_INSPECTION_REPORT': {
                 validateUpdateData(data, 'inspectionReport');
                 responseData = await StaffService.createInspectionReport(data as CreateInspectionReportDto);
@@ -140,13 +133,24 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
             }
 
             case 'STAFF_GET_BOOKINGS_BY_DATE': {
-                const { staffId, date } = payload;
+                const { staffId, date, page = 1, limit = 10 } = payload;
+
                 validateId(staffId, 'staffId');
-                if (!date || isNaN(Date.parse(date))) throw new AppError('Invalid date format', [{ message: 'InvalidDate', path: ['date'] }], {}, 400);
-                responseData = await StaffService.getBookingsByDate(staffId, date);
+
+                if (!date || isNaN(Date.parse(date))) {
+                    throw new AppError(
+                        'Invalid date format',
+                        [{ message: 'InvalidDate', path: ['date'] }],
+                        {},
+                        400
+                    );
+                }
+
+                responseData = await StaffService.getBookingsByDate(staffId, date, page, limit);
                 message = 'Bookings for date retrieved successfully';
                 break;
             }
+
 
             case 'STAFF_GET_MONTHLY_STATS': {
                 const { staffId, month, year } = payload;

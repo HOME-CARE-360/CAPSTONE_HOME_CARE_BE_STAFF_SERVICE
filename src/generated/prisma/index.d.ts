@@ -4287,7 +4287,6 @@ export namespace Prisma {
    */
 
   export type StaffCountOutputType = {
-    Booking_Booking_inspectedByIdToStaff: number
     InspectionReport: number
     Review: number
     StaffCategory: number
@@ -4295,7 +4294,6 @@ export namespace Prisma {
   }
 
   export type StaffCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Booking_Booking_inspectedByIdToStaff?: boolean | StaffCountOutputTypeCountBooking_Booking_inspectedByIdToStaffArgs
     InspectionReport?: boolean | StaffCountOutputTypeCountInspectionReportArgs
     Review?: boolean | StaffCountOutputTypeCountReviewArgs
     StaffCategory?: boolean | StaffCountOutputTypeCountStaffCategoryArgs
@@ -4311,13 +4309,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the StaffCountOutputType
      */
     select?: StaffCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * StaffCountOutputType without action
-   */
-  export type StaffCountOutputTypeCountBooking_Booking_inspectedByIdToStaffArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: BookingWhereInput
   }
 
   /**
@@ -4598,7 +4589,6 @@ export namespace Prisma {
     id: number | null
     customerId: number | null
     providerId: number | null
-    inspectedById: number | null
     staffId: number | null
     serviceRequestId: number | null
   }
@@ -4607,7 +4597,6 @@ export namespace Prisma {
     id: number | null
     customerId: number | null
     providerId: number | null
-    inspectedById: number | null
     staffId: number | null
     serviceRequestId: number | null
   }
@@ -4620,10 +4609,6 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
-    inspectedAt: Date | null
-    inspectedById: number | null
-    inspectionNote: string | null
-    inspectionStatus: $Enums.InspectionStatus | null
     staffId: number | null
     serviceRequestId: number | null
   }
@@ -4636,10 +4621,6 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
-    inspectedAt: Date | null
-    inspectedById: number | null
-    inspectionNote: string | null
-    inspectionStatus: $Enums.InspectionStatus | null
     staffId: number | null
     serviceRequestId: number | null
   }
@@ -4652,10 +4633,6 @@ export namespace Prisma {
     deletedAt: number
     createdAt: number
     updatedAt: number
-    inspectedAt: number
-    inspectedById: number
-    inspectionNote: number
-    inspectionStatus: number
     staffId: number
     serviceRequestId: number
     _all: number
@@ -4666,7 +4643,6 @@ export namespace Prisma {
     id?: true
     customerId?: true
     providerId?: true
-    inspectedById?: true
     staffId?: true
     serviceRequestId?: true
   }
@@ -4675,7 +4651,6 @@ export namespace Prisma {
     id?: true
     customerId?: true
     providerId?: true
-    inspectedById?: true
     staffId?: true
     serviceRequestId?: true
   }
@@ -4688,10 +4663,6 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    inspectedAt?: true
-    inspectedById?: true
-    inspectionNote?: true
-    inspectionStatus?: true
     staffId?: true
     serviceRequestId?: true
   }
@@ -4704,10 +4675,6 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    inspectedAt?: true
-    inspectedById?: true
-    inspectionNote?: true
-    inspectionStatus?: true
     staffId?: true
     serviceRequestId?: true
   }
@@ -4720,10 +4687,6 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    inspectedAt?: true
-    inspectedById?: true
-    inspectionNote?: true
-    inspectionStatus?: true
     staffId?: true
     serviceRequestId?: true
     _all?: true
@@ -4823,10 +4786,6 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
-    inspectedAt: Date | null
-    inspectedById: number | null
-    inspectionNote: string | null
-    inspectionStatus: $Enums.InspectionStatus
     staffId: number | null
     serviceRequestId: number | null
     _count: BookingCountAggregateOutputType | null
@@ -4858,14 +4817,9 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    inspectedAt?: boolean
-    inspectedById?: boolean
-    inspectionNote?: boolean
-    inspectionStatus?: boolean
     staffId?: boolean
     serviceRequestId?: boolean
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Staff_Booking_inspectedByIdToStaff?: boolean | Booking$Staff_Booking_inspectedByIdToStaffArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     ServiceRequest?: boolean | Booking$ServiceRequestArgs<ExtArgs>
     Staff_Booking_staffIdToStaff?: boolean | Booking$Staff_Booking_staffIdToStaffArgs<ExtArgs>
@@ -4884,14 +4838,9 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    inspectedAt?: boolean
-    inspectedById?: boolean
-    inspectionNote?: boolean
-    inspectionStatus?: boolean
     staffId?: boolean
     serviceRequestId?: boolean
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Staff_Booking_inspectedByIdToStaff?: boolean | Booking$Staff_Booking_inspectedByIdToStaffArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     ServiceRequest?: boolean | Booking$ServiceRequestArgs<ExtArgs>
     Staff_Booking_staffIdToStaff?: boolean | Booking$Staff_Booking_staffIdToStaffArgs<ExtArgs>
@@ -4905,14 +4854,9 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    inspectedAt?: boolean
-    inspectedById?: boolean
-    inspectionNote?: boolean
-    inspectionStatus?: boolean
     staffId?: boolean
     serviceRequestId?: boolean
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Staff_Booking_inspectedByIdToStaff?: boolean | Booking$Staff_Booking_inspectedByIdToStaffArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     ServiceRequest?: boolean | Booking$ServiceRequestArgs<ExtArgs>
     Staff_Booking_staffIdToStaff?: boolean | Booking$Staff_Booking_staffIdToStaffArgs<ExtArgs>
@@ -4926,18 +4870,13 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    inspectedAt?: boolean
-    inspectedById?: boolean
-    inspectionNote?: boolean
-    inspectionStatus?: boolean
     staffId?: boolean
     serviceRequestId?: boolean
   }
 
-  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "customerId" | "providerId" | "status" | "deletedAt" | "createdAt" | "updatedAt" | "inspectedAt" | "inspectedById" | "inspectionNote" | "inspectionStatus" | "staffId" | "serviceRequestId", ExtArgs["result"]["booking"]>
+  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "customerId" | "providerId" | "status" | "deletedAt" | "createdAt" | "updatedAt" | "staffId" | "serviceRequestId", ExtArgs["result"]["booking"]>
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Staff_Booking_inspectedByIdToStaff?: boolean | Booking$Staff_Booking_inspectedByIdToStaffArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     ServiceRequest?: boolean | Booking$ServiceRequestArgs<ExtArgs>
     Staff_Booking_staffIdToStaff?: boolean | Booking$Staff_Booking_staffIdToStaffArgs<ExtArgs>
@@ -4949,14 +4888,12 @@ export namespace Prisma {
   }
   export type BookingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Staff_Booking_inspectedByIdToStaff?: boolean | Booking$Staff_Booking_inspectedByIdToStaffArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     ServiceRequest?: boolean | Booking$ServiceRequestArgs<ExtArgs>
     Staff_Booking_staffIdToStaff?: boolean | Booking$Staff_Booking_staffIdToStaffArgs<ExtArgs>
   }
   export type BookingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Staff_Booking_inspectedByIdToStaff?: boolean | Booking$Staff_Booking_inspectedByIdToStaffArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     ServiceRequest?: boolean | Booking$ServiceRequestArgs<ExtArgs>
     Staff_Booking_staffIdToStaff?: boolean | Booking$Staff_Booking_staffIdToStaffArgs<ExtArgs>
@@ -4966,7 +4903,6 @@ export namespace Prisma {
     name: "Booking"
     objects: {
       CustomerProfile: Prisma.$CustomerProfilePayload<ExtArgs>
-      Staff_Booking_inspectedByIdToStaff: Prisma.$StaffPayload<ExtArgs> | null
       ServiceProvider: Prisma.$ServiceProviderPayload<ExtArgs>
       ServiceRequest: Prisma.$ServiceRequestPayload<ExtArgs> | null
       Staff_Booking_staffIdToStaff: Prisma.$StaffPayload<ExtArgs> | null
@@ -4983,10 +4919,6 @@ export namespace Prisma {
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
-      inspectedAt: Date | null
-      inspectedById: number | null
-      inspectionNote: string | null
-      inspectionStatus: $Enums.InspectionStatus
       staffId: number | null
       serviceRequestId: number | null
     }, ExtArgs["result"]["booking"]>
@@ -5384,7 +5316,6 @@ export namespace Prisma {
   export interface Prisma__BookingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     CustomerProfile<T extends CustomerProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CustomerProfileDefaultArgs<ExtArgs>>): Prisma__CustomerProfileClient<$Result.GetResult<Prisma.$CustomerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    Staff_Booking_inspectedByIdToStaff<T extends Booking$Staff_Booking_inspectedByIdToStaffArgs<ExtArgs> = {}>(args?: Subset<T, Booking$Staff_Booking_inspectedByIdToStaffArgs<ExtArgs>>): Prisma__StaffClient<$Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     ServiceProvider<T extends ServiceProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServiceProviderDefaultArgs<ExtArgs>>): Prisma__ServiceProviderClient<$Result.GetResult<Prisma.$ServiceProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     ServiceRequest<T extends Booking$ServiceRequestArgs<ExtArgs> = {}>(args?: Subset<T, Booking$ServiceRequestArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     Staff_Booking_staffIdToStaff<T extends Booking$Staff_Booking_staffIdToStaffArgs<ExtArgs> = {}>(args?: Subset<T, Booking$Staff_Booking_staffIdToStaffArgs<ExtArgs>>): Prisma__StaffClient<$Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -5428,10 +5359,6 @@ export namespace Prisma {
     readonly deletedAt: FieldRef<"Booking", 'DateTime'>
     readonly createdAt: FieldRef<"Booking", 'DateTime'>
     readonly updatedAt: FieldRef<"Booking", 'DateTime'>
-    readonly inspectedAt: FieldRef<"Booking", 'DateTime'>
-    readonly inspectedById: FieldRef<"Booking", 'Int'>
-    readonly inspectionNote: FieldRef<"Booking", 'String'>
-    readonly inspectionStatus: FieldRef<"Booking", 'InspectionStatus'>
     readonly staffId: FieldRef<"Booking", 'Int'>
     readonly serviceRequestId: FieldRef<"Booking", 'Int'>
   }
@@ -5827,25 +5754,6 @@ export namespace Prisma {
      * Limit how many Bookings to delete.
      */
     limit?: number
-  }
-
-  /**
-   * Booking.Staff_Booking_inspectedByIdToStaff
-   */
-  export type Booking$Staff_Booking_inspectedByIdToStaffArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Staff
-     */
-    select?: StaffSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Staff
-     */
-    omit?: StaffOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StaffInclude<ExtArgs> | null
-    where?: StaffWhereInput
   }
 
   /**
@@ -29255,7 +29163,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: boolean | Staff$Booking_Booking_inspectedByIdToStaffArgs<ExtArgs>
     Booking_Booking_staffIdToStaff?: boolean | Staff$Booking_Booking_staffIdToStaffArgs<ExtArgs>
     InspectionReport?: boolean | Staff$InspectionReportArgs<ExtArgs>
     Review?: boolean | Staff$ReviewArgs<ExtArgs>
@@ -29299,7 +29206,6 @@ export namespace Prisma {
 
   export type StaffOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "providerId" | "createdAt" | "updatedAt" | "isActive", ExtArgs["result"]["staff"]>
   export type StaffInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Booking_Booking_inspectedByIdToStaff?: boolean | Staff$Booking_Booking_inspectedByIdToStaffArgs<ExtArgs>
     Booking_Booking_staffIdToStaff?: boolean | Staff$Booking_Booking_staffIdToStaffArgs<ExtArgs>
     InspectionReport?: boolean | Staff$InspectionReportArgs<ExtArgs>
     Review?: boolean | Staff$ReviewArgs<ExtArgs>
@@ -29321,7 +29227,6 @@ export namespace Prisma {
   export type $StaffPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Staff"
     objects: {
-      Booking_Booking_inspectedByIdToStaff: Prisma.$BookingPayload<ExtArgs>[]
       Booking_Booking_staffIdToStaff: Prisma.$BookingPayload<ExtArgs> | null
       InspectionReport: Prisma.$InspectionReportPayload<ExtArgs>[]
       Review: Prisma.$ReviewPayload<ExtArgs>[]
@@ -29731,7 +29636,6 @@ export namespace Prisma {
    */
   export interface Prisma__StaffClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Booking_Booking_inspectedByIdToStaff<T extends Staff$Booking_Booking_inspectedByIdToStaffArgs<ExtArgs> = {}>(args?: Subset<T, Staff$Booking_Booking_inspectedByIdToStaffArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Booking_Booking_staffIdToStaff<T extends Staff$Booking_Booking_staffIdToStaffArgs<ExtArgs> = {}>(args?: Subset<T, Staff$Booking_Booking_staffIdToStaffArgs<ExtArgs>>): Prisma__BookingClient<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     InspectionReport<T extends Staff$InspectionReportArgs<ExtArgs> = {}>(args?: Subset<T, Staff$InspectionReportArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InspectionReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Review<T extends Staff$ReviewArgs<ExtArgs> = {}>(args?: Subset<T, Staff$ReviewArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -30167,30 +30071,6 @@ export namespace Prisma {
      * Limit how many Staff to delete.
      */
     limit?: number
-  }
-
-  /**
-   * Staff.Booking_Booking_inspectedByIdToStaff
-   */
-  export type Staff$Booking_Booking_inspectedByIdToStaffArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Booking
-     */
-    select?: BookingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Booking
-     */
-    omit?: BookingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: BookingInclude<ExtArgs> | null
-    where?: BookingWhereInput
-    orderBy?: BookingOrderByWithRelationInput | BookingOrderByWithRelationInput[]
-    cursor?: BookingWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: BookingScalarFieldEnum | BookingScalarFieldEnum[]
   }
 
   /**
@@ -42432,10 +42312,6 @@ export namespace Prisma {
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    inspectedAt: 'inspectedAt',
-    inspectedById: 'inspectedById',
-    inspectionNote: 'inspectionNote',
-    inspectionStatus: 'inspectionStatus',
     staffId: 'staffId',
     serviceRequestId: 'serviceRequestId'
   };
@@ -42874,20 +42750,20 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const QueryMode: {
-    default: 'default',
-    insensitive: 'insensitive'
-  };
-
-  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
   export const NullsOrder: {
     first: 'first',
     last: 'last'
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
+  };
+
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
   /**
@@ -42948,20 +42824,6 @@ export namespace Prisma {
    * Reference to a field of type 'String[]'
    */
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'InspectionStatus'
-   */
-  export type EnumInspectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InspectionStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'InspectionStatus[]'
-   */
-  export type ListEnumInspectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InspectionStatus[]'>
     
 
 
@@ -43126,14 +42988,9 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
-    inspectedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
-    inspectedById?: IntNullableFilter<"Booking"> | number | null
-    inspectionNote?: StringNullableFilter<"Booking"> | string | null
-    inspectionStatus?: EnumInspectionStatusFilter<"Booking"> | $Enums.InspectionStatus
     staffId?: IntNullableFilter<"Booking"> | number | null
     serviceRequestId?: IntNullableFilter<"Booking"> | number | null
     CustomerProfile?: XOR<CustomerProfileScalarRelationFilter, CustomerProfileWhereInput>
-    Staff_Booking_inspectedByIdToStaff?: XOR<StaffNullableScalarRelationFilter, StaffWhereInput> | null
     ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
     ServiceRequest?: XOR<ServiceRequestNullableScalarRelationFilter, ServiceRequestWhereInput> | null
     Staff_Booking_staffIdToStaff?: XOR<StaffNullableScalarRelationFilter, StaffWhereInput> | null
@@ -43151,14 +43008,9 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    inspectedAt?: SortOrderInput | SortOrder
-    inspectedById?: SortOrderInput | SortOrder
-    inspectionNote?: SortOrderInput | SortOrder
-    inspectionStatus?: SortOrder
     staffId?: SortOrderInput | SortOrder
     serviceRequestId?: SortOrderInput | SortOrder
     CustomerProfile?: CustomerProfileOrderByWithRelationInput
-    Staff_Booking_inspectedByIdToStaff?: StaffOrderByWithRelationInput
     ServiceProvider?: ServiceProviderOrderByWithRelationInput
     ServiceRequest?: ServiceRequestOrderByWithRelationInput
     Staff_Booking_staffIdToStaff?: StaffOrderByWithRelationInput
@@ -43181,12 +43033,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
-    inspectedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
-    inspectedById?: IntNullableFilter<"Booking"> | number | null
-    inspectionNote?: StringNullableFilter<"Booking"> | string | null
-    inspectionStatus?: EnumInspectionStatusFilter<"Booking"> | $Enums.InspectionStatus
     CustomerProfile?: XOR<CustomerProfileScalarRelationFilter, CustomerProfileWhereInput>
-    Staff_Booking_inspectedByIdToStaff?: XOR<StaffNullableScalarRelationFilter, StaffWhereInput> | null
     ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
     ServiceRequest?: XOR<ServiceRequestNullableScalarRelationFilter, ServiceRequestWhereInput> | null
     Staff_Booking_staffIdToStaff?: XOR<StaffNullableScalarRelationFilter, StaffWhereInput> | null
@@ -43204,10 +43051,6 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    inspectedAt?: SortOrderInput | SortOrder
-    inspectedById?: SortOrderInput | SortOrder
-    inspectionNote?: SortOrderInput | SortOrder
-    inspectionStatus?: SortOrder
     staffId?: SortOrderInput | SortOrder
     serviceRequestId?: SortOrderInput | SortOrder
     _count?: BookingCountOrderByAggregateInput
@@ -43228,10 +43071,6 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
-    inspectedAt?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
-    inspectedById?: IntNullableWithAggregatesFilter<"Booking"> | number | null
-    inspectionNote?: StringNullableWithAggregatesFilter<"Booking"> | string | null
-    inspectionStatus?: EnumInspectionStatusWithAggregatesFilter<"Booking"> | $Enums.InspectionStatus
     staffId?: IntNullableWithAggregatesFilter<"Booking"> | number | null
     serviceRequestId?: IntNullableWithAggregatesFilter<"Booking"> | number | null
   }
@@ -44806,7 +44645,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Staff"> | Date | string
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
     isActive?: BoolFilter<"Staff"> | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingListRelationFilter
     Booking_Booking_staffIdToStaff?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
     InspectionReport?: InspectionReportListRelationFilter
     Review?: ReviewListRelationFilter
@@ -44823,7 +44661,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isActive?: SortOrder
-    Booking_Booking_inspectedByIdToStaff?: BookingOrderByRelationAggregateInput
     Booking_Booking_staffIdToStaff?: BookingOrderByWithRelationInput
     InspectionReport?: InspectionReportOrderByRelationAggregateInput
     Review?: ReviewOrderByRelationAggregateInput
@@ -44843,7 +44680,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Staff"> | Date | string
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
     isActive?: BoolFilter<"Staff"> | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingListRelationFilter
     Booking_Booking_staffIdToStaff?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
     InspectionReport?: InspectionReportListRelationFilter
     Review?: ReviewListRelationFilter
@@ -45685,11 +45521,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
-    Staff_Booking_inspectedByIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
@@ -45707,10 +45539,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
@@ -45724,11 +45552,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
-    Staff_Booking_inspectedByIdToStaff?: StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
@@ -45746,10 +45570,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
@@ -45766,10 +45586,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
   }
@@ -45779,9 +45595,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
   }
 
   export type BookingUncheckedUpdateManyInput = {
@@ -45792,10 +45605,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -47358,7 +47167,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
     Review?: ReviewCreateNestedManyWithoutStaffInput
@@ -47375,7 +47183,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
     Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
@@ -47387,7 +47194,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
     Review?: ReviewUpdateManyWithoutStaffNestedInput
@@ -47404,7 +47210,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
@@ -48298,36 +48103,9 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type EnumInspectionStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.InspectionStatus | EnumInspectionStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.InspectionStatus[] | ListEnumInspectionStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.InspectionStatus[] | ListEnumInspectionStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumInspectionStatusFilter<$PrismaModel> | $Enums.InspectionStatus
-  }
-
   export type CustomerProfileScalarRelationFilter = {
     is?: CustomerProfileWhereInput
     isNot?: CustomerProfileWhereInput
-  }
-
-  export type StaffNullableScalarRelationFilter = {
-    is?: StaffWhereInput | null
-    isNot?: StaffWhereInput | null
   }
 
   export type ServiceProviderScalarRelationFilter = {
@@ -48338,6 +48116,11 @@ export namespace Prisma {
   export type ServiceRequestNullableScalarRelationFilter = {
     is?: ServiceRequestWhereInput | null
     isNot?: ServiceRequestWhereInput | null
+  }
+
+  export type StaffNullableScalarRelationFilter = {
+    is?: StaffWhereInput | null
+    isNot?: StaffWhereInput | null
   }
 
   export type InspectionReportNullableScalarRelationFilter = {
@@ -48383,10 +48166,6 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    inspectedAt?: SortOrder
-    inspectedById?: SortOrder
-    inspectionNote?: SortOrder
-    inspectionStatus?: SortOrder
     staffId?: SortOrder
     serviceRequestId?: SortOrder
   }
@@ -48395,7 +48174,6 @@ export namespace Prisma {
     id?: SortOrder
     customerId?: SortOrder
     providerId?: SortOrder
-    inspectedById?: SortOrder
     staffId?: SortOrder
     serviceRequestId?: SortOrder
   }
@@ -48408,10 +48186,6 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    inspectedAt?: SortOrder
-    inspectedById?: SortOrder
-    inspectionNote?: SortOrder
-    inspectionStatus?: SortOrder
     staffId?: SortOrder
     serviceRequestId?: SortOrder
   }
@@ -48424,10 +48198,6 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    inspectedAt?: SortOrder
-    inspectedById?: SortOrder
-    inspectionNote?: SortOrder
-    inspectionStatus?: SortOrder
     staffId?: SortOrder
     serviceRequestId?: SortOrder
   }
@@ -48436,7 +48206,6 @@ export namespace Prisma {
     id?: SortOrder
     customerId?: SortOrder
     providerId?: SortOrder
-    inspectedById?: SortOrder
     staffId?: SortOrder
     serviceRequestId?: SortOrder
   }
@@ -48511,34 +48280,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type EnumInspectionStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.InspectionStatus | EnumInspectionStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.InspectionStatus[] | ListEnumInspectionStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.InspectionStatus[] | ListEnumInspectionStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumInspectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.InspectionStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumInspectionStatusFilter<$PrismaModel>
-    _max?: NestedEnumInspectionStatusFilter<$PrismaModel>
-  }
-
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -48552,6 +48293,21 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type UserNullableScalarRelationFilter = {
@@ -48685,6 +48441,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type CategoryScalarRelationFilter = {
@@ -50463,12 +50237,6 @@ export namespace Prisma {
     connect?: CustomerProfileWhereUniqueInput
   }
 
-  export type StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput = {
-    create?: XOR<StaffCreateWithoutBooking_Booking_inspectedByIdToStaffInput, StaffUncheckedCreateWithoutBooking_Booking_inspectedByIdToStaffInput>
-    connectOrCreate?: StaffCreateOrConnectWithoutBooking_Booking_inspectedByIdToStaffInput
-    connect?: StaffWhereUniqueInput
-  }
-
   export type ServiceProviderCreateNestedOneWithoutBookingInput = {
     create?: XOR<ServiceProviderCreateWithoutBookingInput, ServiceProviderUncheckedCreateWithoutBookingInput>
     connectOrCreate?: ServiceProviderCreateOrConnectWithoutBookingInput
@@ -50551,30 +50319,12 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
-  export type EnumInspectionStatusFieldUpdateOperationsInput = {
-    set?: $Enums.InspectionStatus
-  }
-
   export type CustomerProfileUpdateOneRequiredWithoutBookingNestedInput = {
     create?: XOR<CustomerProfileCreateWithoutBookingInput, CustomerProfileUncheckedCreateWithoutBookingInput>
     connectOrCreate?: CustomerProfileCreateOrConnectWithoutBookingInput
     upsert?: CustomerProfileUpsertWithoutBookingInput
     connect?: CustomerProfileWhereUniqueInput
     update?: XOR<XOR<CustomerProfileUpdateToOneWithWhereWithoutBookingInput, CustomerProfileUpdateWithoutBookingInput>, CustomerProfileUncheckedUpdateWithoutBookingInput>
-  }
-
-  export type StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput = {
-    create?: XOR<StaffCreateWithoutBooking_Booking_inspectedByIdToStaffInput, StaffUncheckedCreateWithoutBooking_Booking_inspectedByIdToStaffInput>
-    connectOrCreate?: StaffCreateOrConnectWithoutBooking_Booking_inspectedByIdToStaffInput
-    upsert?: StaffUpsertWithoutBooking_Booking_inspectedByIdToStaffInput
-    disconnect?: StaffWhereInput | boolean
-    delete?: StaffWhereInput | boolean
-    connect?: StaffWhereUniqueInput
-    update?: XOR<XOR<StaffUpdateToOneWithWhereWithoutBooking_Booking_inspectedByIdToStaffInput, StaffUpdateWithoutBooking_Booking_inspectedByIdToStaffInput>, StaffUncheckedUpdateWithoutBooking_Booking_inspectedByIdToStaffInput>
   }
 
   export type ServiceProviderUpdateOneRequiredWithoutBookingNestedInput = {
@@ -50811,6 +50561,10 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type UserUpdateOneWithoutCategory_Category_createdByIdToUserNestedInput = {
@@ -52564,13 +52318,6 @@ export namespace Prisma {
     update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutServiceTranslationInput, ServiceUpdateWithoutServiceTranslationInput>, ServiceUncheckedUpdateWithoutServiceTranslationInput>
   }
 
-  export type BookingCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    create?: XOR<BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput, BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput> | BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput[] | BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    connectOrCreate?: BookingCreateOrConnectWithoutStaff_Booking_inspectedByIdToStaffInput | BookingCreateOrConnectWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    createMany?: BookingCreateManyStaff_Booking_inspectedByIdToStaffInputEnvelope
-    connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-  }
-
   export type BookingCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput = {
     create?: XOR<BookingCreateWithoutStaff_Booking_staffIdToStaffInput, BookingUncheckedCreateWithoutStaff_Booking_staffIdToStaffInput>
     connectOrCreate?: BookingCreateOrConnectWithoutStaff_Booking_staffIdToStaffInput
@@ -52617,13 +52364,6 @@ export namespace Prisma {
     connect?: WorkLogWhereUniqueInput | WorkLogWhereUniqueInput[]
   }
 
-  export type BookingUncheckedCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    create?: XOR<BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput, BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput> | BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput[] | BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    connectOrCreate?: BookingCreateOrConnectWithoutStaff_Booking_inspectedByIdToStaffInput | BookingCreateOrConnectWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    createMany?: BookingCreateManyStaff_Booking_inspectedByIdToStaffInputEnvelope
-    connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-  }
-
   export type BookingUncheckedCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput = {
     create?: XOR<BookingCreateWithoutStaff_Booking_staffIdToStaffInput, BookingUncheckedCreateWithoutStaff_Booking_staffIdToStaffInput>
     connectOrCreate?: BookingCreateOrConnectWithoutStaff_Booking_staffIdToStaffInput
@@ -52656,20 +52396,6 @@ export namespace Prisma {
     connectOrCreate?: WorkLogCreateOrConnectWithoutStaffInput | WorkLogCreateOrConnectWithoutStaffInput[]
     createMany?: WorkLogCreateManyStaffInputEnvelope
     connect?: WorkLogWhereUniqueInput | WorkLogWhereUniqueInput[]
-  }
-
-  export type BookingUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput = {
-    create?: XOR<BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput, BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput> | BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput[] | BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    connectOrCreate?: BookingCreateOrConnectWithoutStaff_Booking_inspectedByIdToStaffInput | BookingCreateOrConnectWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    upsert?: BookingUpsertWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput | BookingUpsertWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    createMany?: BookingCreateManyStaff_Booking_inspectedByIdToStaffInputEnvelope
-    set?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-    disconnect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-    delete?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-    connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-    update?: BookingUpdateWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput | BookingUpdateWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    updateMany?: BookingUpdateManyWithWhereWithoutStaff_Booking_inspectedByIdToStaffInput | BookingUpdateManyWithWhereWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[]
   }
 
   export type BookingUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput = {
@@ -52752,20 +52478,6 @@ export namespace Prisma {
     update?: WorkLogUpdateWithWhereUniqueWithoutStaffInput | WorkLogUpdateWithWhereUniqueWithoutStaffInput[]
     updateMany?: WorkLogUpdateManyWithWhereWithoutStaffInput | WorkLogUpdateManyWithWhereWithoutStaffInput[]
     deleteMany?: WorkLogScalarWhereInput | WorkLogScalarWhereInput[]
-  }
-
-  export type BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput = {
-    create?: XOR<BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput, BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput> | BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput[] | BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    connectOrCreate?: BookingCreateOrConnectWithoutStaff_Booking_inspectedByIdToStaffInput | BookingCreateOrConnectWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    upsert?: BookingUpsertWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput | BookingUpsertWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    createMany?: BookingCreateManyStaff_Booking_inspectedByIdToStaffInputEnvelope
-    set?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-    disconnect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-    delete?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-    connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
-    update?: BookingUpdateWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput | BookingUpdateWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    updateMany?: BookingUpdateManyWithWhereWithoutStaff_Booking_inspectedByIdToStaffInput | BookingUpdateManyWithWhereWithoutStaff_Booking_inspectedByIdToStaffInput[]
-    deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[]
   }
 
   export type BookingUncheckedUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput = {
@@ -54234,27 +53946,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedEnumInspectionStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.InspectionStatus | EnumInspectionStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.InspectionStatus[] | ListEnumInspectionStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.InspectionStatus[] | ListEnumInspectionStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumInspectionStatusFilter<$PrismaModel> | $Enums.InspectionStatus
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -54347,33 +54038,6 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumInspectionStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.InspectionStatus | EnumInspectionStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.InspectionStatus[] | ListEnumInspectionStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.InspectionStatus[] | ListEnumInspectionStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumInspectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.InspectionStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumInspectionStatusFilter<$PrismaModel>
-    _max?: NestedEnumInspectionStatusFilter<$PrismaModel>
-  }
-
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -54386,6 +54050,20 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -54403,6 +54081,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -54623,38 +54318,6 @@ export namespace Prisma {
     create: XOR<CustomerProfileCreateWithoutBookingInput, CustomerProfileUncheckedCreateWithoutBookingInput>
   }
 
-  export type StaffCreateWithoutBooking_Booking_inspectedByIdToStaffInput = {
-    createdAt?: Date | string
-    updatedAt: Date | string
-    isActive?: boolean
-    Booking_Booking_staffIdToStaff?: BookingCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
-    InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
-    Review?: ReviewCreateNestedManyWithoutStaffInput
-    ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
-    User: UserCreateNestedOneWithoutStaffInput
-    StaffCategory?: StaffCategoryCreateNestedManyWithoutStaffInput
-    WorkLog?: WorkLogCreateNestedManyWithoutStaffInput
-  }
-
-  export type StaffUncheckedCreateWithoutBooking_Booking_inspectedByIdToStaffInput = {
-    id?: number
-    userId: number
-    providerId: number
-    createdAt?: Date | string
-    updatedAt: Date | string
-    isActive?: boolean
-    Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
-    InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
-    StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
-    WorkLog?: WorkLogUncheckedCreateNestedManyWithoutStaffInput
-  }
-
-  export type StaffCreateOrConnectWithoutBooking_Booking_inspectedByIdToStaffInput = {
-    where: StaffWhereUniqueInput
-    create: XOR<StaffCreateWithoutBooking_Booking_inspectedByIdToStaffInput, StaffUncheckedCreateWithoutBooking_Booking_inspectedByIdToStaffInput>
-  }
-
   export type ServiceProviderCreateWithoutBookingInput = {
     description?: string | null
     address: string
@@ -54737,7 +54400,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
     Review?: ReviewCreateNestedManyWithoutStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
@@ -54753,7 +54415,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
     Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
@@ -54917,44 +54578,6 @@ export namespace Prisma {
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCustomerProfileNestedInput
   }
 
-  export type StaffUpsertWithoutBooking_Booking_inspectedByIdToStaffInput = {
-    update: XOR<StaffUpdateWithoutBooking_Booking_inspectedByIdToStaffInput, StaffUncheckedUpdateWithoutBooking_Booking_inspectedByIdToStaffInput>
-    create: XOR<StaffCreateWithoutBooking_Booking_inspectedByIdToStaffInput, StaffUncheckedCreateWithoutBooking_Booking_inspectedByIdToStaffInput>
-    where?: StaffWhereInput
-  }
-
-  export type StaffUpdateToOneWithWhereWithoutBooking_Booking_inspectedByIdToStaffInput = {
-    where?: StaffWhereInput
-    data: XOR<StaffUpdateWithoutBooking_Booking_inspectedByIdToStaffInput, StaffUncheckedUpdateWithoutBooking_Booking_inspectedByIdToStaffInput>
-  }
-
-  export type StaffUpdateWithoutBooking_Booking_inspectedByIdToStaffInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_staffIdToStaff?: BookingUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
-    InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUpdateManyWithoutStaffNestedInput
-    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
-    User?: UserUpdateOneRequiredWithoutStaffNestedInput
-    StaffCategory?: StaffCategoryUpdateManyWithoutStaffNestedInput
-    WorkLog?: WorkLogUpdateManyWithoutStaffNestedInput
-  }
-
-  export type StaffUncheckedUpdateWithoutBooking_Booking_inspectedByIdToStaffInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    providerId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
-    InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
-    StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
-    WorkLog?: WorkLogUncheckedUpdateManyWithoutStaffNestedInput
-  }
-
   export type ServiceProviderUpsertWithoutBookingInput = {
     update: XOR<ServiceProviderUpdateWithoutBookingInput, ServiceProviderUncheckedUpdateWithoutBookingInput>
     create: XOR<ServiceProviderCreateWithoutBookingInput, ServiceProviderUncheckedCreateWithoutBookingInput>
@@ -55060,7 +54683,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
     Review?: ReviewUpdateManyWithoutStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
@@ -55076,7 +54698,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
@@ -56402,10 +56023,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
-    Staff_Booking_inspectedByIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
@@ -56422,10 +56039,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
@@ -56727,10 +56340,6 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
-    inspectedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
-    inspectedById?: IntNullableFilter<"Booking"> | number | null
-    inspectionNote?: StringNullableFilter<"Booking"> | string | null
-    inspectionStatus?: EnumInspectionStatusFilter<"Booking"> | $Enums.InspectionStatus
     staffId?: IntNullableFilter<"Booking"> | number | null
     serviceRequestId?: IntNullableFilter<"Booking"> | number | null
   }
@@ -59306,7 +58915,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
@@ -59322,7 +58930,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
@@ -59447,7 +59054,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
@@ -59463,7 +59069,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
@@ -61212,11 +60817,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
-    Staff_Booking_inspectedByIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedOneWithoutBookingInput
@@ -61232,10 +60833,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
@@ -61555,7 +61152,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
     Review?: ReviewCreateNestedManyWithoutStaffInput
@@ -61570,7 +61166,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
     Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
@@ -62208,63 +61803,12 @@ export namespace Prisma {
     Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
   }
 
-  export type BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    status: $Enums.BookingStatus
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
-    CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
-    ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
-    ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
-    Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
-    InspectionReport?: InspectionReportCreateNestedOneWithoutBookingInput
-    ProposedService?: ProposedServiceCreateNestedManyWithoutBookingInput
-    Transaction?: TransactionCreateNestedOneWithoutBookingInput
-    WorkLog?: WorkLogCreateNestedManyWithoutBookingInput
-  }
-
-  export type BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    id?: number
-    customerId: number
-    providerId: number
-    status: $Enums.BookingStatus
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
-    staffId?: number | null
-    serviceRequestId?: number | null
-    InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
-    ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutBookingInput
-    Transaction?: TransactionUncheckedCreateNestedOneWithoutBookingInput
-    WorkLog?: WorkLogUncheckedCreateNestedManyWithoutBookingInput
-  }
-
-  export type BookingCreateOrConnectWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    where: BookingWhereUniqueInput
-    create: XOR<BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput, BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput>
-  }
-
-  export type BookingCreateManyStaff_Booking_inspectedByIdToStaffInputEnvelope = {
-    data: BookingCreateManyStaff_Booking_inspectedByIdToStaffInput | BookingCreateManyStaff_Booking_inspectedByIdToStaffInput[]
-    skipDuplicates?: boolean
-  }
-
   export type BookingCreateWithoutStaff_Booking_staffIdToStaffInput = {
     status: $Enums.BookingStatus
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
-    Staff_Booking_inspectedByIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     InspectionReport?: InspectionReportCreateNestedOneWithoutBookingInput
@@ -62281,10 +61825,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     serviceRequestId?: number | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutBookingInput
@@ -62532,22 +62072,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type BookingUpsertWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    where: BookingWhereUniqueInput
-    update: XOR<BookingUpdateWithoutStaff_Booking_inspectedByIdToStaffInput, BookingUncheckedUpdateWithoutStaff_Booking_inspectedByIdToStaffInput>
-    create: XOR<BookingCreateWithoutStaff_Booking_inspectedByIdToStaffInput, BookingUncheckedCreateWithoutStaff_Booking_inspectedByIdToStaffInput>
-  }
-
-  export type BookingUpdateWithWhereUniqueWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    where: BookingWhereUniqueInput
-    data: XOR<BookingUpdateWithoutStaff_Booking_inspectedByIdToStaffInput, BookingUncheckedUpdateWithoutStaff_Booking_inspectedByIdToStaffInput>
-  }
-
-  export type BookingUpdateManyWithWhereWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    where: BookingScalarWhereInput
-    data: XOR<BookingUpdateManyMutationInput, BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffInput>
-  }
-
   export type BookingUpsertWithoutStaff_Booking_staffIdToStaffInput = {
     update: XOR<BookingUpdateWithoutStaff_Booking_staffIdToStaffInput, BookingUncheckedUpdateWithoutStaff_Booking_staffIdToStaffInput>
     create: XOR<BookingCreateWithoutStaff_Booking_staffIdToStaffInput, BookingUncheckedCreateWithoutStaff_Booking_staffIdToStaffInput>
@@ -62564,11 +62088,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
-    Staff_Booking_inspectedByIdToStaff?: StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     InspectionReport?: InspectionReportUpdateOneWithoutBookingNestedInput
@@ -62585,10 +62105,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -62861,7 +62377,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
     Review?: ReviewCreateNestedManyWithoutStaffInput
@@ -62877,7 +62392,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
     Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
@@ -62948,7 +62462,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
     Review?: ReviewUpdateManyWithoutStaffNestedInput
@@ -62964,7 +62477,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
@@ -62976,11 +62488,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
-    Staff_Booking_inspectedByIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
@@ -62997,10 +62505,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
@@ -63029,11 +62533,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
-    Staff_Booking_inspectedByIdToStaff?: StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
@@ -63050,10 +62550,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
@@ -63893,7 +63389,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
     Review?: ReviewCreateNestedManyWithoutStaffInput
@@ -63908,7 +63403,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
     Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
@@ -64963,7 +64457,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
     Review?: ReviewUpdateManyWithoutStaffNestedInput
@@ -64978,7 +64471,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
@@ -65337,11 +64829,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
-    Staff_Booking_inspectedByIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
@@ -65358,10 +64846,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
@@ -65378,7 +64862,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
     Review?: ReviewCreateNestedManyWithoutStaffInput
@@ -65394,7 +64877,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
     Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
@@ -65422,11 +64904,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
-    Staff_Booking_inspectedByIdToStaff?: StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
@@ -65443,10 +64921,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
@@ -65469,7 +64943,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
     Review?: ReviewUpdateManyWithoutStaffNestedInput
@@ -65485,7 +64958,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
@@ -65497,11 +64969,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
-    Staff_Booking_inspectedByIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
@@ -65518,10 +64986,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutBookingInput
@@ -65538,7 +65002,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     Review?: ReviewCreateNestedManyWithoutStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
@@ -65554,7 +65017,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     isActive?: boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_inspectedByIdToStaffInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedOneWithoutStaff_Booking_staffIdToStaffInput
     Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
@@ -65582,11 +65044,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
-    Staff_Booking_inspectedByIdToStaff?: StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
@@ -65603,10 +65061,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -65629,7 +65083,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     Review?: ReviewUpdateManyWithoutStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
@@ -65645,7 +65098,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
@@ -65657,11 +65109,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
-    Staff_Booking_inspectedByIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
@@ -65678,10 +65126,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
@@ -65760,11 +65204,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
-    Staff_Booking_inspectedByIdToStaff?: StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
@@ -65781,10 +65221,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
@@ -65959,11 +65395,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
-    Staff_Booking_inspectedByIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_inspectedByIdToStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedOneWithoutBookingInput
@@ -65980,10 +65412,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutBookingInput
@@ -66132,11 +65560,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
-    Staff_Booking_inspectedByIdToStaff?: StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateOneWithoutBookingNestedInput
@@ -66153,10 +65577,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -66611,10 +66031,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
   }
@@ -66680,10 +66096,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
-    Staff_Booking_inspectedByIdToStaff?: StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
@@ -66700,10 +66112,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
@@ -66719,10 +66127,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -67441,10 +66845,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectedById?: number | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
     staffId?: number | null
     serviceRequestId?: number | null
   }
@@ -67502,11 +66902,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
-    Staff_Booking_inspectedByIdToStaff?: StaffUpdateOneWithoutBooking_Booking_inspectedByIdToStaffNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateOneWithoutBookingNestedInput
@@ -67522,10 +66918,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
@@ -67541,10 +66933,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectedById?: NullableIntFieldUpdateOperationsInput | number | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -67684,7 +67072,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
     Review?: ReviewUpdateManyWithoutStaffNestedInput
@@ -67699,7 +67086,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_inspectedByIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffNestedInput
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateOneWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
@@ -67713,21 +67099,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type BookingCreateManyStaff_Booking_inspectedByIdToStaffInput = {
-    id?: number
-    customerId: number
-    providerId: number
-    status: $Enums.BookingStatus
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    inspectedAt?: Date | string | null
-    inspectionNote?: string | null
-    inspectionStatus?: $Enums.InspectionStatus
-    staffId?: number | null
-    serviceRequestId?: number | null
   }
 
   export type InspectionReportCreateManyStaffInput = {
@@ -67760,58 +67131,6 @@ export namespace Prisma {
     note?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
-  }
-
-  export type BookingUpdateWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
-    CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
-    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
-    ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
-    Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
-    InspectionReport?: InspectionReportUpdateOneWithoutBookingNestedInput
-    ProposedService?: ProposedServiceUpdateManyWithoutBookingNestedInput
-    Transaction?: TransactionUpdateOneWithoutBookingNestedInput
-    WorkLog?: WorkLogUpdateManyWithoutBookingNestedInput
-  }
-
-  export type BookingUncheckedUpdateWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    customerId?: IntFieldUpdateOperationsInput | number
-    providerId?: IntFieldUpdateOperationsInput | number
-    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
-    staffId?: NullableIntFieldUpdateOperationsInput | number | null
-    serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
-    InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
-    ProposedService?: ProposedServiceUncheckedUpdateManyWithoutBookingNestedInput
-    Transaction?: TransactionUncheckedUpdateOneWithoutBookingNestedInput
-    WorkLog?: WorkLogUncheckedUpdateManyWithoutBookingNestedInput
-  }
-
-  export type BookingUncheckedUpdateManyWithoutStaff_Booking_inspectedByIdToStaffInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    customerId?: IntFieldUpdateOperationsInput | number
-    providerId?: IntFieldUpdateOperationsInput | number
-    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inspectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inspectionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    inspectionStatus?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
-    staffId?: NullableIntFieldUpdateOperationsInput | number | null
-    serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type InspectionReportUpdateWithoutStaffInput = {

@@ -32,14 +32,6 @@ async function testGetBookingDetail(bookingId: number) {
     logResponse('STAFF_GET_BOOKING_DETAIL', res);
 }
 
-async function testUpdateInspectionStatus(bookingId: number, inspectionStatus: string, inspectionNote?: string) {
-    const res = await sendTCPRequest({
-        type: "STAFF_UPDATE_INSPECTION_STATUS",
-        data: { bookingId, inspectionStatus, inspectionNote },
-    });
-    logResponse("STAFF_UPDATE_INSPECTION_STATUS", res);
-}
-
 async function testCreateInspectionReport(data: {
     staffId: number;
     bookingId: number;
@@ -136,10 +128,10 @@ async function testCreateWorkLog(staffId: number, bookingId: number) {
     logResponse('STAFF_CREATE_WORK_LOG', res);
 }
 
-async function testCheckOut(workLogId: number) {
+async function testCheckOut(bookingId: number) {
     const res = await sendTCPRequest({
         type: 'STAFF_CHECK_OUT',
-        workLogId,
+        bookingId,
     });
     logResponse('STAFF_CHECK_OUT', res);
 }
@@ -166,12 +158,11 @@ async function testGetMonthlyStats(staffId: number, month: number, year: number)
 (async () => {
     const staffId = 5;
     const bookingId = 1;
-    const workLogId = 1;
+    const workLogId = 3;
 
 
-    await testGetBookingsList(staffId);
-    await testGetBookingDetail(bookingId);
-    // await testUpdateInspectionStatus(bookingId, "DONE", "Khách hàng hài lòng, thiết bị hoạt động tốt");
+    // await testGetBookingsList(staffId);
+    // await testGetBookingDetail(bookingId);
     // await testCreateInspectionReport({
     //     staffId,
     //     bookingId,
@@ -190,7 +181,7 @@ async function testGetMonthlyStats(staffId: number, month: number, year: number)
     await testGetWorkLogs(staffId);
     await testGetPerformance(staffId);
     await testGetReviewSummary(staffId);
-    // await testCheckOut(workLogId);
-    await testGetBookingsByDate(staffId, '2025-06-25');
+    // await testCheckOut(bookingId);
+    await testGetBookingsByDate(staffId, '2025-06-26');
     await testGetMonthlyStats(staffId, 6, 2025);
 })();

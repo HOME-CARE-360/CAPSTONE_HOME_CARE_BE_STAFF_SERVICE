@@ -128,10 +128,6 @@ exports.Prisma.BookingScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  inspectedAt: 'inspectedAt',
-  inspectedById: 'inspectedById',
-  inspectionNote: 'inspectionNote',
-  inspectionStatus: 'inspectionStatus',
   staffId: 'staffId',
   serviceRequestId: 'serviceRequestId'
 };
@@ -474,26 +470,20 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-};
-
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 exports.BookingStatus = exports.$Enums.BookingStatus = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
-};
-
-exports.InspectionStatus = exports.$Enums.InspectionStatus = {
-  NOT_YET: 'NOT_YET',
-  IN_PROGRESS: 'IN_PROGRESS',
-  DONE: 'DONE'
 };
 
 exports.Gender = exports.$Enums.Gender = {

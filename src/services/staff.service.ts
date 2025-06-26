@@ -68,28 +68,6 @@ export const StaffService = {
   },
 
   /**
-   * Cập nhật trạng thái kiểm tra và ghi chú
-   */
-  async updateInspectionStatus(dto: UpdateInspectionStatusDto) {
-    const { bookingId, inspectionStatus, inspectionNote } = dto;
-
-    const isEmptyUpdate = inspectionStatus === undefined && !inspectionNote?.trim();
-    if (isEmptyUpdate) {
-      throw new AppError(
-        'Missing update data for inspection',
-        [{ message: 'Error.MissingInspectionData', path: ['inspectionStatus', 'inspectionNote'] }],
-        { dto },
-        400
-      );
-    }
-
-    return StaffRepository.updateInspectionStatus(bookingId, {
-      ...(inspectionStatus && { inspectionStatus }),
-      ...(inspectionNote && { inspectionNote }),
-    });
-  },
-
-  /**
    * Tạo báo cáo kiểm tra dịch vụ
    */
   async createInspectionReport(dto: CreateInspectionReportDto) {
@@ -204,8 +182,8 @@ export const StaffService = {
    * @param staffId
    * @param date YYYY-MM-DD
    */
-  async getBookingsByDate(staffId: number, date: string) {
-    return StaffRepository.getBookingsByDate(staffId, date);
+  async getBookingsByDate(staffId: number, date: string, page = 1, limit = 10) {
+    return StaffRepository.getBookingsByDate(staffId, date, page, limit);
   },
 
   /**
