@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const TCP_PORT = parseInt(process.env.TCP_PORT || '4000', 10);
+const TCP_PORT = parseInt(process.env.TCP_PORT || '4002', 10);
 const TCP_HOST = process.env.TCP_HOST || 'localhost';
 
 export function sendTCPRequest(message: object): Promise<any> {
@@ -45,7 +45,6 @@ export function sendTCPRequest(message: object): Promise<any> {
 
         try {
           const parsed = JSON.parse(raw);
-          console.log('[TCP] ✅ Parsed response:', parsed);
           resolveOnce(parsed);
         } catch (err) {
           console.error('[TCP] ❌ Failed to parse response:', raw);

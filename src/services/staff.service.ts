@@ -17,27 +17,39 @@ export const StaffService = {
       status?: string;
       page?: number;
       limit?: number;
+      fromDate?: string;
+      toDate?: string;
+      keyword?: string;
     }
   ) {
-    const { status, page = 1, limit = 10 } = query;
+    const { status, page = 1, limit = 10, fromDate, toDate, keyword } = query;
 
     // Validate status
-    if (status && !Object.values(BookingStatus).includes(status as BookingStatus)) {
-      throw new AppError(
-        'Invalid booking status',
-        [{ message: 'Error.InvalidBookingStatus', path: ['status'] }],
-        { status },
-        400
-      );
+    let bookingStatus: BookingStatus | undefined = undefined;
+    if (status) {
+      if (!Object.values(BookingStatus).includes(status as BookingStatus)) {
+        throw new AppError(
+          'Invalid booking status',
+          [{ message: 'Error.InvalidBookingStatus', path: ['status'] }],
+          { status },
+          400
+        );
+      }
+      bookingStatus = status as BookingStatus;
     }
 
     const take = Math.max(limit, 1);
     const skip = (Math.max(page, 1) - 1) * take;
 
-    // Parallel fetch data + count
     const [data, total] = await Promise.all([
-      StaffRepository.getBookingsList(staffId, status as BookingStatus, { skip, take }),
-      StaffRepository.countBookings(staffId, status as BookingStatus),
+      StaffRepository.getBookingsList(staffId, bookingStatus, {
+        page,
+        limit,
+        fromDate,
+        toDate,
+        keyword,
+      }),
+      StaffRepository.countBookings(staffId, bookingStatus),
     ]);
 
     return {
@@ -82,16 +94,6 @@ export const StaffService = {
    */
   async createInspectionReport(dto: CreateInspectionReportDto) {
     const { staffId, bookingId, images, estimatedTime, note } = dto;
-
-    if (!staffId || !bookingId || !images?.length) {
-      throw new AppError(
-        'Missing required data to create inspection report',
-        [{ message: 'Error.MissingInspectionReportData', path: ['staffId', 'bookingId', 'images'] }],
-        { dto },
-        400
-      );
-    }
-
     return StaffRepository.createInspectionReport({
       images,
       estimatedTime,
@@ -104,71 +106,120 @@ export const StaffService = {
   /**
    * Lấy danh sách đánh giá của staff
    */
-  async getReviews(staffId: number) {
-    return StaffRepository.getReviews(staffId);
+  async getReviews(
+    staffId: number,
+    options?: {
+      page?: number;
+      limit?: number;
+      rating?: number;
+      fromDate?: string;
+      toDate?: string;
+    }
+  ) {
+    return StaffRepository.getReviews(staffId, options);
   },
-
 
   /**
    * Lấy chi tiết báo cáo kiểm tra của 1 booking
    */
-  async getInspectionReportByBooking(bookingId: number) {
-    if (!bookingId || typeof bookingId !== 'number' || bookingId <= 0) {
-      throw new AppError(
-        'Invalid booking ID',
-        [{ message: 'Error.InvalidBookingId', path: ['bookingId'] }],
-        { bookingId },
-        400
-      );
-    }
-
-    return StaffRepository.getInspectionReportByBooking(bookingId);
+  async getInspectionReportById(inspectionId: number) {
+    return StaffRepository.getInspectionReportById(inspectionId);
   },
 
   /**
    * Lấy danh sách báo cáo kiểm tra của staff
    */
-  async getInspectionReportsByStaff(staffId: number) {
-    if (!staffId || typeof staffId !== 'number' || staffId <= 0) {
-      throw new AppError(
-        'Invalid staff ID',
-        [{ message: 'Error.InvalidStaffId', path: ['staffId'] }],
-        { staffId },
-        400
-      );
+  async getInspectionReportsByStaff(
+    staffId: number,
+    options?: {
+      page?: number;
+      limit?: number;
     }
-
-    return StaffRepository.getInspectionReportsByStaff(staffId);
+  ) {
+    return StaffRepository.getInspectionReportsByStaff(staffId, options);
   },
+
 
   /**
    * Cập nhật nội dung báo cáo kiểm tra
    */
-  async updateInspectionReport(bookingId: number, dto: UpdateInspectionReportDto) {
-    if (!bookingId || typeof bookingId !== 'number' || bookingId <= 0) {
-      throw new AppError(
-        'Invalid booking ID',
-        [{ message: 'Error.InvalidBookingId', path: ['bookingId'] }],
-        { bookingId },
-        400
-      );
-    }
-
+  async updateInspectionReport(inspectionId: number, dto: UpdateInspectionReportDto) {
     const { note, images, estimatedTime } = dto;
-
     if (!note && !images?.length && !estimatedTime) {
       throw new AppError(
         'Missing update data for inspection report',
         [{ message: 'Error.MissingUpdateData', path: ['note', 'images', 'estimatedTime'] }],
-        { bookingId, dto },
+        { inspectionId, dto },
         400
       );
     }
 
-    return StaffRepository.updateInspectionReport(bookingId, {
+    return StaffRepository.updateInspectionReport(inspectionId, {
       ...(note && { note }),
       ...(images && images.length > 0 && { images }),
       ...(estimatedTime && { estimatedTime }),
     });
   },
+
+  /**
+   * Lấy danh sách work logs gần đây của staff
+   */
+  async getRecentWorkLogs(
+    staffId: number,
+    options?: { page?: number; limit?: number }
+  ) {
+    return StaffRepository.getRecentWorkLogs(staffId, options);
+  },
+
+  /**
+   * Lấy tính hiệu suất làm việc của staff
+   */
+  async getStaffPerformanceById(staffId: number) {
+    return StaffRepository.getStaffPerformanceById(staffId);
+  },
+
+  /**
+   * Lấy tổng hợp review theo số sao
+   */
+  async getReviewSummary(staffId: number) {
+    return StaffRepository.getReviewSummary(staffId);
+  },
+
+  /**
+   * Tạo work log và chuyển booking thành IN_PROGRESS
+   */
+  async createWorkLogWithStatusUpdate(staffId: number, bookingId: number) {
+    return StaffRepository.createWorkLogWithStatusUpdate(staffId, bookingId);
+  },
+
+  /**
+   * Check-in work log
+   */
+  async checkOutWorkLog(workLogId: number) {
+    return StaffRepository.checkOutWorkLog(workLogId);
+  },
+
+  /**
+   * Lấy danh sách booking theo ngày
+   * @param staffId
+   * @param date YYYY-MM-DD
+   */
+  async getBookingsByDate(staffId: number, date: string) {
+    return StaffRepository.getBookingsByDate(staffId, date);
+  },
+
+  /**
+   * Lấy thống kê hàng tháng của staff
+   * @param staffId
+   * @param month 1-12
+   *  @param year YYYY
+   * @return
+   * {
+   *   totalBookings: number;
+   * }
+   */
+  async getMonthlyStats(staffId: number, month: number, year: number) {
+    return StaffRepository.getMonthlyStats(staffId, month, year);
+  }
+
 };

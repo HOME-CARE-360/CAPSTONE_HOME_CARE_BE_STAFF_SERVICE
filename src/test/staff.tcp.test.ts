@@ -71,11 +71,11 @@ async function testGetInspectionReportsByStaff(staffId: number) {
     }
 }
 
-async function testGetInspectionReportDetail(bookingId: number) {
+async function testGetInspectionReportDetail(inspectionId: number) {
     try {
         const res = await sendTCPRequest({
             type: 'STAFF_GET_INSPECTION_DETAIL',
-            bookingId,
+            inspectionId,
         });
         logResponse('STAFF_GET_INSPECTION_DETAIL', res);
     } catch (err) {
@@ -83,11 +83,11 @@ async function testGetInspectionReportDetail(bookingId: number) {
     }
 }
 
-async function testUpdateInspectionReport(bookingId: number) {
+async function testUpdateInspectionReport(inspectionId: number) {
     try {
         const res = await sendTCPRequest({
             type: 'UPDATE_INSPECTION_REPORT',
-            bookingId,
+            inspectionId,
             data: {
                 note: 'Đã sửa đường ống bị rò rỉ, mất 90 phút',
                 images: [
@@ -103,12 +103,74 @@ async function testUpdateInspectionReport(bookingId: number) {
     }
 }
 
+async function testGetWorkLogs(staffId: number) {
+    const res = await sendTCPRequest({
+        type: 'STAFF_GET_WORK_LOGS',
+        staffId,
+    });
+    logResponse('STAFF_GET_WORK_LOGS', res);
+}
+
+async function testGetPerformance(staffId: number) {
+    const res = await sendTCPRequest({
+        type: 'STAFF_GET_PERFORMANCE',
+        staffId,
+    });
+    logResponse('STAFF_GET_PERFORMANCE', res);
+}
+
+async function testGetReviewSummary(staffId: number) {
+    const res = await sendTCPRequest({
+        type: 'STAFF_GET_REVIEW_SUMMARY',
+        staffId,
+    });
+    logResponse('STAFF_GET_REVIEW_SUMMARY', res);
+}
+
+async function testCreateWorkLog(staffId: number, bookingId: number) {
+    const res = await sendTCPRequest({
+        type: 'STAFF_CREATE_WORK_LOG',
+        staffId,
+        bookingId,
+    });
+    logResponse('STAFF_CREATE_WORK_LOG', res);
+}
+
+async function testCheckOut(workLogId: number) {
+    const res = await sendTCPRequest({
+        type: 'STAFF_CHECK_OUT',
+        workLogId,
+    });
+    logResponse('STAFF_CHECK_OUT', res);
+}
+
+async function testGetBookingsByDate(staffId: number, date: string) {
+    const res = await sendTCPRequest({
+        type: 'STAFF_GET_BOOKINGS_BY_DATE',
+        staffId,
+        date,
+    });
+    logResponse('STAFF_GET_BOOKINGS_BY_DATE', res);
+}
+
+async function testGetMonthlyStats(staffId: number, month: number, year: number) {
+    const res = await sendTCPRequest({
+        type: 'STAFF_GET_MONTHLY_STATS',
+        staffId,
+        month,
+        year,
+    });
+    logResponse('STAFF_GET_MONTHLY_STATS', res);
+}
+
 (async () => {
     const staffId = 5;
     const bookingId = 1;
+    const workLogId = 1;
 
-    // await testGetBookingsList(staffId);
-    // await testGetBookingDetail(bookingId);
+
+    await testGetBookingsList(staffId);
+    await testGetBookingDetail(bookingId);
     // await testUpdateInspectionStatus(bookingId, "DONE", "Khách hàng hài lòng, thiết bị hoạt động tốt");
     // await testCreateInspectionReport({
     //     staffId,
@@ -117,8 +179,18 @@ async function testUpdateInspectionReport(bookingId: number) {
     //     note: "Đã kiểm tra toàn bộ hệ thống điện",
     //     estimatedTime: 90,
     // });
-    // await testGetReviews(staffId);
+    await testGetReviews(staffId);
     await testGetInspectionReportsByStaff(5);
-    await testGetInspectionReportDetail(1);
+    await testGetInspectionReportDetail(2);
     // await testUpdateInspectionReport(1);
+    // await testCreateWorkLog(staffId, bookingId);
+    await testGetWorkLogs(staffId);
+    await testGetPerformance(staffId);
+    await testGetReviewSummary(staffId);
+    await testGetWorkLogs(staffId);
+    await testGetPerformance(staffId);
+    await testGetReviewSummary(staffId);
+    // await testCheckOut(workLogId);
+    await testGetBookingsByDate(staffId, '2025-06-25');
+    await testGetMonthlyStats(staffId, 6, 2025);
 })();

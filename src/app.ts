@@ -6,7 +6,7 @@ import { AppError } from './handlers/error';
 
 dotenv.config();
 
-const TCP_PORT = parseInt(process.env.USER_TCP_PORT || '4000', 10);
+const TCP_PORT = parseInt(process.env.STAFF_TCP_PORT || '4002', 10);
 const TCP_HOST = '0.0.0.0';
 
 interface RpcErrorFormat {

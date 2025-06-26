@@ -18,21 +18,21 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
         let statusCode = 200;
 
         switch (type) {
-
             case 'STAFF_GET_BOOKINGS': {
-                const { staffId, status, page, limit } = payload;
-
+                const { staffId, status, page, limit, fromDate, toDate, keyword } = payload;
                 validateId(staffId, 'staffId');
-
                 responseData = await StaffService.getBookingsList(staffId, {
                     status,
                     page,
                     limit,
+                    fromDate,
+                    toDate,
+                    keyword,
                 });
-
                 message = 'Staff bookings retrieved successfully';
                 break;
             }
+
 
             case 'STAFF_GET_BOOKING_DETAIL': {
                 const { bookingId } = payload;
@@ -55,42 +55,107 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
                 message = 'Inspection report created successfully';
                 break;
             }
-
             case 'STAFF_GET_REVIEWS': {
-                const { staffId } = payload;
+                const { staffId, page, limit, rating, fromDate, toDate } = payload;
+
                 validateId(staffId, 'staffId');
-                responseData = await StaffService.getReviews(staffId);
+                responseData = await StaffService.getReviews(staffId, {
+                    page,
+                    limit,
+                    rating,
+                    fromDate,
+                    toDate,
+                });
+
                 message = 'Staff reviews retrieved successfully';
                 break;
             }
 
+
             case 'STAFF_GET_INSPECTION_REPORTS': {
                 const { staffId } = payload;
                 validateId(staffId, 'staffId');
-
                 responseData = await StaffService.getInspectionReportsByStaff(staffId);
                 message = 'Inspection reports retrieved successfully';
                 break;
             }
 
             case 'STAFF_GET_INSPECTION_DETAIL': {
-                const { bookingId } = payload;
-                validateId(bookingId, 'bookingId');
-
-                responseData = await StaffService.getInspectionReportByBooking(bookingId);
+                const { inspectionId } = payload;
+                validateId(inspectionId, 'inspectionId');
+                responseData = await StaffService.getInspectionReportById(inspectionId);
                 message = 'Inspection report detail retrieved successfully';
                 break;
             }
 
             case 'UPDATE_INSPECTION_REPORT': {
-                const { bookingId, data } = payload;
-                validateId(bookingId, 'bookingId');
+                const { inspectionId, data } = payload;
+                validateId(inspectionId, 'inspectionId');
                 validateUpdateData(data, 'inspectionReport');
-
-                responseData = await StaffService.updateInspectionReport(bookingId, data);
+                responseData = await StaffService.updateInspectionReport(inspectionId, data);
                 message = 'Inspection report updated successfully';
                 break;
             }
+
+            case 'STAFF_GET_WORK_LOGS': {
+                const { staffId } = payload;
+                validateId(staffId, 'staffId');
+                responseData = await StaffService.getRecentWorkLogs(staffId);
+                message = 'Recent work logs retrieved successfully';
+                break;
+            }
+
+            case 'STAFF_GET_PERFORMANCE': {
+                const { staffId } = payload;
+                validateId(staffId, 'staffId');
+                responseData = await StaffService.getStaffPerformanceById(staffId);
+                message = 'Staff performance retrieved successfully';
+                break;
+            }
+
+            case 'STAFF_GET_REVIEW_SUMMARY': {
+                const { staffId } = payload;
+                validateId(staffId, 'staffId');
+                responseData = await StaffService.getReviewSummary(staffId);
+                message = 'Review summary retrieved successfully';
+                break;
+            }
+
+            case 'STAFF_CREATE_WORK_LOG': {
+                const { staffId, bookingId } = payload;
+                validateId(staffId, 'staffId');
+                validateId(bookingId, 'bookingId');
+                responseData = await StaffService.createWorkLogWithStatusUpdate(staffId, bookingId);
+                message = 'Work log created and booking updated successfully';
+                break;
+            }
+
+            case 'STAFF_CHECK_OUT': {
+                const { workLogId } = payload;
+                validateId(workLogId, 'workLogId');
+                responseData = await StaffService.checkOutWorkLog(workLogId);
+                message = 'Staff checked out successfully';
+                break;
+            }
+
+            case 'STAFF_GET_BOOKINGS_BY_DATE': {
+                const { staffId, date } = payload;
+                validateId(staffId, 'staffId');
+                if (!date || isNaN(Date.parse(date))) throw new AppError('Invalid date format', [{ message: 'InvalidDate', path: ['date'] }], {}, 400);
+                responseData = await StaffService.getBookingsByDate(staffId, date);
+                message = 'Bookings for date retrieved successfully';
+                break;
+            }
+
+            case 'STAFF_GET_MONTHLY_STATS': {
+                const { staffId, month, year } = payload;
+                validateId(staffId, 'staffId');
+                if (![month, year].every(n => typeof n === 'number' && n > 0)) throw new AppError('Invalid month/year', [{ message: 'InvalidMonthYear', path: [] }], {}, 400);
+                responseData = await StaffService.getMonthlyStats(staffId, month, year);
+                message = 'Monthly stats retrieved successfully';
+                break;
+            }
+
             default:
                 throw new AppError(
                     'Error.UnknownRequestType',
@@ -175,7 +240,6 @@ function validateUpdateData(data: any, entityType: string): void {
         );
     }
 }
-
 
 function capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
