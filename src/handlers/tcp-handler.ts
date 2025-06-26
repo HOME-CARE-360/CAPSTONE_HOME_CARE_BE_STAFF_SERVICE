@@ -1,4 +1,5 @@
 import { TCPResponseSuccess } from '../interfaces/tcp-response.interface';
+import { CreateInspectionReportDto, UpdateInspectionReportDto, UpdateInspectionStatusDto } from '../schemas/type';
 import { StaffService } from '../services/staff.service';
 
 import { AppError } from './error';
@@ -44,14 +45,14 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
 
             case 'STAFF_UPDATE_INSPECTION_STATUS': {
                 validateUpdateData(data, 'inspectionStatus');
-                responseData = await StaffService.updateInspectionStatus(data);
+                responseData = await StaffService.updateInspectionStatus(data as UpdateInspectionStatusDto);
                 message = 'Inspection status updated successfully';
                 break;
             }
 
             case 'STAFF_CREATE_INSPECTION_REPORT': {
                 validateUpdateData(data, 'inspectionReport');
-                responseData = await StaffService.createInspectionReport(data);
+                responseData = await StaffService.createInspectionReport(data as CreateInspectionReportDto);
                 message = 'Inspection report created successfully';
                 break;
             }
@@ -92,7 +93,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
                 const { inspectionId, data } = payload;
                 validateId(inspectionId, 'inspectionId');
                 validateUpdateData(data, 'inspectionReport');
-                responseData = await StaffService.updateInspectionReport(inspectionId, data);
+                responseData = await StaffService.updateInspectionReport(inspectionId, data as UpdateInspectionReportDto);
                 message = 'Inspection report updated successfully';
                 break;
             }
@@ -131,9 +132,9 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
             }
 
             case 'STAFF_CHECK_OUT': {
-                const { workLogId } = payload;
-                validateId(workLogId, 'workLogId');
-                responseData = await StaffService.checkOutWorkLog(workLogId);
+                const { bookingId } = payload;
+                validateId(bookingId, 'bookingId');
+                responseData = await StaffService.checkOutWorkLog(bookingId);
                 message = 'Staff checked out successfully';
                 break;
             }

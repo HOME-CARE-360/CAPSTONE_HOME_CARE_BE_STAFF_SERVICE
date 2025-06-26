@@ -647,19 +647,54 @@ export const StaffRepository = {
     }
   },
 
-  async checkOutWorkLog(workLogId: number) {
-    const log = await prisma.workLog.findUnique({ where: { id: workLogId } });
-    if (!log) throw new AppError('Work log not found', [{ message: 'NotFound', path: ['workLogId'] }], {}, 404);
-    if (log.checkOut) throw new AppError('Already checked out', [{ message: 'Error.AlreadyCheckedOut', path: ['workLogId'] }], {}, 400);
+  async checkOutWorkLogByBookingId(bookingId: number) {
+    const log = await prisma.workLog.findFirst({
+      where: { bookingId },
+    });
+
+    if (!log) {
+      throw new AppError(
+        'Work log not found',
+        [{ message: 'NotFound', path: ['bookingId'] }],
+        { bookingId },
+        404
+      );
+    }
+
+    if (log.checkOut) {
+      throw new AppError(
+        'Already checked out',
+        [{ message: 'Error.AlreadyCheckedOut', path: ['bookingId'] }],
+        { bookingId },
+        400
+      );
+    }
+
+    if (!log.checkIn) {
+      throw new AppError(
+        'Check-in time is missing',
+        [{ message: 'Error.MissingCheckIn', path: ['bookingId'] }],
+        { bookingId },
+        400
+      );
+    }
 
     const now = new Date();
-    if (!log.checkIn) {
-      throw new AppError('Check-in time is missing', [{ message: 'Error.MissingCheckIn', path: ['workLogId'] }], {}, 400);
-    }
     const hoursPassed = (now.getTime() - new Date(log.checkIn).getTime()) / (1000 * 60 * 60);
-    if (hoursPassed > 24) throw new AppError('Check-out expired', [{ message: 'Error.CheckOutTooLate', path: ['workLogId'] }], { hoursPassed }, 400);
 
-    return prisma.workLog.update({ where: { id: workLogId }, data: { checkOut: now, updatedAt: now } });
+    if (hoursPassed > 24) {
+      throw new AppError(
+        'Check-out expired',
+        [{ message: 'Error.CheckOutTooLate', path: ['bookingId'] }],
+        { bookingId, hoursPassed },
+        400
+      );
+    }
+
+    return prisma.workLog.update({
+      where: { id: log.id },
+      data: { checkOut: now, updatedAt: now },
+    });
   },
 
   async getBookingsByDate(staffId: number, date: string) {

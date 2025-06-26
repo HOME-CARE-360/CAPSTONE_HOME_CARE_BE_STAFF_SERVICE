@@ -195,8 +195,8 @@ export const StaffService = {
   /**
    * Check-in work log
    */
-  async checkOutWorkLog(workLogId: number) {
-    return StaffRepository.checkOutWorkLog(workLogId);
+  async checkOutWorkLog(bookingId: number) {
+    return StaffRepository.checkOutWorkLogByBookingId(bookingId);
   },
 
   /**
