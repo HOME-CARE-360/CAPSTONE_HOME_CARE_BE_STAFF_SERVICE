@@ -20,7 +20,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
 
         switch (type) {
             case 'STAFF_GET_BOOKINGS': {
-                const { staffId, status, page, limit, fromDate, toDate, keyword } = payload;
+                const { staffId, status, page, limit, fromDate, toDate, keyword } = data;
                 validateId(staffId, 'staffId');
                 responseData = await StaffService.getBookingsList(staffId, {
                     status,
@@ -36,7 +36,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
 
 
             case 'STAFF_GET_BOOKING_DETAIL': {
-                const { bookingId } = payload;
+                const { bookingId } = data;
                 validateId(bookingId, 'bookingId');
                 responseData = await StaffService.getBookingDetail(bookingId);
                 message = 'Booking detail retrieved successfully';
@@ -50,7 +50,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
                 break;
             }
             case 'STAFF_GET_REVIEWS': {
-                const { staffId, page, limit, rating, fromDate, toDate } = payload;
+                const { staffId, page, limit, rating, fromDate, toDate } = data;
 
                 validateId(staffId, 'staffId');
                 responseData = await StaffService.getReviews(staffId, {
@@ -67,7 +67,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
 
 
             case 'STAFF_GET_INSPECTION_REPORTS': {
-                const { staffId } = payload;
+                const { staffId } = data;
                 validateId(staffId, 'staffId');
                 responseData = await StaffService.getInspectionReportsByStaff(staffId);
                 message = 'Inspection reports retrieved successfully';
@@ -75,7 +75,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
             }
 
             case 'STAFF_GET_INSPECTION_DETAIL': {
-                const { inspectionId } = payload;
+                const { inspectionId } = data;
                 validateId(inspectionId, 'inspectionId');
                 responseData = await StaffService.getInspectionReportById(inspectionId);
                 message = 'Inspection report detail retrieved successfully';
@@ -83,16 +83,16 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
             }
 
             case 'UPDATE_INSPECTION_REPORT': {
-                const { inspectionId, data } = payload;
+                const { inspectionId, dataInspection } = data;
                 validateId(inspectionId, 'inspectionId');
                 validateUpdateData(data, 'inspectionReport');
-                responseData = await StaffService.updateInspectionReport(inspectionId, data as UpdateInspectionReportDto);
+                responseData = await StaffService.updateInspectionReport(inspectionId, dataInspection as UpdateInspectionReportDto);
                 message = 'Inspection report updated successfully';
                 break;
             }
 
             case 'STAFF_GET_WORK_LOGS': {
-                const { staffId } = payload;
+                const { staffId } = data;
                 validateId(staffId, 'staffId');
                 responseData = await StaffService.getRecentWorkLogs(staffId);
                 message = 'Recent work logs retrieved successfully';
@@ -100,7 +100,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
             }
 
             case 'STAFF_GET_PERFORMANCE': {
-                const { staffId } = payload;
+                const { staffId } = data;
                 validateId(staffId, 'staffId');
                 responseData = await StaffService.getStaffPerformanceById(staffId);
                 message = 'Staff performance retrieved successfully';
@@ -108,7 +108,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
             }
 
             case 'STAFF_GET_REVIEW_SUMMARY': {
-                const { staffId } = payload;
+                const { staffId } = data;
                 validateId(staffId, 'staffId');
                 responseData = await StaffService.getReviewSummary(staffId);
                 message = 'Review summary retrieved successfully';
@@ -116,7 +116,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
             }
 
             case 'STAFF_CREATE_WORK_LOG': {
-                const { staffId, bookingId } = payload;
+                const { staffId, bookingId } = data;
                 validateId(staffId, 'staffId');
                 validateId(bookingId, 'bookingId');
                 responseData = await StaffService.createWorkLogWithStatusUpdate(staffId, bookingId);
@@ -125,7 +125,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
             }
 
             case 'STAFF_CHECK_OUT': {
-                const { bookingId } = payload;
+                const { bookingId } = data;
                 validateId(bookingId, 'bookingId');
                 responseData = await StaffService.checkOutWorkLog(bookingId);
                 message = 'Staff checked out successfully';
@@ -133,7 +133,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
             }
 
             case 'STAFF_GET_BOOKINGS_BY_DATE': {
-                const { staffId, date, page = 1, limit = 10 } = payload;
+                const { staffId, date, page = 1, limit = 10 } = data;
 
                 validateId(staffId, 'staffId');
 
@@ -153,7 +153,7 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
 
 
             case 'STAFF_GET_MONTHLY_STATS': {
-                const { staffId, month, year } = payload;
+                const { staffId, month, year } = data;
                 validateId(staffId, 'staffId');
                 if (![month, year].every(n => typeof n === 'number' && n > 0)) throw new AppError('Invalid month/year', [{ message: 'InvalidMonthYear', path: [] }], {}, 400);
                 responseData = await StaffService.getMonthlyStats(staffId, month, year);
