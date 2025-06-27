@@ -261,12 +261,10 @@ export const StaffRepository = {
           customerName: r.CustomerProfile?.User?.name ?? null,
           serviceName: r.Service?.name ?? null,
         })),
-        meta: {
-          total,
-          page,
-          limit,
-          totalPages: Math.ceil(total / limit),
-        },
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       };
     } catch (error) {
       throw new AppError(
@@ -425,12 +423,10 @@ export const StaffRepository = {
 
       return {
         data,
-        meta: {
-          total,
-          page,
-          limit,
-          totalPages: Math.ceil(total / limit),
-        },
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       };
     } catch (error) {
       throw new AppError(
@@ -554,12 +550,10 @@ export const StaffRepository = {
 
       return {
         data,
-        meta: {
-          total,
-          page,
-          limit,
-          totalPages: Math.ceil(total / limit),
-        },
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       };
     } catch (error) {
       throw new AppError(

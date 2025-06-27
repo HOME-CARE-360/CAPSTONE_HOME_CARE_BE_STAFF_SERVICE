@@ -54,12 +54,10 @@ export const StaffService = {
 
     return {
       data,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / take),
-      },
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / take),
     };
   },
 
