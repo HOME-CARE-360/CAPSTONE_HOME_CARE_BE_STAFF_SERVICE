@@ -126,13 +126,38 @@ export const StaffRepository = {
       keyword?: string;
     }
   ) {
-    const { page, limit, skip } = calculatePagination(options?.page, options?.limit);
+    const page = options?.page ?? 1;
+    const limit = options?.limit ?? 10;
+    const skip = (page - 1) * limit;
 
     const where: Prisma.BookingWhereInput = {
       staffId,
-      ...(status && { status }),
-      ...buildDateFilter(options?.fromDate, options?.toDate),
-      ...buildKeywordFilter(options?.keyword)
+      ...(status ? { status } : {}),
+      ...(options?.fromDate || options?.toDate
+        ? {
+          createdAt: {
+            ...(options.fromDate ? { gte: new Date(options.fromDate) } : {}),
+            ...(options.toDate ? { lte: new Date(options.toDate) } : {}),
+          },
+        }
+        : {}),
+      ...(options?.keyword
+        ? {
+          CustomerProfile: {
+            OR: [
+              { address: { contains: options.keyword, mode: 'insensitive' } },
+              {
+                User: {
+                  OR: [
+                    { name: { contains: options.keyword, mode: 'insensitive' } },
+                    { phone: { contains: options.keyword, mode: 'insensitive' } },
+                  ],
+                },
+              },
+            ],
+          },
+        }
+        : {}),
     };
 
     const [total, bookings] = await Promise.all([
@@ -142,15 +167,55 @@ export const StaffRepository = {
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
-        include: BOOKING_INCLUDE
-      })
+        include: {
+          CustomerProfile: {
+            include: {
+              User: { select: { name: true, phone: true } },
+            },
+          },
+          ServiceRequest: {
+            select: {
+              id: true,
+              preferredDate: true,
+              note: true,
+              location: true,
+              phoneNumber: true,
+              status: true,
+              Category: { select: { id: true, name: true } },
+            },
+          },
+        },
+      }),
     ]);
 
     return {
+      bookings: bookings.map((b) => ({
+        id: b.id,
+        status: b.status,
+        createdAt: b.createdAt,
+        serviceRequestId: b.serviceRequestId ?? null,
+        customer: {
+          name: b.CustomerProfile?.User?.name ?? null,
+          phone: b.CustomerProfile?.User?.phone ?? null,
+          address: b.CustomerProfile?.address ?? null,
+        },
+        serviceRequest: b.ServiceRequest
+          ? {
+            id: b.ServiceRequest.id,
+            preferredDate: b.ServiceRequest.preferredDate,
+            note: b.ServiceRequest.note,
+            location: b.ServiceRequest.location,
+            phoneNumber: b.ServiceRequest.phoneNumber,
+            status: b.ServiceRequest.status,
+            categoryId: b.ServiceRequest.Category?.id ?? null,
+            categoryName: b.ServiceRequest.Category?.name ?? null,
+          }
+          : null,
+      })),
       total,
       page,
       limit,
-      bookings: bookings.map(mapBookingResponse)
+      totalPages: Math.ceil(total / limit),
     };
   },
 

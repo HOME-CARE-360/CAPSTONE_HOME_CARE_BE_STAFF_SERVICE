@@ -29,16 +29,6 @@ interface BookingsListQuery extends PaginationQuery, DateRangeQuery {
   keyword?: string;
 }
 
-interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-}
-
 export const StaffService = {
   /**
    * Retrieves paginated bookings list for staff with optional filtering
@@ -48,58 +38,34 @@ export const StaffService = {
    */
   async getBookingsList(
     staffId: number,
-    query: BookingsListQuery = {}
-  ): Promise<PaginatedResponse<any>> {
-    const {
-      status,
-      page = DEFAULT_PAGE,
-      limit = DEFAULT_LIMIT,
-      fromDate,
-      toDate,
-      keyword,
-    } = query;
+    options: PaginationQuery & {
+      status?: string;
+      fromDate?: string;
+      toDate?: string;
+      keyword?: string;
+    } = {}
+  ) {
+    const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT, ...filters } = options;
 
-    // Validate and sanitize pagination parameters
-    const sanitizedLimit = Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT);
-    const sanitizedPage = Math.max(page, DEFAULT_PAGE);
-    const skip = (sanitizedPage - 1) * sanitizedLimit;
+    const sanitizedOptions = {
+      page: Math.max(page, DEFAULT_PAGE),
+      limit: Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT),
+      ...filters,
+    };
+
+    const { status, ...rest } = sanitizedOptions;
 
     let bookingStatus: BookingStatus | undefined;
-    if (status) {
-      if (!VALID_BOOKING_STATUSES.has(status as BookingStatus)) {
-        throw new AppError(
-          'Invalid booking status',
-          [{ message: 'Error.InvalidBookingStatus', path: ['status'] }],
-          { status },
-          400
-        );
-      }
-      bookingStatus = status as BookingStatus;
+    if (status && !VALID_BOOKING_STATUSES.has(status as BookingStatus)) {
+      throw new AppError(
+        'Invalid booking status',
+        [{ message: 'Error.InvalidBookingStatus', path: ['status'] }],
+        { status },
+        400
+      );
     }
 
-    const [bookingsResult, total] = await Promise.all([
-      StaffRepository.getBookingsList(staffId, bookingStatus, {
-        page: sanitizedPage,
-        limit: sanitizedLimit,
-        fromDate,
-        toDate,
-        keyword,
-      }),
-      StaffRepository.countBookings(staffId, bookingStatus),
-    ]);
-
-    const data = bookingsResult.bookings ?? [];
-    const totalPages = Math.ceil(total / sanitizedLimit);
-
-    return {
-      data,
-      total,
-      page: sanitizedPage,
-      limit: sanitizedLimit,
-      totalPages,
-      hasNextPage: sanitizedPage < totalPages,
-      hasPreviousPage: sanitizedPage > 1,
-    };
+    return StaffRepository.getBookingsList(staffId, bookingStatus, rest);
   },
 
   /**

@@ -1,12 +1,10 @@
 import { TCPResponseSuccess } from '../interfaces/tcp-response.interface';
 import {
-    GetBookingDetailSchema,
     GetBookingsByDateSchema,
     GetBookingsListSchema,
     GetReviewsSchema,
     GetRecentWorkLogsSchema,
     GetInspectionReportsSchema,
-    GetMonthlyStatsSchema,
 } from '../schemas/app.schema';
 import {
     CreateInspectionReportDto,
