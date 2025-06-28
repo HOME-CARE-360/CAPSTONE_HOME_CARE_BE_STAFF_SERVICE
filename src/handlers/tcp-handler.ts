@@ -1,197 +1,103 @@
 import { TCPResponseSuccess } from '../interfaces/tcp-response.interface';
-import { CreateInspectionReportDto, UpdateInspectionReportDto, UpdateInspectionStatusDto } from '../schemas/type';
+import {
+    GetBookingDetailSchema,
+    GetBookingsByDateSchema,
+    GetBookingsListSchema,
+    GetReviewsSchema,
+    GetRecentWorkLogsSchema,
+    GetInspectionReportsSchema,
+    GetMonthlyStatsSchema,
+} from '../schemas/app.schema';
+import {
+    CreateInspectionReportDto,
+    UpdateInspectionReportDto,
+} from '../schemas/type';
 import { StaffService } from '../services/staff.service';
-
 import { AppError } from './error';
+import { parseWithSchema } from './parseWithSchema';
 import { throwRpcAppError } from './throwRpcAppError';
+
+interface TCPPayload {
+    type: string;
+    data: any;
+}
+
+interface HandlerResult {
+    message: string;
+    data: any;
+}
 
 type HandleTCPReturn<T = any> = TCPResponseSuccess<T>;
 
-export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
+// Handler map for better performance and maintainability
+const HANDLER_MAP = new Map<string, (data: any) => Promise<HandlerResult>>([
+    ['STAFF_GET_BOOKINGS', handleGetBookings],
+    ['STAFF_GET_BOOKING_DETAIL', handleGetBookingDetail],
+    ['STAFF_CREATE_INSPECTION_REPORT', handleCreateInspectionReport],
+    ['STAFF_GET_REVIEWS', handleGetReviews],
+    ['STAFF_GET_INSPECTION_REPORTS', handleGetInspectionReports],
+    ['STAFF_GET_INSPECTION_DETAIL', handleGetInspectionDetail],
+    ['UPDATE_INSPECTION_REPORT', handleUpdateInspectionReport],
+    ['STAFF_GET_WORK_LOGS', handleGetWorkLogs],
+    ['STAFF_GET_PERFORMANCE', handleGetPerformance],
+    ['STAFF_GET_REVIEW_SUMMARY', handleGetReviewSummary],
+    ['STAFF_CREATE_WORK_LOG', handleCreateWorkLog],
+    ['STAFF_CHECK_OUT', handleCheckOut],
+    ['STAFF_GET_BOOKINGS_BY_DATE', handleGetBookingsByDate],
+    ['STAFF_GET_MONTHLY_STATS', handleGetMonthlyStats],
+]);
+
+export async function handleTCPRequest(payload: TCPPayload): Promise<HandleTCPReturn> {
     const { type, data } = payload;
+
     console.log(`[TCP] Incoming: ${type}`, {
         payload: { ...payload, data: data ? '[REDACTED]' : undefined },
     });
 
     try {
-        let responseData: any;
-        let message = '';
-        let statusCode = 200;
+        const handler = HANDLER_MAP.get(type);
 
-        switch (type) {
-            case 'STAFF_GET_BOOKINGS': {
-                const { staffId, status, page, limit, fromDate, toDate, keyword } = data;
-                validateId(staffId, 'staffId');
-                responseData = await StaffService.getBookingsList(staffId, {
-                    status,
-                    page,
-                    limit,
-                    fromDate,
-                    toDate,
-                    keyword,
-                });
-                message = 'Staff bookings retrieved successfully';
-                break;
-            }
-
-
-            case 'STAFF_GET_BOOKING_DETAIL': {
-                const { bookingId } = data;
-                validateId(bookingId, 'bookingId');
-                responseData = await StaffService.getBookingDetail(bookingId);
-                message = 'Booking detail retrieved successfully';
-                break;
-            }
-
-            case 'STAFF_CREATE_INSPECTION_REPORT': {
-                validateUpdateData(data, 'inspectionReport');
-                responseData = await StaffService.createInspectionReport(data as CreateInspectionReportDto);
-                message = 'Inspection report created successfully';
-                break;
-            }
-            case 'STAFF_GET_REVIEWS': {
-                const { staffId, page, limit, rating, fromDate, toDate } = data;
-
-                validateId(staffId, 'staffId');
-                responseData = await StaffService.getReviews(staffId, {
-                    page,
-                    limit,
-                    rating,
-                    fromDate,
-                    toDate,
-                });
-
-                message = 'Staff reviews retrieved successfully';
-                break;
-            }
-
-
-            case 'STAFF_GET_INSPECTION_REPORTS': {
-                const { staffId } = data;
-                validateId(staffId, 'staffId');
-                responseData = await StaffService.getInspectionReportsByStaff(staffId);
-                message = 'Inspection reports retrieved successfully';
-                break;
-            }
-
-            case 'STAFF_GET_INSPECTION_DETAIL': {
-                const { inspectionId } = data;
-                validateId(inspectionId, 'inspectionId');
-                responseData = await StaffService.getInspectionReportById(inspectionId);
-                message = 'Inspection report detail retrieved successfully';
-                break;
-            }
-
-            case 'UPDATE_INSPECTION_REPORT': {
-                const { inspectionId, dataInspection } = data;
-                validateId(inspectionId, 'inspectionId');
-                validateUpdateData(data, 'inspectionReport');
-                responseData = await StaffService.updateInspectionReport(inspectionId, dataInspection as UpdateInspectionReportDto);
-                message = 'Inspection report updated successfully';
-                break;
-            }
-
-            case 'STAFF_GET_WORK_LOGS': {
-                const { staffId } = data;
-                validateId(staffId, 'staffId');
-                responseData = await StaffService.getRecentWorkLogs(staffId);
-                message = 'Recent work logs retrieved successfully';
-                break;
-            }
-
-            case 'STAFF_GET_PERFORMANCE': {
-                const { staffId } = data;
-                validateId(staffId, 'staffId');
-                responseData = await StaffService.getStaffPerformanceById(staffId);
-                message = 'Staff performance retrieved successfully';
-                break;
-            }
-
-            case 'STAFF_GET_REVIEW_SUMMARY': {
-                const { staffId } = data;
-                validateId(staffId, 'staffId');
-                responseData = await StaffService.getReviewSummary(staffId);
-                message = 'Review summary retrieved successfully';
-                break;
-            }
-
-            case 'STAFF_CREATE_WORK_LOG': {
-                const { staffId, bookingId } = data;
-                validateId(staffId, 'staffId');
-                validateId(bookingId, 'bookingId');
-                responseData = await StaffService.createWorkLogWithStatusUpdate(staffId, bookingId);
-                message = 'Work log created and booking updated successfully';
-                break;
-            }
-
-            case 'STAFF_CHECK_OUT': {
-                const { bookingId } = data;
-                validateId(bookingId, 'bookingId');
-                responseData = await StaffService.checkOutWorkLog(bookingId);
-                message = 'Staff checked out successfully';
-                break;
-            }
-
-            case 'STAFF_GET_BOOKINGS_BY_DATE': {
-                const { staffId, date, page = 1, limit = 10 } = data;
-
-                validateId(staffId, 'staffId');
-
-                if (!date || isNaN(Date.parse(date))) {
-                    throw new AppError(
-                        'Invalid date format',
-                        [{ message: 'InvalidDate', path: ['date'] }],
-                        {},
-                        400
-                    );
-                }
-
-                responseData = await StaffService.getBookingsByDate(staffId, date, page, limit);
-                message = 'Bookings for date retrieved successfully';
-                break;
-            }
-
-
-            case 'STAFF_GET_MONTHLY_STATS': {
-                const { staffId, month, year } = data;
-                validateId(staffId, 'staffId');
-                if (![month, year].every(n => typeof n === 'number' && n > 0)) throw new AppError('Invalid month/year', [{ message: 'InvalidMonthYear', path: [] }], {}, 400);
-                responseData = await StaffService.getMonthlyStats(staffId, month, year);
-                message = 'Monthly stats retrieved successfully';
-                break;
-            }
-
-            default:
-                throw new AppError(
-                    'Error.UnknownRequestType',
-                    [{ message: 'Unknown request type', path: ['type'] }],
-                    { receivedType: type },
-                    400
-                );
+        if (!handler) {
+            throw new AppError(
+                'Error.UnknownRequestType',
+                [{ message: 'Unknown request type', path: ['type'] }],
+                { receivedType: type },
+                400
+            );
         }
+
+        const result = await handler(data);
 
         return {
             success: true,
             code: 'SUCCESS',
-            message,
-            data: responseData,
-            statusCode,
+            message: result.message,
+            data: result.data,
+            statusCode: 200,
             timestamp: new Date().toISOString(),
         };
     } catch (err: any) {
-        console.error(`[TCP] ${payload?.type ?? 'Unknown'} Failed:`, {
-            name: err?.name || 'Unknown',
-            message: err?.message || 'No message',
-            code: err?.code || 'NO_CODE',
-            statusCode: err?.statusCode || 500,
-            stack: err?.stack?.split('\n').slice(0, 3).join('\n'),
-        });
+        return handleError(err, payload);
+    }
+}
 
-        if (err instanceof AppError) {
-            throwRpcAppError(err);
-        }
+function handleError(err: any, payload: TCPPayload): never {
+    const errorContext = {
+        name: err?.name || 'Unknown',
+        message: err?.message || 'No message',
+        code: err?.code || 'NO_CODE',
+        statusCode: err?.statusCode || 500,
+        stack: err?.stack?.split('\n').slice(0, 3).join('\n'),
+    };
 
-        const unexpectedError = new AppError(
+    console.error(`[TCP] ${payload?.type ?? 'Unknown'} Failed:`, errorContext);
+
+    if (err instanceof AppError) {
+        throwRpcAppError(err);
+    }
+
+    throwRpcAppError(
+        new AppError(
             'Error.Unexpected',
             [{ message: 'An unexpected error occurred', path: [] }],
             {
@@ -202,25 +108,111 @@ export async function handleTCPRequest(payload: any): Promise<HandleTCPReturn> {
                 requestType: payload?.type,
             },
             500
-        );
-
-        throwRpcAppError(unexpectedError);
-    }
+        )
+    );
 }
 
-// ──────────────────────────────
-// Helpers
-// ──────────────────────────────
+async function handleGetBookings(data: any): Promise<HandlerResult> {
+    const parsed = parseWithSchema(GetBookingsListSchema, data);
+    const result = await StaffService.getBookingsList(parsed.staffId, parsed);
+    return { message: 'Staff bookings retrieved successfully', data: result };
+}
 
-function validateId(value: any, field: string): void {
-    if (!value || typeof value !== 'number' || Number.isNaN(value) || value <= 0) {
+async function handleGetBookingDetail(data: any): Promise<HandlerResult> {
+    validateId(data?.bookingId, 'bookingId');
+    validateId(data?.staffId, 'staffId');
+    const result = await StaffService.getBookingDetail(data.bookingId, data.staffId);
+    return { message: 'Booking detail retrieved successfully', data: result };
+}
+
+async function handleCreateInspectionReport(data: any): Promise<HandlerResult> {
+    validateUpdateData(data, 'inspectionReport');
+    const result = await StaffService.createInspectionReport(data as CreateInspectionReportDto);
+    return { message: 'Inspection report created successfully', data: result };
+}
+
+async function handleGetReviews(data: any): Promise<HandlerResult> {
+    const parsed = parseWithSchema(GetReviewsSchema, data);
+    const result = await StaffService.getReviews(parsed.staffId, parsed);
+    return { message: 'Staff reviews retrieved successfully', data: result };
+}
+
+async function handleGetInspectionReports(data: any): Promise<HandlerResult> {
+    const parsed = parseWithSchema(GetInspectionReportsSchema, data);
+    const result = await StaffService.getInspectionReportsByStaff(parsed.staffId, parsed);
+    return { message: 'Inspection reports retrieved successfully', data: result };
+}
+
+async function handleGetInspectionDetail(data: any): Promise<HandlerResult> {
+    validateId(data?.inspectionId, 'inspectionId');
+    const result = await StaffService.getInspectionReportById(data.inspectionId);
+    return { message: 'Inspection report detail retrieved successfully', data: result };
+}
+
+async function handleUpdateInspectionReport(data: any): Promise<HandlerResult> {
+    validateId(data?.inspectionId, 'inspectionId');
+    validateUpdateData(data?.dataInspection, 'inspectionReport');
+    const result = await StaffService.updateInspectionReport(
+        data.inspectionId,
+        data.dataInspection as UpdateInspectionReportDto
+    );
+    return { message: 'Inspection report updated successfully', data: result };
+}
+
+async function handleGetWorkLogs(data: any): Promise<HandlerResult> {
+    const parsed = parseWithSchema(GetRecentWorkLogsSchema, data);
+    const result = await StaffService.getRecentWorkLogs(parsed.staffId, parsed);
+    return { message: 'Recent work logs retrieved successfully', data: result };
+}
+
+async function handleGetPerformance(data: any): Promise<HandlerResult> {
+    validateId(data?.staffId, 'staffId');
+    const result = await StaffService.getStaffPerformanceById(data.staffId);
+    return { message: 'Staff performance retrieved successfully', data: result };
+}
+
+async function handleGetReviewSummary(data: any): Promise<HandlerResult> {
+    validateId(data?.staffId, 'staffId');
+    const result = await StaffService.getReviewSummary(data.staffId);
+    return { message: 'Review summary retrieved successfully', data: result };
+}
+
+async function handleCreateWorkLog(data: any): Promise<HandlerResult> {
+    validateId(data?.staffId, 'staffId');
+    validateId(data?.bookingId, 'bookingId');
+    const result = await StaffService.createWorkLogWithStatusUpdate(data.staffId, data.bookingId);
+    return { message: 'Work log created and booking updated successfully', data: result };
+}
+
+async function handleCheckOut(data: any): Promise<HandlerResult> {
+    validateId(data?.bookingId, 'bookingId');
+    const result = await StaffService.checkOutWorkLog(data.bookingId);
+    return { message: 'Staff checked out successfully', data: result };
+}
+
+async function handleGetBookingsByDate(data: any): Promise<HandlerResult> {
+    const parsed = parseWithSchema(GetBookingsByDateSchema, data);
+    const result = await StaffService.getBookingsByDate(
+        parsed.staffId,
+        parsed.date,
+        parsed.page,
+        parsed.limit
+    );
+    return { message: 'Bookings for date retrieved successfully', data: result };
+}
+
+async function handleGetMonthlyStats(data: any): Promise<HandlerResult> {
+    validateId(data?.staffId, 'staffId');
+    const result = await StaffService.getMonthlyStats(data.staffId, data.month, data.year);
+    return { message: 'Monthly stats retrieved successfully', data: result };
+}
+
+function validateId(value: any, key: string): void {
+    if (!Number.isInteger(value) || value <= 0) {
         throw new AppError(
-            `Error.Invalid${capitalize(field)}`,
-            [{ message: `Invalid ${field}`, path: [field] }],
-            {
-                receivedValue: value,
-                receivedType: typeof value,
-            },
+            `Error.Invalid${capitalize(key)}`,
+            [{ message: `Invalid ${key}`, path: [key] }],
+            { receivedValue: value },
             400
         );
     }

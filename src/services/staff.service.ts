@@ -7,27 +7,66 @@ import {
 import { AppError } from '../handlers/error';
 import { BookingStatus } from '../generated/prisma';
 
+const DEFAULT_PAGE = 1;
+const DEFAULT_LIMIT = 10;
+const MIN_LIMIT = 1;
+const MAX_LIMIT = 100;
+
+const VALID_BOOKING_STATUSES = new Set(Object.values(BookingStatus));
+
+interface PaginationQuery {
+  page?: number;
+  limit?: number;
+}
+
+interface DateRangeQuery {
+  fromDate?: string;
+  toDate?: string;
+}
+
+interface BookingsListQuery extends PaginationQuery, DateRangeQuery {
+  status?: string;
+  keyword?: string;
+}
+
+interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
 export const StaffService = {
   /**
-   * Lấy danh sách booking của staff theo status (nếu có)
+   * Retrieves paginated bookings list for staff with optional filtering
+   * @param staffId - Staff identifier
+   * @param query - Query parameters for filtering and pagination
+   * @returns Paginated bookings response
    */
   async getBookingsList(
     staffId: number,
-    query: {
-      status?: string;
-      page?: number;
-      limit?: number;
-      fromDate?: string;
-      toDate?: string;
-      keyword?: string;
-    }
-  ) {
-    const { status, page = 1, limit = 10, fromDate, toDate, keyword } = query;
+    query: BookingsListQuery = {}
+  ): Promise<PaginatedResponse<any>> {
+    const {
+      status,
+      page = DEFAULT_PAGE,
+      limit = DEFAULT_LIMIT,
+      fromDate,
+      toDate,
+      keyword,
+    } = query;
 
-    // Validate status
-    let bookingStatus: BookingStatus | undefined = undefined;
+    // Validate and sanitize pagination parameters
+    const sanitizedLimit = Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT);
+    const sanitizedPage = Math.max(page, DEFAULT_PAGE);
+    const skip = (sanitizedPage - 1) * sanitizedLimit;
+
+    let bookingStatus: BookingStatus | undefined;
     if (status) {
-      if (!Object.values(BookingStatus).includes(status as BookingStatus)) {
+      if (!VALID_BOOKING_STATUSES.has(status as BookingStatus)) {
         throw new AppError(
           'Invalid booking status',
           [{ message: 'Error.InvalidBookingStatus', path: ['status'] }],
@@ -38,13 +77,10 @@ export const StaffService = {
       bookingStatus = status as BookingStatus;
     }
 
-    const take = Math.max(limit, 1);
-    const skip = (Math.max(page, 1) - 1) * take;
-
-    const [data, total] = await Promise.all([
+    const [bookingsResult, total] = await Promise.all([
       StaffRepository.getBookingsList(staffId, bookingStatus, {
-        page,
-        limit,
+        page: sanitizedPage,
+        limit: sanitizedLimit,
         fromDate,
         toDate,
         keyword,
@@ -52,150 +88,311 @@ export const StaffService = {
       StaffRepository.countBookings(staffId, bookingStatus),
     ]);
 
+    const data = bookingsResult.bookings ?? [];
+    const totalPages = Math.ceil(total / sanitizedLimit);
+
     return {
       data,
       total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / take),
+      page: sanitizedPage,
+      limit: sanitizedLimit,
+      totalPages,
+      hasNextPage: sanitizedPage < totalPages,
+      hasPreviousPage: sanitizedPage > 1,
     };
   },
 
-  async getBookingDetail(bookingId: number) {
-    return StaffRepository.getBookingDetail(bookingId);
+  /**
+   * Retrieves detailed booking information for staff
+   * @param bookingId - Booking identifier
+   * @param staffId - Staff identifier
+   * @returns Booking details or null if not found
+   */
+  async getBookingDetail(bookingId: number, staffId: number) {
+    if (!bookingId || !staffId) {
+      throw new AppError(
+        'Missing required parameters',
+        [{ message: 'Error.MissingParameters', path: ['bookingId', 'staffId'] }],
+        { bookingId, staffId },
+        400
+      );
+    }
+
+    return StaffRepository.getBookingDetail(bookingId, staffId);
   },
 
   /**
-   * Tạo báo cáo kiểm tra dịch vụ
+   * Creates an inspection report for a booking
+   * @param dto - Inspection report creation data
+   * @returns Created inspection report
    */
   async createInspectionReport(dto: CreateInspectionReportDto) {
-    const { staffId, bookingId, images, estimatedTime, note } = dto;
-    return StaffRepository.createInspectionReport({
+    const { staffId, bookingId, images = [], estimatedTime, note } = dto;
+
+    // Validate required fields
+    if (!staffId || !bookingId) {
+      throw new AppError(
+        'Missing required fields',
+        [{ message: 'Error.MissingRequiredFields', path: ['staffId', 'bookingId'] }],
+        { dto },
+        400
+      );
+    }
+
+    const inspectionData = {
       images,
       estimatedTime,
       note,
       Booking: { connect: { id: bookingId } },
       Staff: { connect: { id: staffId } },
-    });
+    };
+
+    return StaffRepository.createInspectionReport(inspectionData);
   },
 
   /**
-   * Lấy danh sách đánh giá của staff
+   * Retrieves paginated reviews for staff
+   * @param staffId - Staff identifier
+   * @param options - Query options for filtering and pagination
+   * @returns Paginated reviews
    */
   async getReviews(
     staffId: number,
-    options?: {
-      page?: number;
-      limit?: number;
+    options: PaginationQuery & {
       rating?: number;
       fromDate?: string;
       toDate?: string;
-    }
+    } = {}
   ) {
-    return StaffRepository.getReviews(staffId, options);
+    const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT, ...filters } = options;
+    const sanitizedOptions = {
+      page: Math.max(page, DEFAULT_PAGE),
+      limit: Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT),
+      ...filters,
+    };
+
+    return StaffRepository.getReviews(staffId, sanitizedOptions);
   },
 
   /**
-   * Lấy chi tiết báo cáo kiểm tra của 1 booking
+   * Retrieves inspection report by ID with error handling
+   * @param inspectionId - Inspection report identifier
+   * @returns Inspection report details
    */
   async getInspectionReportById(inspectionId: number) {
+    if (!inspectionId || inspectionId <= 0) {
+      throw new AppError(
+        'Invalid inspection ID',
+        [{ message: 'Error.InvalidInspectionId', path: ['inspectionId'] }],
+        { inspectionId },
+        400
+      );
+    }
+
     return StaffRepository.getInspectionReportById(inspectionId);
   },
 
   /**
-   * Lấy danh sách báo cáo kiểm tra của staff
+   * Retrieves paginated inspection reports for staff
+   * @param staffId - Staff identifier
+   * @param options - Pagination options
+   * @returns Paginated inspection reports
    */
   async getInspectionReportsByStaff(
     staffId: number,
-    options?: {
-      page?: number;
-      limit?: number;
-    }
+    options: PaginationQuery = {}
   ) {
-    return StaffRepository.getInspectionReportsByStaff(staffId, options);
+    const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT } = options;
+    const sanitizedOptions = {
+      page: Math.max(page, DEFAULT_PAGE),
+      limit: Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT),
+    };
+
+    return StaffRepository.getInspectionReportsByStaff(staffId, sanitizedOptions);
   },
 
-
   /**
-   * Cập nhật nội dung báo cáo kiểm tra
+   * Updates inspection report with validation and optimization
+   * @param inspectionId - Inspection report identifier
+   * @param dto - Update data
+   * @returns Updated inspection report
    */
-  async updateInspectionReport(inspectionId: number, dto: UpdateInspectionReportDto) {
+  async updateInspectionReport(
+    inspectionId: number,
+    dto: UpdateInspectionReportDto
+  ) {
     const { note, images, estimatedTime } = dto;
-    if (!note && !images?.length && !estimatedTime) {
+
+    // Early validation for empty updates
+    const hasValidUpdates = Boolean(
+      note?.trim() ||
+      (images && images.length > 0) ||
+      estimatedTime
+    );
+
+    if (!hasValidUpdates) {
       throw new AppError(
-        'Missing update data for inspection report',
-        [{ message: 'Error.MissingUpdateData', path: ['note', 'images', 'estimatedTime'] }],
+        'No valid update data provided',
+        [{ message: 'Error.NoValidUpdateData', path: ['note', 'images', 'estimatedTime'] }],
         { inspectionId, dto },
         400
       );
     }
 
-    return StaffRepository.updateInspectionReport(inspectionId, {
-      ...(note && { note }),
-      ...(images && images.length > 0 && { images }),
-      ...(estimatedTime && { estimatedTime }),
-    });
+    const updateData: Partial<UpdateInspectionReportDto> = {};
+    if (note?.trim()) updateData.note = note.trim();
+    if (images && images.length > 0) updateData.images = images;
+    if (estimatedTime) updateData.estimatedTime = estimatedTime;
+
+    return StaffRepository.updateInspectionReport(inspectionId, updateData);
   },
 
   /**
-   * Lấy danh sách work logs gần đây của staff
+   * Retrieves recent work logs for staff with pagination
+   * @param staffId - Staff identifier
+   * @param options - Pagination options
+   * @returns Paginated work logs
    */
   async getRecentWorkLogs(
     staffId: number,
-    options?: { page?: number; limit?: number }
+    options: PaginationQuery = {}
   ) {
-    return StaffRepository.getRecentWorkLogs(staffId, options);
+    const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT } = options;
+    const sanitizedOptions = {
+      page: Math.max(page, DEFAULT_PAGE),
+      limit: Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT),
+    };
+
+    return StaffRepository.getRecentWorkLogs(staffId, sanitizedOptions);
   },
 
   /**
-   * Lấy tính hiệu suất làm việc của staff
+   * Retrieves staff performance metrics
+   * @param staffId - Staff identifier
+   * @returns Performance metrics
    */
   async getStaffPerformanceById(staffId: number) {
+    if (!staffId || staffId <= 0) {
+      throw new AppError(
+        'Invalid staff ID',
+        [{ message: 'Error.InvalidStaffId', path: ['staffId'] }],
+        { staffId },
+        400
+      );
+    }
+
     return StaffRepository.getStaffPerformanceById(staffId);
   },
 
   /**
-   * Lấy tổng hợp review theo số sao
+   * Retrieves aggregated review summary by rating
+   * @param staffId - Staff identifier
+   * @returns Review summary statistics
    */
   async getReviewSummary(staffId: number) {
     return StaffRepository.getReviewSummary(staffId);
   },
 
   /**
-   * Tạo work log và chuyển booking thành IN_PROGRESS
+   * Creates work log and updates booking status atomically
+   * @param staffId - Staff identifier
+   * @param bookingId - Booking identifier
+   * @returns Work log creation result
    */
   async createWorkLogWithStatusUpdate(staffId: number, bookingId: number) {
+    // Validate required parameters
+    if (!staffId || !bookingId) {
+      throw new AppError(
+        'Missing required parameters',
+        [{ message: 'Error.MissingParameters', path: ['staffId', 'bookingId'] }],
+        { staffId, bookingId },
+        400
+      );
+    }
+
     return StaffRepository.createWorkLogWithStatusUpdate(staffId, bookingId);
   },
 
   /**
-   * Check-in work log
+   * Checks out work log for a booking
+   * @param bookingId - Booking identifier
+   * @returns Check-out result
    */
   async checkOutWorkLog(bookingId: number) {
+    if (!bookingId || bookingId <= 0) {
+      throw new AppError(
+        'Invalid booking ID',
+        [{ message: 'Error.InvalidBookingId', path: ['bookingId'] }],
+        { bookingId },
+        400
+      );
+    }
+
     return StaffRepository.checkOutWorkLogByBookingId(bookingId);
   },
 
   /**
-   * Lấy danh sách booking theo ngày
-   * @param staffId
-   * @param date YYYY-MM-DD
+   * Retrieves bookings for a specific date with pagination
+   * @param staffId - Staff identifier
+   * @param date - Date in YYYY-MM-DD format
+   * @param page - Page number (default: 1)
+   * @param limit - Items per page (default: 10)
+   * @returns Paginated bookings for the date
    */
-  async getBookingsByDate(staffId: number, date: string, page = 1, limit = 10) {
-    return StaffRepository.getBookingsByDate(staffId, date, page, limit);
+  async getBookingsByDate(
+    staffId: number,
+    date: string,
+    page = DEFAULT_PAGE,
+    limit = DEFAULT_LIMIT
+  ) {
+    if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      throw new AppError(
+        'Invalid date format',
+        [{ message: 'Error.InvalidDateFormat', path: ['date'] }],
+        { date },
+        400
+      );
+    }
+
+    const sanitizedPage = Math.max(page, DEFAULT_PAGE);
+    const sanitizedLimit = Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT);
+
+    return StaffRepository.getBookingsByDate(
+      staffId,
+      date,
+      sanitizedPage,
+      sanitizedLimit
+    );
   },
 
   /**
-   * Lấy thống kê hàng tháng của staff
-   * @param staffId
-   * @param month 1-12
-   *  @param year YYYY
-   * @return
-   * {
-   *   totalBookings: number;
-   * }
+   * Retrieves monthly statistics for staff
+   * @param staffId - Staff identifier
+   * @param month - Month (1-12)
+   * @param year - Year (YYYY)
+   * @returns Monthly statistics including total bookings
    */
   async getMonthlyStats(staffId: number, month: number, year: number) {
-    return StaffRepository.getMonthlyStats(staffId, month, year);
-  }
+    // Validate month and year
+    if (!month || month < 1 || month > 12) {
+      throw new AppError(
+        'Invalid month',
+        [{ message: 'Error.InvalidMonth', path: ['month'] }],
+        { month },
+        400
+      );
+    }
 
-};
+    const currentYear = new Date().getFullYear();
+    if (!year || year < 2000 || year > currentYear + 10) {
+      throw new AppError(
+        'Invalid year',
+        [{ message: 'Error.InvalidYear', path: ['year'] }],
+        { year },
+        400
+      );
+    }
+
+    return StaffRepository.getMonthlyStats(staffId, month, year);
+  },
+} as const;
