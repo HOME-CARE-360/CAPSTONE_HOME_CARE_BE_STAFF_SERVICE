@@ -594,7 +594,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Workspace\\CAPSTONE_HOME_CARE_BE_STAFF_SERVICE\\src\\generated\\prisma",
+      "value": "/Applications/CAPSTONE/CAPSTONE_HOME_CARE_BE_STAFF_SERVICE/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -603,7 +603,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       },
       {
@@ -612,12 +612,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Workspace\\CAPSTONE_HOME_CARE_BE_STAFF_SERVICE\\prisma\\schema.prisma",
+    "sourceFilePath": "/Applications/CAPSTONE/CAPSTONE_HOME_CARE_BE_STAFF_SERVICE/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.8.2",
@@ -626,7 +625,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
