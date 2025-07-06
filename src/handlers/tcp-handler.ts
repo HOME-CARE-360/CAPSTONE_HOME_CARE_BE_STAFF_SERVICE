@@ -124,6 +124,8 @@ async function handleGetBookingDetail(data: any): Promise<HandlerResult> {
 }
 
 async function handleCreateInspectionReport(data: any): Promise<HandlerResult> {
+    console.log(data);
+
     validateUpdateData(data, 'inspectionReport');
     const result = await StaffService.createInspectionReport(data as CreateInspectionReportDto);
     return { message: 'Inspection report created successfully', data: result };
