@@ -43,6 +43,8 @@ const HANDLER_MAP = new Map<string, (data: any) => Promise<HandlerResult>>([
     ['STAFF_CHECK_OUT', handleCheckOut],
     ['STAFF_GET_BOOKINGS_BY_DATE', handleGetBookingsByDate],
     ['STAFF_GET_MONTHLY_STATS', handleGetMonthlyStats],
+    ['STAFF_GET_INSPECTION_STAFF', handleGetInspectionByStaff],
+
 ]);
 
 export async function handleTCPRequest(payload: TCPPayload): Promise<HandleTCPReturn> {
@@ -203,6 +205,12 @@ async function handleGetMonthlyStats(data: any): Promise<HandlerResult> {
     validateId(data?.staffId, 'staffId');
     const result = await StaffService.getMonthlyStats(data.staffId, data.month, data.year);
     return { message: 'Monthly stats retrieved successfully', data: result };
+}
+
+async function handleGetInspectionByStaff(data: any): Promise<HandlerResult> {
+  const parsed = parseWithSchema(GetInspectionReportsSchema, data);
+  const result = await StaffService.getInspectionReportsByStaff(parsed.staffId, parsed);
+  return { message: 'Inspection reports retrieved successfully', data: result };
 }
 
 function validateId(value: any, key: string): void {

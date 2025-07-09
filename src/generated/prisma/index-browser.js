@@ -308,7 +308,9 @@ exports.Prisma.ServiceScalarFieldEnum = {
   updatedAt: 'updatedAt',
   name: 'name',
   publishedAt: 'publishedAt',
-  description: 'description'
+  description: 'description',
+  categoryId: 'categoryId',
+  unit: 'unit'
 };
 
 exports.Prisma.ServiceProviderScalarFieldEnum = {
@@ -416,14 +418,6 @@ exports.Prisma.WorkLogScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.Spatial_ref_sysScalarFieldEnum = {
-  srid: 'srid',
-  auth_name: 'auth_name',
-  auth_srid: 'auth_srid',
-  srtext: 'srtext',
-  proj4text: 'proj4text'
-};
-
 exports.Prisma.InspectionReportScalarFieldEnum = {
   id: 'id',
   bookingId: 'bookingId',
@@ -448,7 +442,17 @@ exports.Prisma.ServiceItemScalarFieldEnum = {
   id: 'id',
   name: 'name',
   unitPrice: 'unitPrice',
-  serviceId: 'serviceId'
+  warrantyPeriod: 'warrantyPeriod',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
+  updatedAt: 'updatedAt',
+  brand: 'brand',
+  description: 'description',
+  isActive: 'isActive',
+  model: 'model',
+  stockQuantity: 'stockQuantity',
+  unit: 'unit',
+  providerId: 'providerId'
 };
 
 exports.Prisma.ServiceRequestScalarFieldEnum = {
@@ -463,6 +467,11 @@ exports.Prisma.ServiceRequestScalarFieldEnum = {
   location: 'location',
   phoneNumber: 'phoneNumber',
   categoryId: 'categoryId'
+};
+
+exports.Prisma.Service_ServiceItemsScalarFieldEnum = {
+  serviceId: 'serviceId',
+  serviceItemId: 'serviceItemId'
 };
 
 exports.Prisma.SortOrder = {
@@ -500,6 +509,13 @@ exports.HTTPMethod = exports.$Enums.HTTPMethod = {
   PATCH: 'PATCH',
   OPTIONS: 'OPTIONS',
   HEAD: 'HEAD'
+};
+
+exports.Unit = exports.$Enums.Unit = {
+  PER_HOUR: 'PER_HOUR',
+  PER_ITEM: 'PER_ITEM',
+  PER_SQUARE_METER: 'PER_SQUARE_METER',
+  PER_JOB: 'PER_JOB'
 };
 
 exports.CompanyType = exports.$Enums.CompanyType = {
@@ -546,9 +562,7 @@ exports.VerificationCodeType = exports.$Enums.VerificationCodeType = {
 exports.RequestStatus = exports.$Enums.RequestStatus = {
   PENDING: 'PENDING',
   IN_PROGRESS: 'IN_PROGRESS',
-  ESTIMATED: 'ESTIMATED',
-  BOOKED: 'BOOKED',
-  REJECTED: 'REJECTED'
+  ESTIMATED: 'ESTIMATED'
 };
 
 exports.Prisma.ModelName = {
@@ -578,11 +592,11 @@ exports.Prisma.ModelName = {
   User: 'User',
   VerificationCode: 'VerificationCode',
   WorkLog: 'WorkLog',
-  spatial_ref_sys: 'spatial_ref_sys',
   InspectionReport: 'InspectionReport',
   ProposedService: 'ProposedService',
   ServiceItem: 'ServiceItem',
-  ServiceRequest: 'ServiceRequest'
+  ServiceRequest: 'ServiceRequest',
+  Service_ServiceItems: 'Service_ServiceItems'
 };
 
 /**

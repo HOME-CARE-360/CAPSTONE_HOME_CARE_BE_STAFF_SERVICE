@@ -144,11 +144,6 @@ export type VerificationCode = $Result.DefaultSelection<Prisma.$VerificationCode
  */
 export type WorkLog = $Result.DefaultSelection<Prisma.$WorkLogPayload>
 /**
- * Model spatial_ref_sys
- * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
- */
-export type spatial_ref_sys = $Result.DefaultSelection<Prisma.$spatial_ref_sysPayload>
-/**
  * Model InspectionReport
  * 
  */
@@ -168,6 +163,11 @@ export type ServiceItem = $Result.DefaultSelection<Prisma.$ServiceItemPayload>
  * 
  */
 export type ServiceRequest = $Result.DefaultSelection<Prisma.$ServiceRequestPayload>
+/**
+ * Model Service_ServiceItems
+ * 
+ */
+export type Service_ServiceItems = $Result.DefaultSelection<Prisma.$Service_ServiceItemsPayload>
 
 /**
  * Enums
@@ -294,24 +294,23 @@ export const InspectionStatus: {
 export type InspectionStatus = (typeof InspectionStatus)[keyof typeof InspectionStatus]
 
 
-export const TimeOffStatus: {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-};
-
-export type TimeOffStatus = (typeof TimeOffStatus)[keyof typeof TimeOffStatus]
-
-
 export const RequestStatus: {
   PENDING: 'PENDING',
   IN_PROGRESS: 'IN_PROGRESS',
-  ESTIMATED: 'ESTIMATED',
-  BOOKED: 'BOOKED',
-  REJECTED: 'REJECTED'
+  ESTIMATED: 'ESTIMATED'
 };
 
 export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus]
+
+
+export const Unit: {
+  PER_HOUR: 'PER_HOUR',
+  PER_ITEM: 'PER_ITEM',
+  PER_SQUARE_METER: 'PER_SQUARE_METER',
+  PER_JOB: 'PER_JOB'
+};
+
+export type Unit = (typeof Unit)[keyof typeof Unit]
 
 }
 
@@ -363,13 +362,13 @@ export type InspectionStatus = $Enums.InspectionStatus
 
 export const InspectionStatus: typeof $Enums.InspectionStatus
 
-export type TimeOffStatus = $Enums.TimeOffStatus
-
-export const TimeOffStatus: typeof $Enums.TimeOffStatus
-
 export type RequestStatus = $Enums.RequestStatus
 
 export const RequestStatus: typeof $Enums.RequestStatus
+
+export type Unit = $Enums.Unit
+
+export const Unit: typeof $Enums.Unit
 
 /**
  * ##  Prisma Client ʲˢ
@@ -757,16 +756,6 @@ export class PrismaClient<
   get workLog(): Prisma.WorkLogDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.spatial_ref_sys`: Exposes CRUD operations for the **spatial_ref_sys** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Spatial_ref_sys
-    * const spatial_ref_sys = await prisma.spatial_ref_sys.findMany()
-    * ```
-    */
-  get spatial_ref_sys(): Prisma.spatial_ref_sysDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.inspectionReport`: Exposes CRUD operations for the **InspectionReport** model.
     * Example usage:
     * ```ts
@@ -805,6 +794,16 @@ export class PrismaClient<
     * ```
     */
   get serviceRequest(): Prisma.ServiceRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.service_ServiceItems`: Exposes CRUD operations for the **Service_ServiceItems** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Service_ServiceItems
+    * const service_ServiceItems = await prisma.service_ServiceItems.findMany()
+    * ```
+    */
+  get service_ServiceItems(): Prisma.Service_ServiceItemsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1271,11 +1270,11 @@ export namespace Prisma {
     User: 'User',
     VerificationCode: 'VerificationCode',
     WorkLog: 'WorkLog',
-    spatial_ref_sys: 'spatial_ref_sys',
     InspectionReport: 'InspectionReport',
     ProposedService: 'ProposedService',
     ServiceItem: 'ServiceItem',
-    ServiceRequest: 'ServiceRequest'
+    ServiceRequest: 'ServiceRequest',
+    Service_ServiceItems: 'Service_ServiceItems'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1294,7 +1293,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "booking" | "category" | "categoryTranslation" | "chatMessage" | "customerProfile" | "device" | "language" | "notification" | "packageRecommendation" | "paymentTransaction" | "permission" | "recurringBooking" | "refreshToken" | "review" | "rewardPoint" | "role" | "service" | "serviceProvider" | "serviceProviderTranslation" | "serviceTranslation" | "staff" | "staffCategory" | "transaction" | "user" | "verificationCode" | "workLog" | "spatial_ref_sys" | "inspectionReport" | "proposedService" | "serviceItem" | "serviceRequest"
+      modelProps: "booking" | "category" | "categoryTranslation" | "chatMessage" | "customerProfile" | "device" | "language" | "notification" | "packageRecommendation" | "paymentTransaction" | "permission" | "recurringBooking" | "refreshToken" | "review" | "rewardPoint" | "role" | "service" | "serviceProvider" | "serviceProviderTranslation" | "serviceTranslation" | "staff" | "staffCategory" | "transaction" | "user" | "verificationCode" | "workLog" | "inspectionReport" | "proposedService" | "serviceItem" | "serviceRequest" | "service_ServiceItems"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3222,80 +3221,6 @@ export namespace Prisma {
           }
         }
       }
-      spatial_ref_sys: {
-        payload: Prisma.$spatial_ref_sysPayload<ExtArgs>
-        fields: Prisma.spatial_ref_sysFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.spatial_ref_sysFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.spatial_ref_sysFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          findFirst: {
-            args: Prisma.spatial_ref_sysFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.spatial_ref_sysFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          findMany: {
-            args: Prisma.spatial_ref_sysFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>[]
-          }
-          create: {
-            args: Prisma.spatial_ref_sysCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          createMany: {
-            args: Prisma.spatial_ref_sysCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.spatial_ref_sysCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>[]
-          }
-          delete: {
-            args: Prisma.spatial_ref_sysDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          update: {
-            args: Prisma.spatial_ref_sysUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          deleteMany: {
-            args: Prisma.spatial_ref_sysDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.spatial_ref_sysUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.spatial_ref_sysUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>[]
-          }
-          upsert: {
-            args: Prisma.spatial_ref_sysUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          aggregate: {
-            args: Prisma.Spatial_ref_sysAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateSpatial_ref_sys>
-          }
-          groupBy: {
-            args: Prisma.spatial_ref_sysGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Spatial_ref_sysGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.spatial_ref_sysCountArgs<ExtArgs>
-            result: $Utils.Optional<Spatial_ref_sysCountAggregateOutputType> | number
-          }
-        }
-      }
       InspectionReport: {
         payload: Prisma.$InspectionReportPayload<ExtArgs>
         fields: Prisma.InspectionReportFieldRefs
@@ -3592,6 +3517,80 @@ export namespace Prisma {
           }
         }
       }
+      Service_ServiceItems: {
+        payload: Prisma.$Service_ServiceItemsPayload<ExtArgs>
+        fields: Prisma.Service_ServiceItemsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.Service_ServiceItemsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.Service_ServiceItemsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload>
+          }
+          findFirst: {
+            args: Prisma.Service_ServiceItemsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.Service_ServiceItemsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload>
+          }
+          findMany: {
+            args: Prisma.Service_ServiceItemsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload>[]
+          }
+          create: {
+            args: Prisma.Service_ServiceItemsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload>
+          }
+          createMany: {
+            args: Prisma.Service_ServiceItemsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.Service_ServiceItemsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload>[]
+          }
+          delete: {
+            args: Prisma.Service_ServiceItemsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload>
+          }
+          update: {
+            args: Prisma.Service_ServiceItemsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload>
+          }
+          deleteMany: {
+            args: Prisma.Service_ServiceItemsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.Service_ServiceItemsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.Service_ServiceItemsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload>[]
+          }
+          upsert: {
+            args: Prisma.Service_ServiceItemsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Service_ServiceItemsPayload>
+          }
+          aggregate: {
+            args: Prisma.Service_ServiceItemsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateService_ServiceItems>
+          }
+          groupBy: {
+            args: Prisma.Service_ServiceItemsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Service_ServiceItemsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.Service_ServiceItemsCountArgs<ExtArgs>
+            result: $Utils.Optional<Service_ServiceItemsCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3702,11 +3701,11 @@ export namespace Prisma {
     user?: UserOmit
     verificationCode?: VerificationCodeOmit
     workLog?: WorkLogOmit
-    spatial_ref_sys?: spatial_ref_sysOmit
     inspectionReport?: InspectionReportOmit
     proposedService?: ProposedServiceOmit
     serviceItem?: ServiceItemOmit
     serviceRequest?: ServiceRequestOmit
+    service_ServiceItems?: Service_ServiceItemsOmit
   }
 
   /* Types for Logging */
@@ -3843,17 +3842,17 @@ export namespace Prisma {
   export type CategoryCountOutputType = {
     other_Category: number
     CategoryTranslation: number
+    Service: number
     ServiceRequest: number
     StaffCategory: number
-    Service: number
   }
 
   export type CategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     other_Category?: boolean | CategoryCountOutputTypeCountOther_CategoryArgs
     CategoryTranslation?: boolean | CategoryCountOutputTypeCountCategoryTranslationArgs
+    Service?: boolean | CategoryCountOutputTypeCountServiceArgs
     ServiceRequest?: boolean | CategoryCountOutputTypeCountServiceRequestArgs
     StaffCategory?: boolean | CategoryCountOutputTypeCountStaffCategoryArgs
-    Service?: boolean | CategoryCountOutputTypeCountServiceArgs
   }
 
   // Custom InputTypes
@@ -3884,6 +3883,13 @@ export namespace Prisma {
   /**
    * CategoryCountOutputType without action
    */
+  export type CategoryCountOutputTypeCountServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceWhereInput
+  }
+
+  /**
+   * CategoryCountOutputType without action
+   */
   export type CategoryCountOutputTypeCountServiceRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ServiceRequestWhereInput
   }
@@ -3893,13 +3899,6 @@ export namespace Prisma {
    */
   export type CategoryCountOutputTypeCountStaffCategoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StaffCategoryWhereInput
-  }
-
-  /**
-   * CategoryCountOutputType without action
-   */
-  export type CategoryCountOutputTypeCountServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ServiceWhereInput
   }
 
 
@@ -4147,18 +4146,16 @@ export namespace Prisma {
     ProposedService: number
     RecurringBooking: number
     Review: number
-    ServiceItem: number
     ServiceTranslation: number
-    Category: number
+    Service_ServiceItems: number
   }
 
   export type ServiceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ProposedService?: boolean | ServiceCountOutputTypeCountProposedServiceArgs
     RecurringBooking?: boolean | ServiceCountOutputTypeCountRecurringBookingArgs
     Review?: boolean | ServiceCountOutputTypeCountReviewArgs
-    ServiceItem?: boolean | ServiceCountOutputTypeCountServiceItemArgs
     ServiceTranslation?: boolean | ServiceCountOutputTypeCountServiceTranslationArgs
-    Category?: boolean | ServiceCountOutputTypeCountCategoryArgs
+    Service_ServiceItems?: boolean | ServiceCountOutputTypeCountService_ServiceItemsArgs
   }
 
   // Custom InputTypes
@@ -4196,13 +4193,6 @@ export namespace Prisma {
   /**
    * ServiceCountOutputType without action
    */
-  export type ServiceCountOutputTypeCountServiceItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ServiceItemWhereInput
-  }
-
-  /**
-   * ServiceCountOutputType without action
-   */
   export type ServiceCountOutputTypeCountServiceTranslationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ServiceTranslationWhereInput
   }
@@ -4210,8 +4200,8 @@ export namespace Prisma {
   /**
    * ServiceCountOutputType without action
    */
-  export type ServiceCountOutputTypeCountCategoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CategoryWhereInput
+  export type ServiceCountOutputTypeCountService_ServiceItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Service_ServiceItemsWhereInput
   }
 
 
@@ -4222,6 +4212,7 @@ export namespace Prisma {
   export type ServiceProviderCountOutputType = {
     Booking: number
     Service: number
+    ServiceItem: number
     ServiceProviderTranslation: number
     ServiceRequest: number
     Staff: number
@@ -4230,6 +4221,7 @@ export namespace Prisma {
   export type ServiceProviderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Booking?: boolean | ServiceProviderCountOutputTypeCountBookingArgs
     Service?: boolean | ServiceProviderCountOutputTypeCountServiceArgs
+    ServiceItem?: boolean | ServiceProviderCountOutputTypeCountServiceItemArgs
     ServiceProviderTranslation?: boolean | ServiceProviderCountOutputTypeCountServiceProviderTranslationArgs
     ServiceRequest?: boolean | ServiceProviderCountOutputTypeCountServiceRequestArgs
     Staff?: boolean | ServiceProviderCountOutputTypeCountStaffArgs
@@ -4258,6 +4250,13 @@ export namespace Prisma {
    */
   export type ServiceProviderCountOutputTypeCountServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ServiceWhereInput
+  }
+
+  /**
+   * ServiceProviderCountOutputType without action
+   */
+  export type ServiceProviderCountOutputTypeCountServiceItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceItemWhereInput
   }
 
   /**
@@ -4566,6 +4565,37 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountRole_UserRolesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RoleWhereInput
+  }
+
+
+  /**
+   * Count Type ServiceItemCountOutputType
+   */
+
+  export type ServiceItemCountOutputType = {
+    Service_ServiceItems: number
+  }
+
+  export type ServiceItemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Service_ServiceItems?: boolean | ServiceItemCountOutputTypeCountService_ServiceItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ServiceItemCountOutputType without action
+   */
+  export type ServiceItemCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceItemCountOutputType
+     */
+    select?: ServiceItemCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ServiceItemCountOutputType without action
+   */
+  export type ServiceItemCountOutputTypeCountService_ServiceItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Service_ServiceItemsWhereInput
   }
 
 
@@ -6159,9 +6189,9 @@ export namespace Prisma {
     other_Category?: boolean | Category$other_CategoryArgs<ExtArgs>
     User_Category_updatedByIdToUser?: boolean | Category$User_Category_updatedByIdToUserArgs<ExtArgs>
     CategoryTranslation?: boolean | Category$CategoryTranslationArgs<ExtArgs>
+    Service?: boolean | Category$ServiceArgs<ExtArgs>
     ServiceRequest?: boolean | Category$ServiceRequestArgs<ExtArgs>
     StaffCategory?: boolean | Category$StaffCategoryArgs<ExtArgs>
-    Service?: boolean | Category$ServiceArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["category"]>
 
@@ -6220,9 +6250,9 @@ export namespace Prisma {
     other_Category?: boolean | Category$other_CategoryArgs<ExtArgs>
     User_Category_updatedByIdToUser?: boolean | Category$User_Category_updatedByIdToUserArgs<ExtArgs>
     CategoryTranslation?: boolean | Category$CategoryTranslationArgs<ExtArgs>
+    Service?: boolean | Category$ServiceArgs<ExtArgs>
     ServiceRequest?: boolean | Category$ServiceRequestArgs<ExtArgs>
     StaffCategory?: boolean | Category$StaffCategoryArgs<ExtArgs>
-    Service?: boolean | Category$ServiceArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6247,9 +6277,9 @@ export namespace Prisma {
       other_Category: Prisma.$CategoryPayload<ExtArgs>[]
       User_Category_updatedByIdToUser: Prisma.$UserPayload<ExtArgs> | null
       CategoryTranslation: Prisma.$CategoryTranslationPayload<ExtArgs>[]
+      Service: Prisma.$ServicePayload<ExtArgs>[]
       ServiceRequest: Prisma.$ServiceRequestPayload<ExtArgs>[]
       StaffCategory: Prisma.$StaffCategoryPayload<ExtArgs>[]
-      Service: Prisma.$ServicePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6662,9 +6692,9 @@ export namespace Prisma {
     other_Category<T extends Category$other_CategoryArgs<ExtArgs> = {}>(args?: Subset<T, Category$other_CategoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     User_Category_updatedByIdToUser<T extends Category$User_Category_updatedByIdToUserArgs<ExtArgs> = {}>(args?: Subset<T, Category$User_Category_updatedByIdToUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     CategoryTranslation<T extends Category$CategoryTranslationArgs<ExtArgs> = {}>(args?: Subset<T, Category$CategoryTranslationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Service<T extends Category$ServiceArgs<ExtArgs> = {}>(args?: Subset<T, Category$ServiceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ServiceRequest<T extends Category$ServiceRequestArgs<ExtArgs> = {}>(args?: Subset<T, Category$ServiceRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     StaffCategory<T extends Category$StaffCategoryArgs<ExtArgs> = {}>(args?: Subset<T, Category$StaffCategoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    Service<T extends Category$ServiceArgs<ExtArgs> = {}>(args?: Subset<T, Category$ServiceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7224,6 +7254,30 @@ export namespace Prisma {
   }
 
   /**
+   * Category.Service
+   */
+  export type Category$ServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    where?: ServiceWhereInput
+    orderBy?: ServiceOrderByWithRelationInput | ServiceOrderByWithRelationInput[]
+    cursor?: ServiceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceScalarFieldEnum | ServiceScalarFieldEnum[]
+  }
+
+  /**
    * Category.ServiceRequest
    */
   export type Category$ServiceRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7269,30 +7323,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StaffCategoryScalarFieldEnum | StaffCategoryScalarFieldEnum[]
-  }
-
-  /**
-   * Category.Service
-   */
-  export type Category$ServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Service
-     */
-    select?: ServiceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Service
-     */
-    omit?: ServiceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ServiceInclude<ExtArgs> | null
-    where?: ServiceWhereInput
-    orderBy?: ServiceOrderByWithRelationInput | ServiceOrderByWithRelationInput[]
-    cursor?: ServiceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ServiceScalarFieldEnum | ServiceScalarFieldEnum[]
   }
 
   /**
@@ -23801,6 +23831,7 @@ export namespace Prisma {
     createdById: number | null
     updatedById: number | null
     deletedById: number | null
+    categoryId: number | null
   }
 
   export type ServiceSumAggregateOutputType = {
@@ -23812,6 +23843,7 @@ export namespace Prisma {
     createdById: number | null
     updatedById: number | null
     deletedById: number | null
+    categoryId: number | null
   }
 
   export type ServiceMinAggregateOutputType = {
@@ -23829,6 +23861,8 @@ export namespace Prisma {
     name: string | null
     publishedAt: Date | null
     description: string | null
+    categoryId: number | null
+    unit: $Enums.Unit | null
   }
 
   export type ServiceMaxAggregateOutputType = {
@@ -23846,6 +23880,8 @@ export namespace Prisma {
     name: string | null
     publishedAt: Date | null
     description: string | null
+    categoryId: number | null
+    unit: $Enums.Unit | null
   }
 
   export type ServiceCountAggregateOutputType = {
@@ -23864,6 +23900,8 @@ export namespace Prisma {
     name: number
     publishedAt: number
     description: number
+    categoryId: number
+    unit: number
     _all: number
   }
 
@@ -23877,6 +23915,7 @@ export namespace Prisma {
     createdById?: true
     updatedById?: true
     deletedById?: true
+    categoryId?: true
   }
 
   export type ServiceSumAggregateInputType = {
@@ -23888,6 +23927,7 @@ export namespace Prisma {
     createdById?: true
     updatedById?: true
     deletedById?: true
+    categoryId?: true
   }
 
   export type ServiceMinAggregateInputType = {
@@ -23905,6 +23945,8 @@ export namespace Prisma {
     name?: true
     publishedAt?: true
     description?: true
+    categoryId?: true
+    unit?: true
   }
 
   export type ServiceMaxAggregateInputType = {
@@ -23922,6 +23964,8 @@ export namespace Prisma {
     name?: true
     publishedAt?: true
     description?: true
+    categoryId?: true
+    unit?: true
   }
 
   export type ServiceCountAggregateInputType = {
@@ -23940,6 +23984,8 @@ export namespace Prisma {
     name?: true
     publishedAt?: true
     description?: true
+    categoryId?: true
+    unit?: true
     _all?: true
   }
 
@@ -24045,6 +24091,8 @@ export namespace Prisma {
     name: string
     publishedAt: Date | null
     description: string
+    categoryId: number
+    unit: $Enums.Unit
     _count: ServiceCountAggregateOutputType | null
     _avg: ServiceAvgAggregateOutputType | null
     _sum: ServiceSumAggregateOutputType | null
@@ -24082,16 +24130,18 @@ export namespace Prisma {
     name?: boolean
     publishedAt?: boolean
     description?: boolean
+    categoryId?: boolean
+    unit?: boolean
     ProposedService?: boolean | Service$ProposedServiceArgs<ExtArgs>
     RecurringBooking?: boolean | Service$RecurringBookingArgs<ExtArgs>
     Review?: boolean | Service$ReviewArgs<ExtArgs>
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
     User_Service_createdByIdToUser?: boolean | Service$User_Service_createdByIdToUserArgs<ExtArgs>
     User_Service_deletedByIdToUser?: boolean | Service$User_Service_deletedByIdToUserArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     User_Service_updatedByIdToUser?: boolean | Service$User_Service_updatedByIdToUserArgs<ExtArgs>
-    ServiceItem?: boolean | Service$ServiceItemArgs<ExtArgs>
     ServiceTranslation?: boolean | Service$ServiceTranslationArgs<ExtArgs>
-    Category?: boolean | Service$CategoryArgs<ExtArgs>
+    Service_ServiceItems?: boolean | Service$Service_ServiceItemsArgs<ExtArgs>
     _count?: boolean | ServiceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["service"]>
 
@@ -24111,6 +24161,9 @@ export namespace Prisma {
     name?: boolean
     publishedAt?: boolean
     description?: boolean
+    categoryId?: boolean
+    unit?: boolean
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
     User_Service_createdByIdToUser?: boolean | Service$User_Service_createdByIdToUserArgs<ExtArgs>
     User_Service_deletedByIdToUser?: boolean | Service$User_Service_deletedByIdToUserArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
@@ -24133,6 +24186,9 @@ export namespace Prisma {
     name?: boolean
     publishedAt?: boolean
     description?: boolean
+    categoryId?: boolean
+    unit?: boolean
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
     User_Service_createdByIdToUser?: boolean | Service$User_Service_createdByIdToUserArgs<ExtArgs>
     User_Service_deletedByIdToUser?: boolean | Service$User_Service_deletedByIdToUserArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
@@ -24155,29 +24211,33 @@ export namespace Prisma {
     name?: boolean
     publishedAt?: boolean
     description?: boolean
+    categoryId?: boolean
+    unit?: boolean
   }
 
-  export type ServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "basePrice" | "virtualPrice" | "images" | "durationMinutes" | "providerId" | "createdById" | "updatedById" | "deletedById" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "publishedAt" | "description", ExtArgs["result"]["service"]>
+  export type ServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "basePrice" | "virtualPrice" | "images" | "durationMinutes" | "providerId" | "createdById" | "updatedById" | "deletedById" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "publishedAt" | "description" | "categoryId" | "unit", ExtArgs["result"]["service"]>
   export type ServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ProposedService?: boolean | Service$ProposedServiceArgs<ExtArgs>
     RecurringBooking?: boolean | Service$RecurringBookingArgs<ExtArgs>
     Review?: boolean | Service$ReviewArgs<ExtArgs>
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
     User_Service_createdByIdToUser?: boolean | Service$User_Service_createdByIdToUserArgs<ExtArgs>
     User_Service_deletedByIdToUser?: boolean | Service$User_Service_deletedByIdToUserArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     User_Service_updatedByIdToUser?: boolean | Service$User_Service_updatedByIdToUserArgs<ExtArgs>
-    ServiceItem?: boolean | Service$ServiceItemArgs<ExtArgs>
     ServiceTranslation?: boolean | Service$ServiceTranslationArgs<ExtArgs>
-    Category?: boolean | Service$CategoryArgs<ExtArgs>
+    Service_ServiceItems?: boolean | Service$Service_ServiceItemsArgs<ExtArgs>
     _count?: boolean | ServiceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ServiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
     User_Service_createdByIdToUser?: boolean | Service$User_Service_createdByIdToUserArgs<ExtArgs>
     User_Service_deletedByIdToUser?: boolean | Service$User_Service_deletedByIdToUserArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     User_Service_updatedByIdToUser?: boolean | Service$User_Service_updatedByIdToUserArgs<ExtArgs>
   }
   export type ServiceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
     User_Service_createdByIdToUser?: boolean | Service$User_Service_createdByIdToUserArgs<ExtArgs>
     User_Service_deletedByIdToUser?: boolean | Service$User_Service_deletedByIdToUserArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
@@ -24190,13 +24250,13 @@ export namespace Prisma {
       ProposedService: Prisma.$ProposedServicePayload<ExtArgs>[]
       RecurringBooking: Prisma.$RecurringBookingPayload<ExtArgs>[]
       Review: Prisma.$ReviewPayload<ExtArgs>[]
+      Category: Prisma.$CategoryPayload<ExtArgs>
       User_Service_createdByIdToUser: Prisma.$UserPayload<ExtArgs> | null
       User_Service_deletedByIdToUser: Prisma.$UserPayload<ExtArgs> | null
       ServiceProvider: Prisma.$ServiceProviderPayload<ExtArgs>
       User_Service_updatedByIdToUser: Prisma.$UserPayload<ExtArgs> | null
-      ServiceItem: Prisma.$ServiceItemPayload<ExtArgs>[]
       ServiceTranslation: Prisma.$ServiceTranslationPayload<ExtArgs>[]
-      Category: Prisma.$CategoryPayload<ExtArgs>[]
+      Service_ServiceItems: Prisma.$Service_ServiceItemsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -24214,6 +24274,8 @@ export namespace Prisma {
       name: string
       publishedAt: Date | null
       description: string
+      categoryId: number
+      unit: $Enums.Unit
     }, ExtArgs["result"]["service"]>
     composites: {}
   }
@@ -24611,13 +24673,13 @@ export namespace Prisma {
     ProposedService<T extends Service$ProposedServiceArgs<ExtArgs> = {}>(args?: Subset<T, Service$ProposedServiceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposedServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     RecurringBooking<T extends Service$RecurringBookingArgs<ExtArgs> = {}>(args?: Subset<T, Service$RecurringBookingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecurringBookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Review<T extends Service$ReviewArgs<ExtArgs> = {}>(args?: Subset<T, Service$ReviewArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     User_Service_createdByIdToUser<T extends Service$User_Service_createdByIdToUserArgs<ExtArgs> = {}>(args?: Subset<T, Service$User_Service_createdByIdToUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     User_Service_deletedByIdToUser<T extends Service$User_Service_deletedByIdToUserArgs<ExtArgs> = {}>(args?: Subset<T, Service$User_Service_deletedByIdToUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     ServiceProvider<T extends ServiceProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServiceProviderDefaultArgs<ExtArgs>>): Prisma__ServiceProviderClient<$Result.GetResult<Prisma.$ServiceProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     User_Service_updatedByIdToUser<T extends Service$User_Service_updatedByIdToUserArgs<ExtArgs> = {}>(args?: Subset<T, Service$User_Service_updatedByIdToUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    ServiceItem<T extends Service$ServiceItemArgs<ExtArgs> = {}>(args?: Subset<T, Service$ServiceItemArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ServiceTranslation<T extends Service$ServiceTranslationArgs<ExtArgs> = {}>(args?: Subset<T, Service$ServiceTranslationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    Category<T extends Service$CategoryArgs<ExtArgs> = {}>(args?: Subset<T, Service$CategoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Service_ServiceItems<T extends Service$Service_ServiceItemsArgs<ExtArgs> = {}>(args?: Subset<T, Service$Service_ServiceItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -24662,6 +24724,8 @@ export namespace Prisma {
     readonly name: FieldRef<"Service", 'String'>
     readonly publishedAt: FieldRef<"Service", 'DateTime'>
     readonly description: FieldRef<"Service", 'String'>
+    readonly categoryId: FieldRef<"Service", 'Int'>
+    readonly unit: FieldRef<"Service", 'Unit'>
   }
     
 
@@ -25187,30 +25251,6 @@ export namespace Prisma {
   }
 
   /**
-   * Service.ServiceItem
-   */
-  export type Service$ServiceItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ServiceItem
-     */
-    select?: ServiceItemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ServiceItem
-     */
-    omit?: ServiceItemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ServiceItemInclude<ExtArgs> | null
-    where?: ServiceItemWhereInput
-    orderBy?: ServiceItemOrderByWithRelationInput | ServiceItemOrderByWithRelationInput[]
-    cursor?: ServiceItemWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ServiceItemScalarFieldEnum | ServiceItemScalarFieldEnum[]
-  }
-
-  /**
    * Service.ServiceTranslation
    */
   export type Service$ServiceTranslationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25235,27 +25275,27 @@ export namespace Prisma {
   }
 
   /**
-   * Service.Category
+   * Service.Service_ServiceItems
    */
-  export type Service$CategoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Service$Service_ServiceItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the Service_ServiceItems
      */
-    select?: CategorySelect<ExtArgs> | null
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the Service_ServiceItems
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
-    where?: CategoryWhereInput
-    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
-    cursor?: CategoryWhereUniqueInput
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    where?: Service_ServiceItemsWhereInput
+    orderBy?: Service_ServiceItemsOrderByWithRelationInput | Service_ServiceItemsOrderByWithRelationInput[]
+    cursor?: Service_ServiceItemsWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+    distinct?: Service_ServiceItemsScalarFieldEnum | Service_ServiceItemsScalarFieldEnum[]
   }
 
   /**
@@ -25557,6 +25597,7 @@ export namespace Prisma {
     verifiedById?: boolean
     Booking?: boolean | ServiceProvider$BookingArgs<ExtArgs>
     Service?: boolean | ServiceProvider$ServiceArgs<ExtArgs>
+    ServiceItem?: boolean | ServiceProvider$ServiceItemArgs<ExtArgs>
     User_ServiceProvider_userIdToUser?: boolean | UserDefaultArgs<ExtArgs>
     User_ServiceProvider_verifiedByIdToUser?: boolean | ServiceProvider$User_ServiceProvider_verifiedByIdToUserArgs<ExtArgs>
     ServiceProviderTranslation?: boolean | ServiceProvider$ServiceProviderTranslationArgs<ExtArgs>
@@ -25624,6 +25665,7 @@ export namespace Prisma {
   export type ServiceProviderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Booking?: boolean | ServiceProvider$BookingArgs<ExtArgs>
     Service?: boolean | ServiceProvider$ServiceArgs<ExtArgs>
+    ServiceItem?: boolean | ServiceProvider$ServiceItemArgs<ExtArgs>
     User_ServiceProvider_userIdToUser?: boolean | UserDefaultArgs<ExtArgs>
     User_ServiceProvider_verifiedByIdToUser?: boolean | ServiceProvider$User_ServiceProvider_verifiedByIdToUserArgs<ExtArgs>
     ServiceProviderTranslation?: boolean | ServiceProvider$ServiceProviderTranslationArgs<ExtArgs>
@@ -25645,6 +25687,7 @@ export namespace Prisma {
     objects: {
       Booking: Prisma.$BookingPayload<ExtArgs>[]
       Service: Prisma.$ServicePayload<ExtArgs>[]
+      ServiceItem: Prisma.$ServiceItemPayload<ExtArgs>[]
       User_ServiceProvider_userIdToUser: Prisma.$UserPayload<ExtArgs>
       User_ServiceProvider_verifiedByIdToUser: Prisma.$UserPayload<ExtArgs> | null
       ServiceProviderTranslation: Prisma.$ServiceProviderTranslationPayload<ExtArgs>[]
@@ -26062,6 +26105,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     Booking<T extends ServiceProvider$BookingArgs<ExtArgs> = {}>(args?: Subset<T, ServiceProvider$BookingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Service<T extends ServiceProvider$ServiceArgs<ExtArgs> = {}>(args?: Subset<T, ServiceProvider$ServiceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    ServiceItem<T extends ServiceProvider$ServiceItemArgs<ExtArgs> = {}>(args?: Subset<T, ServiceProvider$ServiceItemArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     User_ServiceProvider_userIdToUser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     User_ServiceProvider_verifiedByIdToUser<T extends ServiceProvider$User_ServiceProvider_verifiedByIdToUserArgs<ExtArgs> = {}>(args?: Subset<T, ServiceProvider$User_ServiceProvider_verifiedByIdToUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     ServiceProviderTranslation<T extends ServiceProvider$ServiceProviderTranslationArgs<ExtArgs> = {}>(args?: Subset<T, ServiceProvider$ServiceProviderTranslationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceProviderTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -26551,6 +26595,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ServiceScalarFieldEnum | ServiceScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceProvider.ServiceItem
+   */
+  export type ServiceProvider$ServiceItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceItem
+     */
+    select?: ServiceItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceItem
+     */
+    omit?: ServiceItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceItemInclude<ExtArgs> | null
+    where?: ServiceItemWhereInput
+    orderBy?: ServiceItemOrderByWithRelationInput | ServiceItemOrderByWithRelationInput[]
+    cursor?: ServiceItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceItemScalarFieldEnum | ServiceItemScalarFieldEnum[]
   }
 
   /**
@@ -36674,1039 +36742,6 @@ export namespace Prisma {
 
 
   /**
-   * Model spatial_ref_sys
-   */
-
-  export type AggregateSpatial_ref_sys = {
-    _count: Spatial_ref_sysCountAggregateOutputType | null
-    _avg: Spatial_ref_sysAvgAggregateOutputType | null
-    _sum: Spatial_ref_sysSumAggregateOutputType | null
-    _min: Spatial_ref_sysMinAggregateOutputType | null
-    _max: Spatial_ref_sysMaxAggregateOutputType | null
-  }
-
-  export type Spatial_ref_sysAvgAggregateOutputType = {
-    srid: number | null
-    auth_srid: number | null
-  }
-
-  export type Spatial_ref_sysSumAggregateOutputType = {
-    srid: number | null
-    auth_srid: number | null
-  }
-
-  export type Spatial_ref_sysMinAggregateOutputType = {
-    srid: number | null
-    auth_name: string | null
-    auth_srid: number | null
-    srtext: string | null
-    proj4text: string | null
-  }
-
-  export type Spatial_ref_sysMaxAggregateOutputType = {
-    srid: number | null
-    auth_name: string | null
-    auth_srid: number | null
-    srtext: string | null
-    proj4text: string | null
-  }
-
-  export type Spatial_ref_sysCountAggregateOutputType = {
-    srid: number
-    auth_name: number
-    auth_srid: number
-    srtext: number
-    proj4text: number
-    _all: number
-  }
-
-
-  export type Spatial_ref_sysAvgAggregateInputType = {
-    srid?: true
-    auth_srid?: true
-  }
-
-  export type Spatial_ref_sysSumAggregateInputType = {
-    srid?: true
-    auth_srid?: true
-  }
-
-  export type Spatial_ref_sysMinAggregateInputType = {
-    srid?: true
-    auth_name?: true
-    auth_srid?: true
-    srtext?: true
-    proj4text?: true
-  }
-
-  export type Spatial_ref_sysMaxAggregateInputType = {
-    srid?: true
-    auth_name?: true
-    auth_srid?: true
-    srtext?: true
-    proj4text?: true
-  }
-
-  export type Spatial_ref_sysCountAggregateInputType = {
-    srid?: true
-    auth_name?: true
-    auth_srid?: true
-    srtext?: true
-    proj4text?: true
-    _all?: true
-  }
-
-  export type Spatial_ref_sysAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which spatial_ref_sys to aggregate.
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of spatial_ref_sys to fetch.
-     */
-    orderBy?: spatial_ref_sysOrderByWithRelationInput | spatial_ref_sysOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: spatial_ref_sysWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` spatial_ref_sys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` spatial_ref_sys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned spatial_ref_sys
-    **/
-    _count?: true | Spatial_ref_sysCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: Spatial_ref_sysAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Spatial_ref_sysSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: Spatial_ref_sysMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: Spatial_ref_sysMaxAggregateInputType
-  }
-
-  export type GetSpatial_ref_sysAggregateType<T extends Spatial_ref_sysAggregateArgs> = {
-        [P in keyof T & keyof AggregateSpatial_ref_sys]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateSpatial_ref_sys[P]>
-      : GetScalarType<T[P], AggregateSpatial_ref_sys[P]>
-  }
-
-
-
-
-  export type spatial_ref_sysGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: spatial_ref_sysWhereInput
-    orderBy?: spatial_ref_sysOrderByWithAggregationInput | spatial_ref_sysOrderByWithAggregationInput[]
-    by: Spatial_ref_sysScalarFieldEnum[] | Spatial_ref_sysScalarFieldEnum
-    having?: spatial_ref_sysScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: Spatial_ref_sysCountAggregateInputType | true
-    _avg?: Spatial_ref_sysAvgAggregateInputType
-    _sum?: Spatial_ref_sysSumAggregateInputType
-    _min?: Spatial_ref_sysMinAggregateInputType
-    _max?: Spatial_ref_sysMaxAggregateInputType
-  }
-
-  export type Spatial_ref_sysGroupByOutputType = {
-    srid: number
-    auth_name: string | null
-    auth_srid: number | null
-    srtext: string | null
-    proj4text: string | null
-    _count: Spatial_ref_sysCountAggregateOutputType | null
-    _avg: Spatial_ref_sysAvgAggregateOutputType | null
-    _sum: Spatial_ref_sysSumAggregateOutputType | null
-    _min: Spatial_ref_sysMinAggregateOutputType | null
-    _max: Spatial_ref_sysMaxAggregateOutputType | null
-  }
-
-  type GetSpatial_ref_sysGroupByPayload<T extends spatial_ref_sysGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<Spatial_ref_sysGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof Spatial_ref_sysGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], Spatial_ref_sysGroupByOutputType[P]>
-            : GetScalarType<T[P], Spatial_ref_sysGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type spatial_ref_sysSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    srid?: boolean
-    auth_name?: boolean
-    auth_srid?: boolean
-    srtext?: boolean
-    proj4text?: boolean
-  }, ExtArgs["result"]["spatial_ref_sys"]>
-
-  export type spatial_ref_sysSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    srid?: boolean
-    auth_name?: boolean
-    auth_srid?: boolean
-    srtext?: boolean
-    proj4text?: boolean
-  }, ExtArgs["result"]["spatial_ref_sys"]>
-
-  export type spatial_ref_sysSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    srid?: boolean
-    auth_name?: boolean
-    auth_srid?: boolean
-    srtext?: boolean
-    proj4text?: boolean
-  }, ExtArgs["result"]["spatial_ref_sys"]>
-
-  export type spatial_ref_sysSelectScalar = {
-    srid?: boolean
-    auth_name?: boolean
-    auth_srid?: boolean
-    srtext?: boolean
-    proj4text?: boolean
-  }
-
-  export type spatial_ref_sysOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"srid" | "auth_name" | "auth_srid" | "srtext" | "proj4text", ExtArgs["result"]["spatial_ref_sys"]>
-
-  export type $spatial_ref_sysPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "spatial_ref_sys"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      srid: number
-      auth_name: string | null
-      auth_srid: number | null
-      srtext: string | null
-      proj4text: string | null
-    }, ExtArgs["result"]["spatial_ref_sys"]>
-    composites: {}
-  }
-
-  type spatial_ref_sysGetPayload<S extends boolean | null | undefined | spatial_ref_sysDefaultArgs> = $Result.GetResult<Prisma.$spatial_ref_sysPayload, S>
-
-  type spatial_ref_sysCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<spatial_ref_sysFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Spatial_ref_sysCountAggregateInputType | true
-    }
-
-  export interface spatial_ref_sysDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['spatial_ref_sys'], meta: { name: 'spatial_ref_sys' } }
-    /**
-     * Find zero or one Spatial_ref_sys that matches the filter.
-     * @param {spatial_ref_sysFindUniqueArgs} args - Arguments to find a Spatial_ref_sys
-     * @example
-     * // Get one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends spatial_ref_sysFindUniqueArgs>(args: SelectSubset<T, spatial_ref_sysFindUniqueArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Spatial_ref_sys that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {spatial_ref_sysFindUniqueOrThrowArgs} args - Arguments to find a Spatial_ref_sys
-     * @example
-     * // Get one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends spatial_ref_sysFindUniqueOrThrowArgs>(args: SelectSubset<T, spatial_ref_sysFindUniqueOrThrowArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Spatial_ref_sys that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysFindFirstArgs} args - Arguments to find a Spatial_ref_sys
-     * @example
-     * // Get one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends spatial_ref_sysFindFirstArgs>(args?: SelectSubset<T, spatial_ref_sysFindFirstArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Spatial_ref_sys that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysFindFirstOrThrowArgs} args - Arguments to find a Spatial_ref_sys
-     * @example
-     * // Get one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends spatial_ref_sysFindFirstOrThrowArgs>(args?: SelectSubset<T, spatial_ref_sysFindFirstOrThrowArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Spatial_ref_sys that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findMany()
-     * 
-     * // Get first 10 Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findMany({ take: 10 })
-     * 
-     * // Only select the `srid`
-     * const spatial_ref_sysWithSridOnly = await prisma.spatial_ref_sys.findMany({ select: { srid: true } })
-     * 
-     */
-    findMany<T extends spatial_ref_sysFindManyArgs>(args?: SelectSubset<T, spatial_ref_sysFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Spatial_ref_sys.
-     * @param {spatial_ref_sysCreateArgs} args - Arguments to create a Spatial_ref_sys.
-     * @example
-     * // Create one Spatial_ref_sys
-     * const Spatial_ref_sys = await prisma.spatial_ref_sys.create({
-     *   data: {
-     *     // ... data to create a Spatial_ref_sys
-     *   }
-     * })
-     * 
-     */
-    create<T extends spatial_ref_sysCreateArgs>(args: SelectSubset<T, spatial_ref_sysCreateArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Spatial_ref_sys.
-     * @param {spatial_ref_sysCreateManyArgs} args - Arguments to create many Spatial_ref_sys.
-     * @example
-     * // Create many Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends spatial_ref_sysCreateManyArgs>(args?: SelectSubset<T, spatial_ref_sysCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Spatial_ref_sys and returns the data saved in the database.
-     * @param {spatial_ref_sysCreateManyAndReturnArgs} args - Arguments to create many Spatial_ref_sys.
-     * @example
-     * // Create many Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Spatial_ref_sys and only return the `srid`
-     * const spatial_ref_sysWithSridOnly = await prisma.spatial_ref_sys.createManyAndReturn({
-     *   select: { srid: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends spatial_ref_sysCreateManyAndReturnArgs>(args?: SelectSubset<T, spatial_ref_sysCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Spatial_ref_sys.
-     * @param {spatial_ref_sysDeleteArgs} args - Arguments to delete one Spatial_ref_sys.
-     * @example
-     * // Delete one Spatial_ref_sys
-     * const Spatial_ref_sys = await prisma.spatial_ref_sys.delete({
-     *   where: {
-     *     // ... filter to delete one Spatial_ref_sys
-     *   }
-     * })
-     * 
-     */
-    delete<T extends spatial_ref_sysDeleteArgs>(args: SelectSubset<T, spatial_ref_sysDeleteArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Spatial_ref_sys.
-     * @param {spatial_ref_sysUpdateArgs} args - Arguments to update one Spatial_ref_sys.
-     * @example
-     * // Update one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends spatial_ref_sysUpdateArgs>(args: SelectSubset<T, spatial_ref_sysUpdateArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Spatial_ref_sys.
-     * @param {spatial_ref_sysDeleteManyArgs} args - Arguments to filter Spatial_ref_sys to delete.
-     * @example
-     * // Delete a few Spatial_ref_sys
-     * const { count } = await prisma.spatial_ref_sys.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends spatial_ref_sysDeleteManyArgs>(args?: SelectSubset<T, spatial_ref_sysDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Spatial_ref_sys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends spatial_ref_sysUpdateManyArgs>(args: SelectSubset<T, spatial_ref_sysUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Spatial_ref_sys and returns the data updated in the database.
-     * @param {spatial_ref_sysUpdateManyAndReturnArgs} args - Arguments to update many Spatial_ref_sys.
-     * @example
-     * // Update many Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Spatial_ref_sys and only return the `srid`
-     * const spatial_ref_sysWithSridOnly = await prisma.spatial_ref_sys.updateManyAndReturn({
-     *   select: { srid: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends spatial_ref_sysUpdateManyAndReturnArgs>(args: SelectSubset<T, spatial_ref_sysUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Spatial_ref_sys.
-     * @param {spatial_ref_sysUpsertArgs} args - Arguments to update or create a Spatial_ref_sys.
-     * @example
-     * // Update or create a Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.upsert({
-     *   create: {
-     *     // ... data to create a Spatial_ref_sys
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Spatial_ref_sys we want to update
-     *   }
-     * })
-     */
-    upsert<T extends spatial_ref_sysUpsertArgs>(args: SelectSubset<T, spatial_ref_sysUpsertArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Spatial_ref_sys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysCountArgs} args - Arguments to filter Spatial_ref_sys to count.
-     * @example
-     * // Count the number of Spatial_ref_sys
-     * const count = await prisma.spatial_ref_sys.count({
-     *   where: {
-     *     // ... the filter for the Spatial_ref_sys we want to count
-     *   }
-     * })
-    **/
-    count<T extends spatial_ref_sysCountArgs>(
-      args?: Subset<T, spatial_ref_sysCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], Spatial_ref_sysCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Spatial_ref_sys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {Spatial_ref_sysAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends Spatial_ref_sysAggregateArgs>(args: Subset<T, Spatial_ref_sysAggregateArgs>): Prisma.PrismaPromise<GetSpatial_ref_sysAggregateType<T>>
-
-    /**
-     * Group by Spatial_ref_sys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends spatial_ref_sysGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: spatial_ref_sysGroupByArgs['orderBy'] }
-        : { orderBy?: spatial_ref_sysGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, spatial_ref_sysGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSpatial_ref_sysGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the spatial_ref_sys model
-   */
-  readonly fields: spatial_ref_sysFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for spatial_ref_sys.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__spatial_ref_sysClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the spatial_ref_sys model
-   */
-  interface spatial_ref_sysFieldRefs {
-    readonly srid: FieldRef<"spatial_ref_sys", 'Int'>
-    readonly auth_name: FieldRef<"spatial_ref_sys", 'String'>
-    readonly auth_srid: FieldRef<"spatial_ref_sys", 'Int'>
-    readonly srtext: FieldRef<"spatial_ref_sys", 'String'>
-    readonly proj4text: FieldRef<"spatial_ref_sys", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * spatial_ref_sys findUnique
-   */
-  export type spatial_ref_sysFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-  }
-
-  /**
-   * spatial_ref_sys findUniqueOrThrow
-   */
-  export type spatial_ref_sysFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-  }
-
-  /**
-   * spatial_ref_sys findFirst
-   */
-  export type spatial_ref_sysFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of spatial_ref_sys to fetch.
-     */
-    orderBy?: spatial_ref_sysOrderByWithRelationInput | spatial_ref_sysOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for spatial_ref_sys.
-     */
-    cursor?: spatial_ref_sysWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` spatial_ref_sys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` spatial_ref_sys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of spatial_ref_sys.
-     */
-    distinct?: Spatial_ref_sysScalarFieldEnum | Spatial_ref_sysScalarFieldEnum[]
-  }
-
-  /**
-   * spatial_ref_sys findFirstOrThrow
-   */
-  export type spatial_ref_sysFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of spatial_ref_sys to fetch.
-     */
-    orderBy?: spatial_ref_sysOrderByWithRelationInput | spatial_ref_sysOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for spatial_ref_sys.
-     */
-    cursor?: spatial_ref_sysWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` spatial_ref_sys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` spatial_ref_sys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of spatial_ref_sys.
-     */
-    distinct?: Spatial_ref_sysScalarFieldEnum | Spatial_ref_sysScalarFieldEnum[]
-  }
-
-  /**
-   * spatial_ref_sys findMany
-   */
-  export type spatial_ref_sysFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of spatial_ref_sys to fetch.
-     */
-    orderBy?: spatial_ref_sysOrderByWithRelationInput | spatial_ref_sysOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing spatial_ref_sys.
-     */
-    cursor?: spatial_ref_sysWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` spatial_ref_sys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` spatial_ref_sys.
-     */
-    skip?: number
-    distinct?: Spatial_ref_sysScalarFieldEnum | Spatial_ref_sysScalarFieldEnum[]
-  }
-
-  /**
-   * spatial_ref_sys create
-   */
-  export type spatial_ref_sysCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The data needed to create a spatial_ref_sys.
-     */
-    data: XOR<spatial_ref_sysCreateInput, spatial_ref_sysUncheckedCreateInput>
-  }
-
-  /**
-   * spatial_ref_sys createMany
-   */
-  export type spatial_ref_sysCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many spatial_ref_sys.
-     */
-    data: spatial_ref_sysCreateManyInput | spatial_ref_sysCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * spatial_ref_sys createManyAndReturn
-   */
-  export type spatial_ref_sysCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The data used to create many spatial_ref_sys.
-     */
-    data: spatial_ref_sysCreateManyInput | spatial_ref_sysCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * spatial_ref_sys update
-   */
-  export type spatial_ref_sysUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The data needed to update a spatial_ref_sys.
-     */
-    data: XOR<spatial_ref_sysUpdateInput, spatial_ref_sysUncheckedUpdateInput>
-    /**
-     * Choose, which spatial_ref_sys to update.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-  }
-
-  /**
-   * spatial_ref_sys updateMany
-   */
-  export type spatial_ref_sysUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update spatial_ref_sys.
-     */
-    data: XOR<spatial_ref_sysUpdateManyMutationInput, spatial_ref_sysUncheckedUpdateManyInput>
-    /**
-     * Filter which spatial_ref_sys to update
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * Limit how many spatial_ref_sys to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * spatial_ref_sys updateManyAndReturn
-   */
-  export type spatial_ref_sysUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The data used to update spatial_ref_sys.
-     */
-    data: XOR<spatial_ref_sysUpdateManyMutationInput, spatial_ref_sysUncheckedUpdateManyInput>
-    /**
-     * Filter which spatial_ref_sys to update
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * Limit how many spatial_ref_sys to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * spatial_ref_sys upsert
-   */
-  export type spatial_ref_sysUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The filter to search for the spatial_ref_sys to update in case it exists.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-    /**
-     * In case the spatial_ref_sys found by the `where` argument doesn't exist, create a new spatial_ref_sys with this data.
-     */
-    create: XOR<spatial_ref_sysCreateInput, spatial_ref_sysUncheckedCreateInput>
-    /**
-     * In case the spatial_ref_sys was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<spatial_ref_sysUpdateInput, spatial_ref_sysUncheckedUpdateInput>
-  }
-
-  /**
-   * spatial_ref_sys delete
-   */
-  export type spatial_ref_sysDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter which spatial_ref_sys to delete.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-  }
-
-  /**
-   * spatial_ref_sys deleteMany
-   */
-  export type spatial_ref_sysDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which spatial_ref_sys to delete
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * Limit how many spatial_ref_sys to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * spatial_ref_sys without action
-   */
-  export type spatial_ref_sysDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-  }
-
-
-  /**
    * Model InspectionReport
    */
 
@@ -39997,34 +39032,68 @@ export namespace Prisma {
   export type ServiceItemAvgAggregateOutputType = {
     id: number | null
     unitPrice: number | null
-    serviceId: number | null
+    warrantyPeriod: number | null
+    stockQuantity: number | null
+    providerId: number | null
   }
 
   export type ServiceItemSumAggregateOutputType = {
     id: number | null
     unitPrice: number | null
-    serviceId: number | null
+    warrantyPeriod: number | null
+    stockQuantity: number | null
+    providerId: number | null
   }
 
   export type ServiceItemMinAggregateOutputType = {
     id: number | null
     name: string | null
     unitPrice: number | null
-    serviceId: number | null
+    warrantyPeriod: number | null
+    createdAt: Date | null
+    deletedAt: Date | null
+    updatedAt: Date | null
+    brand: string | null
+    description: string | null
+    isActive: boolean | null
+    model: string | null
+    stockQuantity: number | null
+    unit: $Enums.Unit | null
+    providerId: number | null
   }
 
   export type ServiceItemMaxAggregateOutputType = {
     id: number | null
     name: string | null
     unitPrice: number | null
-    serviceId: number | null
+    warrantyPeriod: number | null
+    createdAt: Date | null
+    deletedAt: Date | null
+    updatedAt: Date | null
+    brand: string | null
+    description: string | null
+    isActive: boolean | null
+    model: string | null
+    stockQuantity: number | null
+    unit: $Enums.Unit | null
+    providerId: number | null
   }
 
   export type ServiceItemCountAggregateOutputType = {
     id: number
     name: number
     unitPrice: number
-    serviceId: number
+    warrantyPeriod: number
+    createdAt: number
+    deletedAt: number
+    updatedAt: number
+    brand: number
+    description: number
+    isActive: number
+    model: number
+    stockQuantity: number
+    unit: number
+    providerId: number
     _all: number
   }
 
@@ -40032,34 +39101,68 @@ export namespace Prisma {
   export type ServiceItemAvgAggregateInputType = {
     id?: true
     unitPrice?: true
-    serviceId?: true
+    warrantyPeriod?: true
+    stockQuantity?: true
+    providerId?: true
   }
 
   export type ServiceItemSumAggregateInputType = {
     id?: true
     unitPrice?: true
-    serviceId?: true
+    warrantyPeriod?: true
+    stockQuantity?: true
+    providerId?: true
   }
 
   export type ServiceItemMinAggregateInputType = {
     id?: true
     name?: true
     unitPrice?: true
-    serviceId?: true
+    warrantyPeriod?: true
+    createdAt?: true
+    deletedAt?: true
+    updatedAt?: true
+    brand?: true
+    description?: true
+    isActive?: true
+    model?: true
+    stockQuantity?: true
+    unit?: true
+    providerId?: true
   }
 
   export type ServiceItemMaxAggregateInputType = {
     id?: true
     name?: true
     unitPrice?: true
-    serviceId?: true
+    warrantyPeriod?: true
+    createdAt?: true
+    deletedAt?: true
+    updatedAt?: true
+    brand?: true
+    description?: true
+    isActive?: true
+    model?: true
+    stockQuantity?: true
+    unit?: true
+    providerId?: true
   }
 
   export type ServiceItemCountAggregateInputType = {
     id?: true
     name?: true
     unitPrice?: true
-    serviceId?: true
+    warrantyPeriod?: true
+    createdAt?: true
+    deletedAt?: true
+    updatedAt?: true
+    brand?: true
+    description?: true
+    isActive?: true
+    model?: true
+    stockQuantity?: true
+    unit?: true
+    providerId?: true
     _all?: true
   }
 
@@ -40153,7 +39256,17 @@ export namespace Prisma {
     id: number
     name: string
     unitPrice: number
-    serviceId: number
+    warrantyPeriod: number | null
+    createdAt: Date
+    deletedAt: Date | null
+    updatedAt: Date
+    brand: string | null
+    description: string | null
+    isActive: boolean
+    model: string | null
+    stockQuantity: number
+    unit: $Enums.Unit
+    providerId: number
     _count: ServiceItemCountAggregateOutputType | null
     _avg: ServiceItemAvgAggregateOutputType | null
     _sum: ServiceItemSumAggregateOutputType | null
@@ -40179,54 +39292,109 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     unitPrice?: boolean
-    serviceId?: boolean
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    warrantyPeriod?: boolean
+    createdAt?: boolean
+    deletedAt?: boolean
+    updatedAt?: boolean
+    brand?: boolean
+    description?: boolean
+    isActive?: boolean
+    model?: boolean
+    stockQuantity?: boolean
+    unit?: boolean
+    providerId?: boolean
+    ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
+    Service_ServiceItems?: boolean | ServiceItem$Service_ServiceItemsArgs<ExtArgs>
+    _count?: boolean | ServiceItemCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["serviceItem"]>
 
   export type ServiceItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     unitPrice?: boolean
-    serviceId?: boolean
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    warrantyPeriod?: boolean
+    createdAt?: boolean
+    deletedAt?: boolean
+    updatedAt?: boolean
+    brand?: boolean
+    description?: boolean
+    isActive?: boolean
+    model?: boolean
+    stockQuantity?: boolean
+    unit?: boolean
+    providerId?: boolean
+    ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["serviceItem"]>
 
   export type ServiceItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     unitPrice?: boolean
-    serviceId?: boolean
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    warrantyPeriod?: boolean
+    createdAt?: boolean
+    deletedAt?: boolean
+    updatedAt?: boolean
+    brand?: boolean
+    description?: boolean
+    isActive?: boolean
+    model?: boolean
+    stockQuantity?: boolean
+    unit?: boolean
+    providerId?: boolean
+    ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["serviceItem"]>
 
   export type ServiceItemSelectScalar = {
     id?: boolean
     name?: boolean
     unitPrice?: boolean
-    serviceId?: boolean
+    warrantyPeriod?: boolean
+    createdAt?: boolean
+    deletedAt?: boolean
+    updatedAt?: boolean
+    brand?: boolean
+    description?: boolean
+    isActive?: boolean
+    model?: boolean
+    stockQuantity?: boolean
+    unit?: boolean
+    providerId?: boolean
   }
 
-  export type ServiceItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "unitPrice" | "serviceId", ExtArgs["result"]["serviceItem"]>
+  export type ServiceItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "unitPrice" | "warrantyPeriod" | "createdAt" | "deletedAt" | "updatedAt" | "brand" | "description" | "isActive" | "model" | "stockQuantity" | "unit" | "providerId", ExtArgs["result"]["serviceItem"]>
   export type ServiceItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
+    Service_ServiceItems?: boolean | ServiceItem$Service_ServiceItemsArgs<ExtArgs>
+    _count?: boolean | ServiceItemCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ServiceItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
   }
   export type ServiceItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
   }
 
   export type $ServiceItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ServiceItem"
     objects: {
-      Service: Prisma.$ServicePayload<ExtArgs>
+      ServiceProvider: Prisma.$ServiceProviderPayload<ExtArgs>
+      Service_ServiceItems: Prisma.$Service_ServiceItemsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
       unitPrice: number
-      serviceId: number
+      warrantyPeriod: number | null
+      createdAt: Date
+      deletedAt: Date | null
+      updatedAt: Date
+      brand: string | null
+      description: string | null
+      isActive: boolean
+      model: string | null
+      stockQuantity: number
+      unit: $Enums.Unit
+      providerId: number
     }, ExtArgs["result"]["serviceItem"]>
     composites: {}
   }
@@ -40621,7 +39789,8 @@ export namespace Prisma {
    */
   export interface Prisma__ServiceItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Service<T extends ServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServiceDefaultArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    ServiceProvider<T extends ServiceProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServiceProviderDefaultArgs<ExtArgs>>): Prisma__ServiceProviderClient<$Result.GetResult<Prisma.$ServiceProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    Service_ServiceItems<T extends ServiceItem$Service_ServiceItemsArgs<ExtArgs> = {}>(args?: Subset<T, ServiceItem$Service_ServiceItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -40654,7 +39823,17 @@ export namespace Prisma {
     readonly id: FieldRef<"ServiceItem", 'Int'>
     readonly name: FieldRef<"ServiceItem", 'String'>
     readonly unitPrice: FieldRef<"ServiceItem", 'Float'>
-    readonly serviceId: FieldRef<"ServiceItem", 'Int'>
+    readonly warrantyPeriod: FieldRef<"ServiceItem", 'Int'>
+    readonly createdAt: FieldRef<"ServiceItem", 'DateTime'>
+    readonly deletedAt: FieldRef<"ServiceItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"ServiceItem", 'DateTime'>
+    readonly brand: FieldRef<"ServiceItem", 'String'>
+    readonly description: FieldRef<"ServiceItem", 'String'>
+    readonly isActive: FieldRef<"ServiceItem", 'Boolean'>
+    readonly model: FieldRef<"ServiceItem", 'String'>
+    readonly stockQuantity: FieldRef<"ServiceItem", 'Int'>
+    readonly unit: FieldRef<"ServiceItem", 'Unit'>
+    readonly providerId: FieldRef<"ServiceItem", 'Int'>
   }
     
 
@@ -41048,6 +40227,30 @@ export namespace Prisma {
      * Limit how many ServiceItems to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ServiceItem.Service_ServiceItems
+   */
+  export type ServiceItem$Service_ServiceItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    where?: Service_ServiceItemsWhereInput
+    orderBy?: Service_ServiceItemsOrderByWithRelationInput | Service_ServiceItemsOrderByWithRelationInput[]
+    cursor?: Service_ServiceItemsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Service_ServiceItemsScalarFieldEnum | Service_ServiceItemsScalarFieldEnum[]
   }
 
   /**
@@ -42291,6 +41494,1071 @@ export namespace Prisma {
 
 
   /**
+   * Model Service_ServiceItems
+   */
+
+  export type AggregateService_ServiceItems = {
+    _count: Service_ServiceItemsCountAggregateOutputType | null
+    _avg: Service_ServiceItemsAvgAggregateOutputType | null
+    _sum: Service_ServiceItemsSumAggregateOutputType | null
+    _min: Service_ServiceItemsMinAggregateOutputType | null
+    _max: Service_ServiceItemsMaxAggregateOutputType | null
+  }
+
+  export type Service_ServiceItemsAvgAggregateOutputType = {
+    serviceId: number | null
+    serviceItemId: number | null
+  }
+
+  export type Service_ServiceItemsSumAggregateOutputType = {
+    serviceId: number | null
+    serviceItemId: number | null
+  }
+
+  export type Service_ServiceItemsMinAggregateOutputType = {
+    serviceId: number | null
+    serviceItemId: number | null
+  }
+
+  export type Service_ServiceItemsMaxAggregateOutputType = {
+    serviceId: number | null
+    serviceItemId: number | null
+  }
+
+  export type Service_ServiceItemsCountAggregateOutputType = {
+    serviceId: number
+    serviceItemId: number
+    _all: number
+  }
+
+
+  export type Service_ServiceItemsAvgAggregateInputType = {
+    serviceId?: true
+    serviceItemId?: true
+  }
+
+  export type Service_ServiceItemsSumAggregateInputType = {
+    serviceId?: true
+    serviceItemId?: true
+  }
+
+  export type Service_ServiceItemsMinAggregateInputType = {
+    serviceId?: true
+    serviceItemId?: true
+  }
+
+  export type Service_ServiceItemsMaxAggregateInputType = {
+    serviceId?: true
+    serviceItemId?: true
+  }
+
+  export type Service_ServiceItemsCountAggregateInputType = {
+    serviceId?: true
+    serviceItemId?: true
+    _all?: true
+  }
+
+  export type Service_ServiceItemsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Service_ServiceItems to aggregate.
+     */
+    where?: Service_ServiceItemsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Service_ServiceItems to fetch.
+     */
+    orderBy?: Service_ServiceItemsOrderByWithRelationInput | Service_ServiceItemsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: Service_ServiceItemsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Service_ServiceItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Service_ServiceItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Service_ServiceItems
+    **/
+    _count?: true | Service_ServiceItemsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Service_ServiceItemsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Service_ServiceItemsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Service_ServiceItemsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Service_ServiceItemsMaxAggregateInputType
+  }
+
+  export type GetService_ServiceItemsAggregateType<T extends Service_ServiceItemsAggregateArgs> = {
+        [P in keyof T & keyof AggregateService_ServiceItems]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateService_ServiceItems[P]>
+      : GetScalarType<T[P], AggregateService_ServiceItems[P]>
+  }
+
+
+
+
+  export type Service_ServiceItemsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Service_ServiceItemsWhereInput
+    orderBy?: Service_ServiceItemsOrderByWithAggregationInput | Service_ServiceItemsOrderByWithAggregationInput[]
+    by: Service_ServiceItemsScalarFieldEnum[] | Service_ServiceItemsScalarFieldEnum
+    having?: Service_ServiceItemsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Service_ServiceItemsCountAggregateInputType | true
+    _avg?: Service_ServiceItemsAvgAggregateInputType
+    _sum?: Service_ServiceItemsSumAggregateInputType
+    _min?: Service_ServiceItemsMinAggregateInputType
+    _max?: Service_ServiceItemsMaxAggregateInputType
+  }
+
+  export type Service_ServiceItemsGroupByOutputType = {
+    serviceId: number
+    serviceItemId: number
+    _count: Service_ServiceItemsCountAggregateOutputType | null
+    _avg: Service_ServiceItemsAvgAggregateOutputType | null
+    _sum: Service_ServiceItemsSumAggregateOutputType | null
+    _min: Service_ServiceItemsMinAggregateOutputType | null
+    _max: Service_ServiceItemsMaxAggregateOutputType | null
+  }
+
+  type GetService_ServiceItemsGroupByPayload<T extends Service_ServiceItemsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Service_ServiceItemsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Service_ServiceItemsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Service_ServiceItemsGroupByOutputType[P]>
+            : GetScalarType<T[P], Service_ServiceItemsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type Service_ServiceItemsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    serviceId?: boolean
+    serviceItemId?: boolean
+    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    ServiceItem?: boolean | ServiceItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["service_ServiceItems"]>
+
+  export type Service_ServiceItemsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    serviceId?: boolean
+    serviceItemId?: boolean
+    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    ServiceItem?: boolean | ServiceItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["service_ServiceItems"]>
+
+  export type Service_ServiceItemsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    serviceId?: boolean
+    serviceItemId?: boolean
+    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    ServiceItem?: boolean | ServiceItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["service_ServiceItems"]>
+
+  export type Service_ServiceItemsSelectScalar = {
+    serviceId?: boolean
+    serviceItemId?: boolean
+  }
+
+  export type Service_ServiceItemsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"serviceId" | "serviceItemId", ExtArgs["result"]["service_ServiceItems"]>
+  export type Service_ServiceItemsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    ServiceItem?: boolean | ServiceItemDefaultArgs<ExtArgs>
+  }
+  export type Service_ServiceItemsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    ServiceItem?: boolean | ServiceItemDefaultArgs<ExtArgs>
+  }
+  export type Service_ServiceItemsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Service?: boolean | ServiceDefaultArgs<ExtArgs>
+    ServiceItem?: boolean | ServiceItemDefaultArgs<ExtArgs>
+  }
+
+  export type $Service_ServiceItemsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Service_ServiceItems"
+    objects: {
+      Service: Prisma.$ServicePayload<ExtArgs>
+      ServiceItem: Prisma.$ServiceItemPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      serviceId: number
+      serviceItemId: number
+    }, ExtArgs["result"]["service_ServiceItems"]>
+    composites: {}
+  }
+
+  type Service_ServiceItemsGetPayload<S extends boolean | null | undefined | Service_ServiceItemsDefaultArgs> = $Result.GetResult<Prisma.$Service_ServiceItemsPayload, S>
+
+  type Service_ServiceItemsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<Service_ServiceItemsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Service_ServiceItemsCountAggregateInputType | true
+    }
+
+  export interface Service_ServiceItemsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Service_ServiceItems'], meta: { name: 'Service_ServiceItems' } }
+    /**
+     * Find zero or one Service_ServiceItems that matches the filter.
+     * @param {Service_ServiceItemsFindUniqueArgs} args - Arguments to find a Service_ServiceItems
+     * @example
+     * // Get one Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends Service_ServiceItemsFindUniqueArgs>(args: SelectSubset<T, Service_ServiceItemsFindUniqueArgs<ExtArgs>>): Prisma__Service_ServiceItemsClient<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Service_ServiceItems that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {Service_ServiceItemsFindUniqueOrThrowArgs} args - Arguments to find a Service_ServiceItems
+     * @example
+     * // Get one Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends Service_ServiceItemsFindUniqueOrThrowArgs>(args: SelectSubset<T, Service_ServiceItemsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__Service_ServiceItemsClient<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Service_ServiceItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Service_ServiceItemsFindFirstArgs} args - Arguments to find a Service_ServiceItems
+     * @example
+     * // Get one Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends Service_ServiceItemsFindFirstArgs>(args?: SelectSubset<T, Service_ServiceItemsFindFirstArgs<ExtArgs>>): Prisma__Service_ServiceItemsClient<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Service_ServiceItems that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Service_ServiceItemsFindFirstOrThrowArgs} args - Arguments to find a Service_ServiceItems
+     * @example
+     * // Get one Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends Service_ServiceItemsFindFirstOrThrowArgs>(args?: SelectSubset<T, Service_ServiceItemsFindFirstOrThrowArgs<ExtArgs>>): Prisma__Service_ServiceItemsClient<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Service_ServiceItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Service_ServiceItemsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.findMany()
+     * 
+     * // Get first 10 Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.findMany({ take: 10 })
+     * 
+     * // Only select the `serviceId`
+     * const service_ServiceItemsWithServiceIdOnly = await prisma.service_ServiceItems.findMany({ select: { serviceId: true } })
+     * 
+     */
+    findMany<T extends Service_ServiceItemsFindManyArgs>(args?: SelectSubset<T, Service_ServiceItemsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Service_ServiceItems.
+     * @param {Service_ServiceItemsCreateArgs} args - Arguments to create a Service_ServiceItems.
+     * @example
+     * // Create one Service_ServiceItems
+     * const Service_ServiceItems = await prisma.service_ServiceItems.create({
+     *   data: {
+     *     // ... data to create a Service_ServiceItems
+     *   }
+     * })
+     * 
+     */
+    create<T extends Service_ServiceItemsCreateArgs>(args: SelectSubset<T, Service_ServiceItemsCreateArgs<ExtArgs>>): Prisma__Service_ServiceItemsClient<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Service_ServiceItems.
+     * @param {Service_ServiceItemsCreateManyArgs} args - Arguments to create many Service_ServiceItems.
+     * @example
+     * // Create many Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends Service_ServiceItemsCreateManyArgs>(args?: SelectSubset<T, Service_ServiceItemsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Service_ServiceItems and returns the data saved in the database.
+     * @param {Service_ServiceItemsCreateManyAndReturnArgs} args - Arguments to create many Service_ServiceItems.
+     * @example
+     * // Create many Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Service_ServiceItems and only return the `serviceId`
+     * const service_ServiceItemsWithServiceIdOnly = await prisma.service_ServiceItems.createManyAndReturn({
+     *   select: { serviceId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends Service_ServiceItemsCreateManyAndReturnArgs>(args?: SelectSubset<T, Service_ServiceItemsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Service_ServiceItems.
+     * @param {Service_ServiceItemsDeleteArgs} args - Arguments to delete one Service_ServiceItems.
+     * @example
+     * // Delete one Service_ServiceItems
+     * const Service_ServiceItems = await prisma.service_ServiceItems.delete({
+     *   where: {
+     *     // ... filter to delete one Service_ServiceItems
+     *   }
+     * })
+     * 
+     */
+    delete<T extends Service_ServiceItemsDeleteArgs>(args: SelectSubset<T, Service_ServiceItemsDeleteArgs<ExtArgs>>): Prisma__Service_ServiceItemsClient<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Service_ServiceItems.
+     * @param {Service_ServiceItemsUpdateArgs} args - Arguments to update one Service_ServiceItems.
+     * @example
+     * // Update one Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends Service_ServiceItemsUpdateArgs>(args: SelectSubset<T, Service_ServiceItemsUpdateArgs<ExtArgs>>): Prisma__Service_ServiceItemsClient<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Service_ServiceItems.
+     * @param {Service_ServiceItemsDeleteManyArgs} args - Arguments to filter Service_ServiceItems to delete.
+     * @example
+     * // Delete a few Service_ServiceItems
+     * const { count } = await prisma.service_ServiceItems.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends Service_ServiceItemsDeleteManyArgs>(args?: SelectSubset<T, Service_ServiceItemsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Service_ServiceItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Service_ServiceItemsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends Service_ServiceItemsUpdateManyArgs>(args: SelectSubset<T, Service_ServiceItemsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Service_ServiceItems and returns the data updated in the database.
+     * @param {Service_ServiceItemsUpdateManyAndReturnArgs} args - Arguments to update many Service_ServiceItems.
+     * @example
+     * // Update many Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Service_ServiceItems and only return the `serviceId`
+     * const service_ServiceItemsWithServiceIdOnly = await prisma.service_ServiceItems.updateManyAndReturn({
+     *   select: { serviceId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends Service_ServiceItemsUpdateManyAndReturnArgs>(args: SelectSubset<T, Service_ServiceItemsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Service_ServiceItems.
+     * @param {Service_ServiceItemsUpsertArgs} args - Arguments to update or create a Service_ServiceItems.
+     * @example
+     * // Update or create a Service_ServiceItems
+     * const service_ServiceItems = await prisma.service_ServiceItems.upsert({
+     *   create: {
+     *     // ... data to create a Service_ServiceItems
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Service_ServiceItems we want to update
+     *   }
+     * })
+     */
+    upsert<T extends Service_ServiceItemsUpsertArgs>(args: SelectSubset<T, Service_ServiceItemsUpsertArgs<ExtArgs>>): Prisma__Service_ServiceItemsClient<$Result.GetResult<Prisma.$Service_ServiceItemsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Service_ServiceItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Service_ServiceItemsCountArgs} args - Arguments to filter Service_ServiceItems to count.
+     * @example
+     * // Count the number of Service_ServiceItems
+     * const count = await prisma.service_ServiceItems.count({
+     *   where: {
+     *     // ... the filter for the Service_ServiceItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends Service_ServiceItemsCountArgs>(
+      args?: Subset<T, Service_ServiceItemsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Service_ServiceItemsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Service_ServiceItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Service_ServiceItemsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Service_ServiceItemsAggregateArgs>(args: Subset<T, Service_ServiceItemsAggregateArgs>): Prisma.PrismaPromise<GetService_ServiceItemsAggregateType<T>>
+
+    /**
+     * Group by Service_ServiceItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Service_ServiceItemsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends Service_ServiceItemsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: Service_ServiceItemsGroupByArgs['orderBy'] }
+        : { orderBy?: Service_ServiceItemsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, Service_ServiceItemsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetService_ServiceItemsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Service_ServiceItems model
+   */
+  readonly fields: Service_ServiceItemsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Service_ServiceItems.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__Service_ServiceItemsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Service<T extends ServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServiceDefaultArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    ServiceItem<T extends ServiceItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServiceItemDefaultArgs<ExtArgs>>): Prisma__ServiceItemClient<$Result.GetResult<Prisma.$ServiceItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Service_ServiceItems model
+   */
+  interface Service_ServiceItemsFieldRefs {
+    readonly serviceId: FieldRef<"Service_ServiceItems", 'Int'>
+    readonly serviceItemId: FieldRef<"Service_ServiceItems", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Service_ServiceItems findUnique
+   */
+  export type Service_ServiceItemsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    /**
+     * Filter, which Service_ServiceItems to fetch.
+     */
+    where: Service_ServiceItemsWhereUniqueInput
+  }
+
+  /**
+   * Service_ServiceItems findUniqueOrThrow
+   */
+  export type Service_ServiceItemsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    /**
+     * Filter, which Service_ServiceItems to fetch.
+     */
+    where: Service_ServiceItemsWhereUniqueInput
+  }
+
+  /**
+   * Service_ServiceItems findFirst
+   */
+  export type Service_ServiceItemsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    /**
+     * Filter, which Service_ServiceItems to fetch.
+     */
+    where?: Service_ServiceItemsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Service_ServiceItems to fetch.
+     */
+    orderBy?: Service_ServiceItemsOrderByWithRelationInput | Service_ServiceItemsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Service_ServiceItems.
+     */
+    cursor?: Service_ServiceItemsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Service_ServiceItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Service_ServiceItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Service_ServiceItems.
+     */
+    distinct?: Service_ServiceItemsScalarFieldEnum | Service_ServiceItemsScalarFieldEnum[]
+  }
+
+  /**
+   * Service_ServiceItems findFirstOrThrow
+   */
+  export type Service_ServiceItemsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    /**
+     * Filter, which Service_ServiceItems to fetch.
+     */
+    where?: Service_ServiceItemsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Service_ServiceItems to fetch.
+     */
+    orderBy?: Service_ServiceItemsOrderByWithRelationInput | Service_ServiceItemsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Service_ServiceItems.
+     */
+    cursor?: Service_ServiceItemsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Service_ServiceItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Service_ServiceItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Service_ServiceItems.
+     */
+    distinct?: Service_ServiceItemsScalarFieldEnum | Service_ServiceItemsScalarFieldEnum[]
+  }
+
+  /**
+   * Service_ServiceItems findMany
+   */
+  export type Service_ServiceItemsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    /**
+     * Filter, which Service_ServiceItems to fetch.
+     */
+    where?: Service_ServiceItemsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Service_ServiceItems to fetch.
+     */
+    orderBy?: Service_ServiceItemsOrderByWithRelationInput | Service_ServiceItemsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Service_ServiceItems.
+     */
+    cursor?: Service_ServiceItemsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Service_ServiceItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Service_ServiceItems.
+     */
+    skip?: number
+    distinct?: Service_ServiceItemsScalarFieldEnum | Service_ServiceItemsScalarFieldEnum[]
+  }
+
+  /**
+   * Service_ServiceItems create
+   */
+  export type Service_ServiceItemsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Service_ServiceItems.
+     */
+    data: XOR<Service_ServiceItemsCreateInput, Service_ServiceItemsUncheckedCreateInput>
+  }
+
+  /**
+   * Service_ServiceItems createMany
+   */
+  export type Service_ServiceItemsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Service_ServiceItems.
+     */
+    data: Service_ServiceItemsCreateManyInput | Service_ServiceItemsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Service_ServiceItems createManyAndReturn
+   */
+  export type Service_ServiceItemsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * The data used to create many Service_ServiceItems.
+     */
+    data: Service_ServiceItemsCreateManyInput | Service_ServiceItemsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Service_ServiceItems update
+   */
+  export type Service_ServiceItemsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Service_ServiceItems.
+     */
+    data: XOR<Service_ServiceItemsUpdateInput, Service_ServiceItemsUncheckedUpdateInput>
+    /**
+     * Choose, which Service_ServiceItems to update.
+     */
+    where: Service_ServiceItemsWhereUniqueInput
+  }
+
+  /**
+   * Service_ServiceItems updateMany
+   */
+  export type Service_ServiceItemsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Service_ServiceItems.
+     */
+    data: XOR<Service_ServiceItemsUpdateManyMutationInput, Service_ServiceItemsUncheckedUpdateManyInput>
+    /**
+     * Filter which Service_ServiceItems to update
+     */
+    where?: Service_ServiceItemsWhereInput
+    /**
+     * Limit how many Service_ServiceItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Service_ServiceItems updateManyAndReturn
+   */
+  export type Service_ServiceItemsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * The data used to update Service_ServiceItems.
+     */
+    data: XOR<Service_ServiceItemsUpdateManyMutationInput, Service_ServiceItemsUncheckedUpdateManyInput>
+    /**
+     * Filter which Service_ServiceItems to update
+     */
+    where?: Service_ServiceItemsWhereInput
+    /**
+     * Limit how many Service_ServiceItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Service_ServiceItems upsert
+   */
+  export type Service_ServiceItemsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Service_ServiceItems to update in case it exists.
+     */
+    where: Service_ServiceItemsWhereUniqueInput
+    /**
+     * In case the Service_ServiceItems found by the `where` argument doesn't exist, create a new Service_ServiceItems with this data.
+     */
+    create: XOR<Service_ServiceItemsCreateInput, Service_ServiceItemsUncheckedCreateInput>
+    /**
+     * In case the Service_ServiceItems was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<Service_ServiceItemsUpdateInput, Service_ServiceItemsUncheckedUpdateInput>
+  }
+
+  /**
+   * Service_ServiceItems delete
+   */
+  export type Service_ServiceItemsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+    /**
+     * Filter which Service_ServiceItems to delete.
+     */
+    where: Service_ServiceItemsWhereUniqueInput
+  }
+
+  /**
+   * Service_ServiceItems deleteMany
+   */
+  export type Service_ServiceItemsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Service_ServiceItems to delete
+     */
+    where?: Service_ServiceItemsWhereInput
+    /**
+     * Limit how many Service_ServiceItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Service_ServiceItems without action
+   */
+  export type Service_ServiceItemsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service_ServiceItems
+     */
+    select?: Service_ServiceItemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service_ServiceItems
+     */
+    omit?: Service_ServiceItemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Service_ServiceItemsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -42540,7 +42808,9 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     name: 'name',
     publishedAt: 'publishedAt',
-    description: 'description'
+    description: 'description',
+    categoryId: 'categoryId',
+    unit: 'unit'
   };
 
   export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
@@ -42678,17 +42948,6 @@ export namespace Prisma {
   export type WorkLogScalarFieldEnum = (typeof WorkLogScalarFieldEnum)[keyof typeof WorkLogScalarFieldEnum]
 
 
-  export const Spatial_ref_sysScalarFieldEnum: {
-    srid: 'srid',
-    auth_name: 'auth_name',
-    auth_srid: 'auth_srid',
-    srtext: 'srtext',
-    proj4text: 'proj4text'
-  };
-
-  export type Spatial_ref_sysScalarFieldEnum = (typeof Spatial_ref_sysScalarFieldEnum)[keyof typeof Spatial_ref_sysScalarFieldEnum]
-
-
   export const InspectionReportScalarFieldEnum: {
     id: 'id',
     bookingId: 'bookingId',
@@ -42719,7 +42978,17 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     unitPrice: 'unitPrice',
-    serviceId: 'serviceId'
+    warrantyPeriod: 'warrantyPeriod',
+    createdAt: 'createdAt',
+    deletedAt: 'deletedAt',
+    updatedAt: 'updatedAt',
+    brand: 'brand',
+    description: 'description',
+    isActive: 'isActive',
+    model: 'model',
+    stockQuantity: 'stockQuantity',
+    unit: 'unit',
+    providerId: 'providerId'
   };
 
   export type ServiceItemScalarFieldEnum = (typeof ServiceItemScalarFieldEnum)[keyof typeof ServiceItemScalarFieldEnum]
@@ -42740,6 +43009,14 @@ export namespace Prisma {
   };
 
   export type ServiceRequestScalarFieldEnum = (typeof ServiceRequestScalarFieldEnum)[keyof typeof ServiceRequestScalarFieldEnum]
+
+
+  export const Service_ServiceItemsScalarFieldEnum: {
+    serviceId: 'serviceId',
+    serviceItemId: 'serviceItemId'
+  };
+
+  export type Service_ServiceItemsScalarFieldEnum = (typeof Service_ServiceItemsScalarFieldEnum)[keyof typeof Service_ServiceItemsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -42873,6 +43150,20 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Unit'
+   */
+  export type EnumUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Unit'>
+    
+
+
+  /**
+   * Reference to a field of type 'Unit[]'
+   */
+  export type ListEnumUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Unit[]'>
     
 
 
@@ -43095,9 +43386,9 @@ export namespace Prisma {
     other_Category?: CategoryListRelationFilter
     User_Category_updatedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     CategoryTranslation?: CategoryTranslationListRelationFilter
+    Service?: ServiceListRelationFilter
     ServiceRequest?: ServiceRequestListRelationFilter
     StaffCategory?: StaffCategoryListRelationFilter
-    Service?: ServiceListRelationFilter
   }
 
   export type CategoryOrderByWithRelationInput = {
@@ -43117,9 +43408,9 @@ export namespace Prisma {
     other_Category?: CategoryOrderByRelationAggregateInput
     User_Category_updatedByIdToUser?: UserOrderByWithRelationInput
     CategoryTranslation?: CategoryTranslationOrderByRelationAggregateInput
+    Service?: ServiceOrderByRelationAggregateInput
     ServiceRequest?: ServiceRequestOrderByRelationAggregateInput
     StaffCategory?: StaffCategoryOrderByRelationAggregateInput
-    Service?: ServiceOrderByRelationAggregateInput
   }
 
   export type CategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -43142,9 +43433,9 @@ export namespace Prisma {
     other_Category?: CategoryListRelationFilter
     User_Category_updatedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     CategoryTranslation?: CategoryTranslationListRelationFilter
+    Service?: ServiceListRelationFilter
     ServiceRequest?: ServiceRequestListRelationFilter
     StaffCategory?: StaffCategoryListRelationFilter
-    Service?: ServiceListRelationFilter
   }, "id">
 
   export type CategoryOrderByWithAggregationInput = {
@@ -44250,16 +44541,18 @@ export namespace Prisma {
     name?: StringFilter<"Service"> | string
     publishedAt?: DateTimeNullableFilter<"Service"> | Date | string | null
     description?: StringFilter<"Service"> | string
+    categoryId?: IntFilter<"Service"> | number
+    unit?: EnumUnitFilter<"Service"> | $Enums.Unit
     ProposedService?: ProposedServiceListRelationFilter
     RecurringBooking?: RecurringBookingListRelationFilter
     Review?: ReviewListRelationFilter
+    Category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     User_Service_createdByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     User_Service_deletedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
     User_Service_updatedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    ServiceItem?: ServiceItemListRelationFilter
     ServiceTranslation?: ServiceTranslationListRelationFilter
-    Category?: CategoryListRelationFilter
+    Service_ServiceItems?: Service_ServiceItemsListRelationFilter
   }
 
   export type ServiceOrderByWithRelationInput = {
@@ -44278,16 +44571,18 @@ export namespace Prisma {
     name?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
     description?: SortOrder
+    categoryId?: SortOrder
+    unit?: SortOrder
     ProposedService?: ProposedServiceOrderByRelationAggregateInput
     RecurringBooking?: RecurringBookingOrderByRelationAggregateInput
     Review?: ReviewOrderByRelationAggregateInput
+    Category?: CategoryOrderByWithRelationInput
     User_Service_createdByIdToUser?: UserOrderByWithRelationInput
     User_Service_deletedByIdToUser?: UserOrderByWithRelationInput
     ServiceProvider?: ServiceProviderOrderByWithRelationInput
     User_Service_updatedByIdToUser?: UserOrderByWithRelationInput
-    ServiceItem?: ServiceItemOrderByRelationAggregateInput
     ServiceTranslation?: ServiceTranslationOrderByRelationAggregateInput
-    Category?: CategoryOrderByRelationAggregateInput
+    Service_ServiceItems?: Service_ServiceItemsOrderByRelationAggregateInput
   }
 
   export type ServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -44309,16 +44604,18 @@ export namespace Prisma {
     name?: StringFilter<"Service"> | string
     publishedAt?: DateTimeNullableFilter<"Service"> | Date | string | null
     description?: StringFilter<"Service"> | string
+    categoryId?: IntFilter<"Service"> | number
+    unit?: EnumUnitFilter<"Service"> | $Enums.Unit
     ProposedService?: ProposedServiceListRelationFilter
     RecurringBooking?: RecurringBookingListRelationFilter
     Review?: ReviewListRelationFilter
+    Category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     User_Service_createdByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     User_Service_deletedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
     User_Service_updatedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    ServiceItem?: ServiceItemListRelationFilter
     ServiceTranslation?: ServiceTranslationListRelationFilter
-    Category?: CategoryListRelationFilter
+    Service_ServiceItems?: Service_ServiceItemsListRelationFilter
   }, "id">
 
   export type ServiceOrderByWithAggregationInput = {
@@ -44337,6 +44634,8 @@ export namespace Prisma {
     name?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
     description?: SortOrder
+    categoryId?: SortOrder
+    unit?: SortOrder
     _count?: ServiceCountOrderByAggregateInput
     _avg?: ServiceAvgOrderByAggregateInput
     _max?: ServiceMaxOrderByAggregateInput
@@ -44363,6 +44662,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Service"> | string
     publishedAt?: DateTimeNullableWithAggregatesFilter<"Service"> | Date | string | null
     description?: StringWithAggregatesFilter<"Service"> | string
+    categoryId?: IntWithAggregatesFilter<"Service"> | number
+    unit?: EnumUnitWithAggregatesFilter<"Service"> | $Enums.Unit
   }
 
   export type ServiceProviderWhereInput = {
@@ -44385,6 +44686,7 @@ export namespace Prisma {
     verifiedById?: IntNullableFilter<"ServiceProvider"> | number | null
     Booking?: BookingListRelationFilter
     Service?: ServiceListRelationFilter
+    ServiceItem?: ServiceItemListRelationFilter
     User_ServiceProvider_userIdToUser?: XOR<UserScalarRelationFilter, UserWhereInput>
     User_ServiceProvider_verifiedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     ServiceProviderTranslation?: ServiceProviderTranslationListRelationFilter
@@ -44409,6 +44711,7 @@ export namespace Prisma {
     verifiedById?: SortOrderInput | SortOrder
     Booking?: BookingOrderByRelationAggregateInput
     Service?: ServiceOrderByRelationAggregateInput
+    ServiceItem?: ServiceItemOrderByRelationAggregateInput
     User_ServiceProvider_userIdToUser?: UserOrderByWithRelationInput
     User_ServiceProvider_verifiedByIdToUser?: UserOrderByWithRelationInput
     ServiceProviderTranslation?: ServiceProviderTranslationOrderByRelationAggregateInput
@@ -44436,6 +44739,7 @@ export namespace Prisma {
     verifiedById?: IntNullableFilter<"ServiceProvider"> | number | null
     Booking?: BookingListRelationFilter
     Service?: ServiceListRelationFilter
+    ServiceItem?: ServiceItemListRelationFilter
     User_ServiceProvider_userIdToUser?: XOR<UserScalarRelationFilter, UserWhereInput>
     User_ServiceProvider_verifiedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     ServiceProviderTranslation?: ServiceProviderTranslationListRelationFilter
@@ -45174,60 +45478,6 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"WorkLog"> | Date | string
   }
 
-  export type spatial_ref_sysWhereInput = {
-    AND?: spatial_ref_sysWhereInput | spatial_ref_sysWhereInput[]
-    OR?: spatial_ref_sysWhereInput[]
-    NOT?: spatial_ref_sysWhereInput | spatial_ref_sysWhereInput[]
-    srid?: IntFilter<"spatial_ref_sys"> | number
-    auth_name?: StringNullableFilter<"spatial_ref_sys"> | string | null
-    auth_srid?: IntNullableFilter<"spatial_ref_sys"> | number | null
-    srtext?: StringNullableFilter<"spatial_ref_sys"> | string | null
-    proj4text?: StringNullableFilter<"spatial_ref_sys"> | string | null
-  }
-
-  export type spatial_ref_sysOrderByWithRelationInput = {
-    srid?: SortOrder
-    auth_name?: SortOrderInput | SortOrder
-    auth_srid?: SortOrderInput | SortOrder
-    srtext?: SortOrderInput | SortOrder
-    proj4text?: SortOrderInput | SortOrder
-  }
-
-  export type spatial_ref_sysWhereUniqueInput = Prisma.AtLeast<{
-    srid?: number
-    AND?: spatial_ref_sysWhereInput | spatial_ref_sysWhereInput[]
-    OR?: spatial_ref_sysWhereInput[]
-    NOT?: spatial_ref_sysWhereInput | spatial_ref_sysWhereInput[]
-    auth_name?: StringNullableFilter<"spatial_ref_sys"> | string | null
-    auth_srid?: IntNullableFilter<"spatial_ref_sys"> | number | null
-    srtext?: StringNullableFilter<"spatial_ref_sys"> | string | null
-    proj4text?: StringNullableFilter<"spatial_ref_sys"> | string | null
-  }, "srid">
-
-  export type spatial_ref_sysOrderByWithAggregationInput = {
-    srid?: SortOrder
-    auth_name?: SortOrderInput | SortOrder
-    auth_srid?: SortOrderInput | SortOrder
-    srtext?: SortOrderInput | SortOrder
-    proj4text?: SortOrderInput | SortOrder
-    _count?: spatial_ref_sysCountOrderByAggregateInput
-    _avg?: spatial_ref_sysAvgOrderByAggregateInput
-    _max?: spatial_ref_sysMaxOrderByAggregateInput
-    _min?: spatial_ref_sysMinOrderByAggregateInput
-    _sum?: spatial_ref_sysSumOrderByAggregateInput
-  }
-
-  export type spatial_ref_sysScalarWhereWithAggregatesInput = {
-    AND?: spatial_ref_sysScalarWhereWithAggregatesInput | spatial_ref_sysScalarWhereWithAggregatesInput[]
-    OR?: spatial_ref_sysScalarWhereWithAggregatesInput[]
-    NOT?: spatial_ref_sysScalarWhereWithAggregatesInput | spatial_ref_sysScalarWhereWithAggregatesInput[]
-    srid?: IntWithAggregatesFilter<"spatial_ref_sys"> | number
-    auth_name?: StringNullableWithAggregatesFilter<"spatial_ref_sys"> | string | null
-    auth_srid?: IntNullableWithAggregatesFilter<"spatial_ref_sys"> | number | null
-    srtext?: StringNullableWithAggregatesFilter<"spatial_ref_sys"> | string | null
-    proj4text?: StringNullableWithAggregatesFilter<"spatial_ref_sys"> | string | null
-  }
-
   export type InspectionReportWhereInput = {
     AND?: InspectionReportWhereInput | InspectionReportWhereInput[]
     OR?: InspectionReportWhereInput[]
@@ -45375,16 +45625,38 @@ export namespace Prisma {
     id?: IntFilter<"ServiceItem"> | number
     name?: StringFilter<"ServiceItem"> | string
     unitPrice?: FloatFilter<"ServiceItem"> | number
-    serviceId?: IntFilter<"ServiceItem"> | number
-    Service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
+    warrantyPeriod?: IntNullableFilter<"ServiceItem"> | number | null
+    createdAt?: DateTimeFilter<"ServiceItem"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceItem"> | Date | string | null
+    updatedAt?: DateTimeFilter<"ServiceItem"> | Date | string
+    brand?: StringNullableFilter<"ServiceItem"> | string | null
+    description?: StringNullableFilter<"ServiceItem"> | string | null
+    isActive?: BoolFilter<"ServiceItem"> | boolean
+    model?: StringNullableFilter<"ServiceItem"> | string | null
+    stockQuantity?: IntFilter<"ServiceItem"> | number
+    unit?: EnumUnitFilter<"ServiceItem"> | $Enums.Unit
+    providerId?: IntFilter<"ServiceItem"> | number
+    ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
+    Service_ServiceItems?: Service_ServiceItemsListRelationFilter
   }
 
   export type ServiceItemOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     unitPrice?: SortOrder
-    serviceId?: SortOrder
-    Service?: ServiceOrderByWithRelationInput
+    warrantyPeriod?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    brand?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    model?: SortOrderInput | SortOrder
+    stockQuantity?: SortOrder
+    unit?: SortOrder
+    providerId?: SortOrder
+    ServiceProvider?: ServiceProviderOrderByWithRelationInput
+    Service_ServiceItems?: Service_ServiceItemsOrderByRelationAggregateInput
   }
 
   export type ServiceItemWhereUniqueInput = Prisma.AtLeast<{
@@ -45394,15 +45666,36 @@ export namespace Prisma {
     NOT?: ServiceItemWhereInput | ServiceItemWhereInput[]
     name?: StringFilter<"ServiceItem"> | string
     unitPrice?: FloatFilter<"ServiceItem"> | number
-    serviceId?: IntFilter<"ServiceItem"> | number
-    Service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
+    warrantyPeriod?: IntNullableFilter<"ServiceItem"> | number | null
+    createdAt?: DateTimeFilter<"ServiceItem"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceItem"> | Date | string | null
+    updatedAt?: DateTimeFilter<"ServiceItem"> | Date | string
+    brand?: StringNullableFilter<"ServiceItem"> | string | null
+    description?: StringNullableFilter<"ServiceItem"> | string | null
+    isActive?: BoolFilter<"ServiceItem"> | boolean
+    model?: StringNullableFilter<"ServiceItem"> | string | null
+    stockQuantity?: IntFilter<"ServiceItem"> | number
+    unit?: EnumUnitFilter<"ServiceItem"> | $Enums.Unit
+    providerId?: IntFilter<"ServiceItem"> | number
+    ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
+    Service_ServiceItems?: Service_ServiceItemsListRelationFilter
   }, "id">
 
   export type ServiceItemOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     unitPrice?: SortOrder
-    serviceId?: SortOrder
+    warrantyPeriod?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    brand?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    model?: SortOrderInput | SortOrder
+    stockQuantity?: SortOrder
+    unit?: SortOrder
+    providerId?: SortOrder
     _count?: ServiceItemCountOrderByAggregateInput
     _avg?: ServiceItemAvgOrderByAggregateInput
     _max?: ServiceItemMaxOrderByAggregateInput
@@ -45417,7 +45710,17 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"ServiceItem"> | number
     name?: StringWithAggregatesFilter<"ServiceItem"> | string
     unitPrice?: FloatWithAggregatesFilter<"ServiceItem"> | number
-    serviceId?: IntWithAggregatesFilter<"ServiceItem"> | number
+    warrantyPeriod?: IntNullableWithAggregatesFilter<"ServiceItem"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"ServiceItem"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ServiceItem"> | Date | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"ServiceItem"> | Date | string
+    brand?: StringNullableWithAggregatesFilter<"ServiceItem"> | string | null
+    description?: StringNullableWithAggregatesFilter<"ServiceItem"> | string | null
+    isActive?: BoolWithAggregatesFilter<"ServiceItem"> | boolean
+    model?: StringNullableWithAggregatesFilter<"ServiceItem"> | string | null
+    stockQuantity?: IntWithAggregatesFilter<"ServiceItem"> | number
+    unit?: EnumUnitWithAggregatesFilter<"ServiceItem"> | $Enums.Unit
+    providerId?: IntWithAggregatesFilter<"ServiceItem"> | number
   }
 
   export type ServiceRequestWhereInput = {
@@ -45514,6 +45817,52 @@ export namespace Prisma {
     location?: StringWithAggregatesFilter<"ServiceRequest"> | string
     phoneNumber?: StringWithAggregatesFilter<"ServiceRequest"> | string
     categoryId?: IntWithAggregatesFilter<"ServiceRequest"> | number
+  }
+
+  export type Service_ServiceItemsWhereInput = {
+    AND?: Service_ServiceItemsWhereInput | Service_ServiceItemsWhereInput[]
+    OR?: Service_ServiceItemsWhereInput[]
+    NOT?: Service_ServiceItemsWhereInput | Service_ServiceItemsWhereInput[]
+    serviceId?: IntFilter<"Service_ServiceItems"> | number
+    serviceItemId?: IntFilter<"Service_ServiceItems"> | number
+    Service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
+    ServiceItem?: XOR<ServiceItemScalarRelationFilter, ServiceItemWhereInput>
+  }
+
+  export type Service_ServiceItemsOrderByWithRelationInput = {
+    serviceId?: SortOrder
+    serviceItemId?: SortOrder
+    Service?: ServiceOrderByWithRelationInput
+    ServiceItem?: ServiceItemOrderByWithRelationInput
+  }
+
+  export type Service_ServiceItemsWhereUniqueInput = Prisma.AtLeast<{
+    serviceId_serviceItemId?: Service_ServiceItemsServiceIdServiceItemIdCompoundUniqueInput
+    AND?: Service_ServiceItemsWhereInput | Service_ServiceItemsWhereInput[]
+    OR?: Service_ServiceItemsWhereInput[]
+    NOT?: Service_ServiceItemsWhereInput | Service_ServiceItemsWhereInput[]
+    serviceId?: IntFilter<"Service_ServiceItems"> | number
+    serviceItemId?: IntFilter<"Service_ServiceItems"> | number
+    Service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
+    ServiceItem?: XOR<ServiceItemScalarRelationFilter, ServiceItemWhereInput>
+  }, "serviceId_serviceItemId">
+
+  export type Service_ServiceItemsOrderByWithAggregationInput = {
+    serviceId?: SortOrder
+    serviceItemId?: SortOrder
+    _count?: Service_ServiceItemsCountOrderByAggregateInput
+    _avg?: Service_ServiceItemsAvgOrderByAggregateInput
+    _max?: Service_ServiceItemsMaxOrderByAggregateInput
+    _min?: Service_ServiceItemsMinOrderByAggregateInput
+    _sum?: Service_ServiceItemsSumOrderByAggregateInput
+  }
+
+  export type Service_ServiceItemsScalarWhereWithAggregatesInput = {
+    AND?: Service_ServiceItemsScalarWhereWithAggregatesInput | Service_ServiceItemsScalarWhereWithAggregatesInput[]
+    OR?: Service_ServiceItemsScalarWhereWithAggregatesInput[]
+    NOT?: Service_ServiceItemsScalarWhereWithAggregatesInput | Service_ServiceItemsScalarWhereWithAggregatesInput[]
+    serviceId?: IntWithAggregatesFilter<"Service_ServiceItems"> | number
+    serviceItemId?: IntWithAggregatesFilter<"Service_ServiceItems"> | number
   }
 
   export type BookingCreateInput = {
@@ -45621,9 +45970,9 @@ export namespace Prisma {
     other_Category?: CategoryCreateNestedManyWithoutCategoryInput
     User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
+    Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
-    Service?: ServiceCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateInput = {
@@ -45639,9 +45988,9 @@ export namespace Prisma {
     updatedAt: Date | string
     other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
-    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUpdateInput = {
@@ -45656,9 +46005,9 @@ export namespace Prisma {
     other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
     User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateInput = {
@@ -45674,9 +46023,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryCreateManyInput = {
@@ -46753,16 +47102,17 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
     Review?: ReviewCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
     User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateInput = {
@@ -46781,12 +47131,13 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
     Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUpdateInput = {
@@ -46800,16 +47151,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
     Review?: ReviewUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
     User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateInput = {
@@ -46828,12 +47180,13 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceCreateManyInput = {
@@ -46852,6 +47205,8 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
   }
 
   export type ServiceUpdateManyMutationInput = {
@@ -46865,6 +47220,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
   }
 
   export type ServiceUncheckedUpdateManyInput = {
@@ -46883,6 +47239,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
   }
 
   export type ServiceProviderCreateInput = {
@@ -46899,6 +47257,7 @@ export namespace Prisma {
     verifiedAt?: Date | string | null
     Booking?: BookingCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceProviderInput
     User_ServiceProvider_userIdToUser: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_userIdToUserInput
     User_ServiceProvider_verifiedByIdToUser?: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserInput
     ServiceProviderTranslation?: ServiceProviderTranslationCreateNestedManyWithoutServiceProviderInput
@@ -46923,6 +47282,7 @@ export namespace Prisma {
     verifiedById?: number | null
     Booking?: BookingUncheckedCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutServiceProviderInput
     Staff?: StaffUncheckedCreateNestedManyWithoutServiceProviderInput
@@ -46942,6 +47302,7 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Booking?: BookingUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUpdateManyWithoutServiceProviderNestedInput
     User_ServiceProvider_userIdToUser?: UserUpdateOneRequiredWithoutServiceProvider_ServiceProvider_userIdToUserNestedInput
     User_ServiceProvider_verifiedByIdToUser?: UserUpdateOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUpdateManyWithoutServiceProviderNestedInput
@@ -46966,6 +47327,7 @@ export namespace Prisma {
     verifiedById?: NullableIntFieldUpdateOperationsInput | number | null
     Booking?: BookingUncheckedUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutServiceProviderNestedInput
     Staff?: StaffUncheckedUpdateManyWithoutServiceProviderNestedInput
@@ -47725,62 +48087,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type spatial_ref_sysCreateInput = {
-    srid: number
-    auth_name?: string | null
-    auth_srid?: number | null
-    srtext?: string | null
-    proj4text?: string | null
-  }
-
-  export type spatial_ref_sysUncheckedCreateInput = {
-    srid: number
-    auth_name?: string | null
-    auth_srid?: number | null
-    srtext?: string | null
-    proj4text?: string | null
-  }
-
-  export type spatial_ref_sysUpdateInput = {
-    srid?: IntFieldUpdateOperationsInput | number
-    auth_name?: NullableStringFieldUpdateOperationsInput | string | null
-    auth_srid?: NullableIntFieldUpdateOperationsInput | number | null
-    srtext?: NullableStringFieldUpdateOperationsInput | string | null
-    proj4text?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type spatial_ref_sysUncheckedUpdateInput = {
-    srid?: IntFieldUpdateOperationsInput | number
-    auth_name?: NullableStringFieldUpdateOperationsInput | string | null
-    auth_srid?: NullableIntFieldUpdateOperationsInput | number | null
-    srtext?: NullableStringFieldUpdateOperationsInput | string | null
-    proj4text?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type spatial_ref_sysCreateManyInput = {
-    srid: number
-    auth_name?: string | null
-    auth_srid?: number | null
-    srtext?: string | null
-    proj4text?: string | null
-  }
-
-  export type spatial_ref_sysUpdateManyMutationInput = {
-    srid?: IntFieldUpdateOperationsInput | number
-    auth_name?: NullableStringFieldUpdateOperationsInput | string | null
-    auth_srid?: NullableIntFieldUpdateOperationsInput | number | null
-    srtext?: NullableStringFieldUpdateOperationsInput | string | null
-    proj4text?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type spatial_ref_sysUncheckedUpdateManyInput = {
-    srid?: IntFieldUpdateOperationsInput | number
-    auth_name?: NullableStringFieldUpdateOperationsInput | string | null
-    auth_srid?: NullableIntFieldUpdateOperationsInput | number | null
-    srtext?: NullableStringFieldUpdateOperationsInput | string | null
-    proj4text?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type InspectionReportCreateInput = {
     estimatedTime?: number | null
     note?: string | null
@@ -47914,46 +48220,120 @@ export namespace Prisma {
   export type ServiceItemCreateInput = {
     name: string
     unitPrice: number
-    Service: ServiceCreateNestedOneWithoutServiceItemInput
+    warrantyPeriod?: number | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedAt: Date | string
+    brand?: string | null
+    description?: string | null
+    isActive?: boolean
+    model?: string | null
+    stockQuantity?: number
+    unit?: $Enums.Unit
+    ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceItemInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceItemInput
   }
 
   export type ServiceItemUncheckedCreateInput = {
     id?: number
     name: string
     unitPrice: number
-    serviceId: number
+    warrantyPeriod?: number | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedAt: Date | string
+    brand?: string | null
+    description?: string | null
+    isActive?: boolean
+    model?: string | null
+    stockQuantity?: number
+    unit?: $Enums.Unit
+    providerId: number
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceItemInput
   }
 
   export type ServiceItemUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     unitPrice?: FloatFieldUpdateOperationsInput | number
-    Service?: ServiceUpdateOneRequiredWithoutServiceItemNestedInput
+    warrantyPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    stockQuantity?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceItemNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceItemNestedInput
   }
 
   export type ServiceItemUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     unitPrice?: FloatFieldUpdateOperationsInput | number
-    serviceId?: IntFieldUpdateOperationsInput | number
+    warrantyPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    stockQuantity?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    providerId?: IntFieldUpdateOperationsInput | number
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceItemNestedInput
   }
 
   export type ServiceItemCreateManyInput = {
     id?: number
     name: string
     unitPrice: number
-    serviceId: number
+    warrantyPeriod?: number | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedAt: Date | string
+    brand?: string | null
+    description?: string | null
+    isActive?: boolean
+    model?: string | null
+    stockQuantity?: number
+    unit?: $Enums.Unit
+    providerId: number
   }
 
   export type ServiceItemUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     unitPrice?: FloatFieldUpdateOperationsInput | number
+    warrantyPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    stockQuantity?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
   }
 
   export type ServiceItemUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     unitPrice?: FloatFieldUpdateOperationsInput | number
-    serviceId?: IntFieldUpdateOperationsInput | number
+    warrantyPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    stockQuantity?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    providerId?: IntFieldUpdateOperationsInput | number
   }
 
   export type ServiceRequestCreateInput = {
@@ -48050,6 +48430,40 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     categoryId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type Service_ServiceItemsCreateInput = {
+    Service: ServiceCreateNestedOneWithoutService_ServiceItemsInput
+    ServiceItem: ServiceItemCreateNestedOneWithoutService_ServiceItemsInput
+  }
+
+  export type Service_ServiceItemsUncheckedCreateInput = {
+    serviceId: number
+    serviceItemId: number
+  }
+
+  export type Service_ServiceItemsUpdateInput = {
+    Service?: ServiceUpdateOneRequiredWithoutService_ServiceItemsNestedInput
+    ServiceItem?: ServiceItemUpdateOneRequiredWithoutService_ServiceItemsNestedInput
+  }
+
+  export type Service_ServiceItemsUncheckedUpdateInput = {
+    serviceId?: IntFieldUpdateOperationsInput | number
+    serviceItemId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type Service_ServiceItemsCreateManyInput = {
+    serviceId: number
+    serviceItemId: number
+  }
+
+  export type Service_ServiceItemsUpdateManyMutationInput = {
+
+  }
+
+  export type Service_ServiceItemsUncheckedUpdateManyInput = {
+    serviceId?: IntFieldUpdateOperationsInput | number
+    serviceItemId?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -48332,6 +48746,12 @@ export namespace Prisma {
     none?: CategoryTranslationWhereInput
   }
 
+  export type ServiceListRelationFilter = {
+    every?: ServiceWhereInput
+    some?: ServiceWhereInput
+    none?: ServiceWhereInput
+  }
+
   export type ServiceRequestListRelationFilter = {
     every?: ServiceRequestWhereInput
     some?: ServiceRequestWhereInput
@@ -48344,12 +48764,6 @@ export namespace Prisma {
     none?: StaffCategoryWhereInput
   }
 
-  export type ServiceListRelationFilter = {
-    every?: ServiceWhereInput
-    some?: ServiceWhereInput
-    none?: ServiceWhereInput
-  }
-
   export type CategoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -48358,15 +48772,15 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ServiceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ServiceRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type StaffCategoryOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ServiceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -49289,13 +49703,20 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
-  export type ServiceItemListRelationFilter = {
-    every?: ServiceItemWhereInput
-    some?: ServiceItemWhereInput
-    none?: ServiceItemWhereInput
+  export type EnumUnitFilter<$PrismaModel = never> = {
+    equals?: $Enums.Unit | EnumUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.Unit[] | ListEnumUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Unit[] | ListEnumUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumUnitFilter<$PrismaModel> | $Enums.Unit
   }
 
-  export type ServiceItemOrderByRelationAggregateInput = {
+  export type Service_ServiceItemsListRelationFilter = {
+    every?: Service_ServiceItemsWhereInput
+    some?: Service_ServiceItemsWhereInput
+    none?: Service_ServiceItemsWhereInput
+  }
+
+  export type Service_ServiceItemsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -49315,6 +49736,8 @@ export namespace Prisma {
     name?: SortOrder
     publishedAt?: SortOrder
     description?: SortOrder
+    categoryId?: SortOrder
+    unit?: SortOrder
   }
 
   export type ServiceAvgOrderByAggregateInput = {
@@ -49326,6 +49749,7 @@ export namespace Prisma {
     createdById?: SortOrder
     updatedById?: SortOrder
     deletedById?: SortOrder
+    categoryId?: SortOrder
   }
 
   export type ServiceMaxOrderByAggregateInput = {
@@ -49343,6 +49767,8 @@ export namespace Prisma {
     name?: SortOrder
     publishedAt?: SortOrder
     description?: SortOrder
+    categoryId?: SortOrder
+    unit?: SortOrder
   }
 
   export type ServiceMinOrderByAggregateInput = {
@@ -49360,6 +49786,8 @@ export namespace Prisma {
     name?: SortOrder
     publishedAt?: SortOrder
     description?: SortOrder
+    categoryId?: SortOrder
+    unit?: SortOrder
   }
 
   export type ServiceSumOrderByAggregateInput = {
@@ -49371,6 +49799,7 @@ export namespace Prisma {
     createdById?: SortOrder
     updatedById?: SortOrder
     deletedById?: SortOrder
+    categoryId?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -49389,6 +49818,16 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type EnumUnitWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Unit | EnumUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.Unit[] | ListEnumUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Unit[] | ListEnumUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumUnitWithAggregatesFilter<$PrismaModel> | $Enums.Unit
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUnitFilter<$PrismaModel>
+    _max?: NestedEnumUnitFilter<$PrismaModel>
+  }
+
   export type EnumCompanyTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.CompanyType | EnumCompanyTypeFieldRefInput<$PrismaModel>
     in?: $Enums.CompanyType[] | ListEnumCompanyTypeFieldRefInput<$PrismaModel>
@@ -49403,10 +49842,20 @@ export namespace Prisma {
     not?: NestedEnumVerificationStatusFilter<$PrismaModel> | $Enums.VerificationStatus
   }
 
+  export type ServiceItemListRelationFilter = {
+    every?: ServiceItemWhereInput
+    some?: ServiceItemWhereInput
+    none?: ServiceItemWhereInput
+  }
+
   export type StaffListRelationFilter = {
     every?: StaffWhereInput
     some?: StaffWhereInput
     none?: StaffWhereInput
+  }
+
+  export type ServiceItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type StaffOrderByRelationAggregateInput = {
@@ -50003,40 +50452,6 @@ export namespace Prisma {
     bookingId?: SortOrder
   }
 
-  export type spatial_ref_sysCountOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_name?: SortOrder
-    auth_srid?: SortOrder
-    srtext?: SortOrder
-    proj4text?: SortOrder
-  }
-
-  export type spatial_ref_sysAvgOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_srid?: SortOrder
-  }
-
-  export type spatial_ref_sysMaxOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_name?: SortOrder
-    auth_srid?: SortOrder
-    srtext?: SortOrder
-    proj4text?: SortOrder
-  }
-
-  export type spatial_ref_sysMinOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_name?: SortOrder
-    auth_srid?: SortOrder
-    srtext?: SortOrder
-    proj4text?: SortOrder
-  }
-
-  export type spatial_ref_sysSumOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_srid?: SortOrder
-  }
-
   export type InspectionReportCountOrderByAggregateInput = {
     id?: SortOrder
     bookingId?: SortOrder
@@ -50129,33 +50544,67 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     unitPrice?: SortOrder
-    serviceId?: SortOrder
+    warrantyPeriod?: SortOrder
+    createdAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedAt?: SortOrder
+    brand?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    model?: SortOrder
+    stockQuantity?: SortOrder
+    unit?: SortOrder
+    providerId?: SortOrder
   }
 
   export type ServiceItemAvgOrderByAggregateInput = {
     id?: SortOrder
     unitPrice?: SortOrder
-    serviceId?: SortOrder
+    warrantyPeriod?: SortOrder
+    stockQuantity?: SortOrder
+    providerId?: SortOrder
   }
 
   export type ServiceItemMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     unitPrice?: SortOrder
-    serviceId?: SortOrder
+    warrantyPeriod?: SortOrder
+    createdAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedAt?: SortOrder
+    brand?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    model?: SortOrder
+    stockQuantity?: SortOrder
+    unit?: SortOrder
+    providerId?: SortOrder
   }
 
   export type ServiceItemMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     unitPrice?: SortOrder
-    serviceId?: SortOrder
+    warrantyPeriod?: SortOrder
+    createdAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedAt?: SortOrder
+    brand?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    model?: SortOrder
+    stockQuantity?: SortOrder
+    unit?: SortOrder
+    providerId?: SortOrder
   }
 
   export type ServiceItemSumOrderByAggregateInput = {
     id?: SortOrder
     unitPrice?: SortOrder
-    serviceId?: SortOrder
+    warrantyPeriod?: SortOrder
+    stockQuantity?: SortOrder
+    providerId?: SortOrder
   }
 
   export type EnumRequestStatusFilter<$PrismaModel = never> = {
@@ -50229,6 +50678,41 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRequestStatusFilter<$PrismaModel>
     _max?: NestedEnumRequestStatusFilter<$PrismaModel>
+  }
+
+  export type ServiceItemScalarRelationFilter = {
+    is?: ServiceItemWhereInput
+    isNot?: ServiceItemWhereInput
+  }
+
+  export type Service_ServiceItemsServiceIdServiceItemIdCompoundUniqueInput = {
+    serviceId: number
+    serviceItemId: number
+  }
+
+  export type Service_ServiceItemsCountOrderByAggregateInput = {
+    serviceId?: SortOrder
+    serviceItemId?: SortOrder
+  }
+
+  export type Service_ServiceItemsAvgOrderByAggregateInput = {
+    serviceId?: SortOrder
+    serviceItemId?: SortOrder
+  }
+
+  export type Service_ServiceItemsMaxOrderByAggregateInput = {
+    serviceId?: SortOrder
+    serviceItemId?: SortOrder
+  }
+
+  export type Service_ServiceItemsMinOrderByAggregateInput = {
+    serviceId?: SortOrder
+    serviceItemId?: SortOrder
+  }
+
+  export type Service_ServiceItemsSumOrderByAggregateInput = {
+    serviceId?: SortOrder
+    serviceItemId?: SortOrder
   }
 
   export type CustomerProfileCreateNestedOneWithoutBookingInput = {
@@ -50505,6 +50989,13 @@ export namespace Prisma {
     connect?: CategoryTranslationWhereUniqueInput | CategoryTranslationWhereUniqueInput[]
   }
 
+  export type ServiceCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput> | ServiceCreateWithoutCategoryInput[] | ServiceUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ServiceCreateOrConnectWithoutCategoryInput | ServiceCreateOrConnectWithoutCategoryInput[]
+    createMany?: ServiceCreateManyCategoryInputEnvelope
+    connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+  }
+
   export type ServiceRequestCreateNestedManyWithoutCategoryInput = {
     create?: XOR<ServiceRequestCreateWithoutCategoryInput, ServiceRequestUncheckedCreateWithoutCategoryInput> | ServiceRequestCreateWithoutCategoryInput[] | ServiceRequestUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: ServiceRequestCreateOrConnectWithoutCategoryInput | ServiceRequestCreateOrConnectWithoutCategoryInput[]
@@ -50517,12 +51008,6 @@ export namespace Prisma {
     connectOrCreate?: StaffCategoryCreateOrConnectWithoutCategoryInput | StaffCategoryCreateOrConnectWithoutCategoryInput[]
     createMany?: StaffCategoryCreateManyCategoryInputEnvelope
     connect?: StaffCategoryWhereUniqueInput | StaffCategoryWhereUniqueInput[]
-  }
-
-  export type ServiceCreateNestedManyWithoutCategoryInput = {
-    create?: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput> | ServiceCreateWithoutCategoryInput[] | ServiceUncheckedCreateWithoutCategoryInput[]
-    connectOrCreate?: ServiceCreateOrConnectWithoutCategoryInput | ServiceCreateOrConnectWithoutCategoryInput[]
-    connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
   }
 
   export type CategoryUncheckedCreateNestedManyWithoutCategoryInput = {
@@ -50539,6 +51024,13 @@ export namespace Prisma {
     connect?: CategoryTranslationWhereUniqueInput | CategoryTranslationWhereUniqueInput[]
   }
 
+  export type ServiceUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput> | ServiceCreateWithoutCategoryInput[] | ServiceUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ServiceCreateOrConnectWithoutCategoryInput | ServiceCreateOrConnectWithoutCategoryInput[]
+    createMany?: ServiceCreateManyCategoryInputEnvelope
+    connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+  }
+
   export type ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput = {
     create?: XOR<ServiceRequestCreateWithoutCategoryInput, ServiceRequestUncheckedCreateWithoutCategoryInput> | ServiceRequestCreateWithoutCategoryInput[] | ServiceRequestUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: ServiceRequestCreateOrConnectWithoutCategoryInput | ServiceRequestCreateOrConnectWithoutCategoryInput[]
@@ -50551,12 +51043,6 @@ export namespace Prisma {
     connectOrCreate?: StaffCategoryCreateOrConnectWithoutCategoryInput | StaffCategoryCreateOrConnectWithoutCategoryInput[]
     createMany?: StaffCategoryCreateManyCategoryInputEnvelope
     connect?: StaffCategoryWhereUniqueInput | StaffCategoryWhereUniqueInput[]
-  }
-
-  export type ServiceUncheckedCreateNestedManyWithoutCategoryInput = {
-    create?: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput> | ServiceCreateWithoutCategoryInput[] | ServiceUncheckedCreateWithoutCategoryInput[]
-    connectOrCreate?: ServiceCreateOrConnectWithoutCategoryInput | ServiceCreateOrConnectWithoutCategoryInput[]
-    connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -50635,6 +51121,20 @@ export namespace Prisma {
     deleteMany?: CategoryTranslationScalarWhereInput | CategoryTranslationScalarWhereInput[]
   }
 
+  export type ServiceUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput> | ServiceCreateWithoutCategoryInput[] | ServiceUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ServiceCreateOrConnectWithoutCategoryInput | ServiceCreateOrConnectWithoutCategoryInput[]
+    upsert?: ServiceUpsertWithWhereUniqueWithoutCategoryInput | ServiceUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: ServiceCreateManyCategoryInputEnvelope
+    set?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+    disconnect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+    delete?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+    connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+    update?: ServiceUpdateWithWhereUniqueWithoutCategoryInput | ServiceUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: ServiceUpdateManyWithWhereWithoutCategoryInput | ServiceUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
+  }
+
   export type ServiceRequestUpdateManyWithoutCategoryNestedInput = {
     create?: XOR<ServiceRequestCreateWithoutCategoryInput, ServiceRequestUncheckedCreateWithoutCategoryInput> | ServiceRequestCreateWithoutCategoryInput[] | ServiceRequestUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: ServiceRequestCreateOrConnectWithoutCategoryInput | ServiceRequestCreateOrConnectWithoutCategoryInput[]
@@ -50661,19 +51161,6 @@ export namespace Prisma {
     update?: StaffCategoryUpdateWithWhereUniqueWithoutCategoryInput | StaffCategoryUpdateWithWhereUniqueWithoutCategoryInput[]
     updateMany?: StaffCategoryUpdateManyWithWhereWithoutCategoryInput | StaffCategoryUpdateManyWithWhereWithoutCategoryInput[]
     deleteMany?: StaffCategoryScalarWhereInput | StaffCategoryScalarWhereInput[]
-  }
-
-  export type ServiceUpdateManyWithoutCategoryNestedInput = {
-    create?: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput> | ServiceCreateWithoutCategoryInput[] | ServiceUncheckedCreateWithoutCategoryInput[]
-    connectOrCreate?: ServiceCreateOrConnectWithoutCategoryInput | ServiceCreateOrConnectWithoutCategoryInput[]
-    upsert?: ServiceUpsertWithWhereUniqueWithoutCategoryInput | ServiceUpsertWithWhereUniqueWithoutCategoryInput[]
-    set?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
-    disconnect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
-    delete?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
-    connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
-    update?: ServiceUpdateWithWhereUniqueWithoutCategoryInput | ServiceUpdateWithWhereUniqueWithoutCategoryInput[]
-    updateMany?: ServiceUpdateManyWithWhereWithoutCategoryInput | ServiceUpdateManyWithWhereWithoutCategoryInput[]
-    deleteMany?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
   }
 
   export type CategoryUncheckedUpdateManyWithoutCategoryNestedInput = {
@@ -50704,6 +51191,20 @@ export namespace Prisma {
     deleteMany?: CategoryTranslationScalarWhereInput | CategoryTranslationScalarWhereInput[]
   }
 
+  export type ServiceUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput> | ServiceCreateWithoutCategoryInput[] | ServiceUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ServiceCreateOrConnectWithoutCategoryInput | ServiceCreateOrConnectWithoutCategoryInput[]
+    upsert?: ServiceUpsertWithWhereUniqueWithoutCategoryInput | ServiceUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: ServiceCreateManyCategoryInputEnvelope
+    set?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+    disconnect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+    delete?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+    connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+    update?: ServiceUpdateWithWhereUniqueWithoutCategoryInput | ServiceUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: ServiceUpdateManyWithWhereWithoutCategoryInput | ServiceUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
+  }
+
   export type ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput = {
     create?: XOR<ServiceRequestCreateWithoutCategoryInput, ServiceRequestUncheckedCreateWithoutCategoryInput> | ServiceRequestCreateWithoutCategoryInput[] | ServiceRequestUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: ServiceRequestCreateOrConnectWithoutCategoryInput | ServiceRequestCreateOrConnectWithoutCategoryInput[]
@@ -50730,19 +51231,6 @@ export namespace Prisma {
     update?: StaffCategoryUpdateWithWhereUniqueWithoutCategoryInput | StaffCategoryUpdateWithWhereUniqueWithoutCategoryInput[]
     updateMany?: StaffCategoryUpdateManyWithWhereWithoutCategoryInput | StaffCategoryUpdateManyWithWhereWithoutCategoryInput[]
     deleteMany?: StaffCategoryScalarWhereInput | StaffCategoryScalarWhereInput[]
-  }
-
-  export type ServiceUncheckedUpdateManyWithoutCategoryNestedInput = {
-    create?: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput> | ServiceCreateWithoutCategoryInput[] | ServiceUncheckedCreateWithoutCategoryInput[]
-    connectOrCreate?: ServiceCreateOrConnectWithoutCategoryInput | ServiceCreateOrConnectWithoutCategoryInput[]
-    upsert?: ServiceUpsertWithWhereUniqueWithoutCategoryInput | ServiceUpsertWithWhereUniqueWithoutCategoryInput[]
-    set?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
-    disconnect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
-    delete?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
-    connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
-    update?: ServiceUpdateWithWhereUniqueWithoutCategoryInput | ServiceUpdateWithWhereUniqueWithoutCategoryInput[]
-    updateMany?: ServiceUpdateManyWithWhereWithoutCategoryInput | ServiceUpdateManyWithWhereWithoutCategoryInput[]
-    deleteMany?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
   }
 
   export type CategoryCreateNestedOneWithoutCategoryTranslationInput = {
@@ -51712,6 +52200,12 @@ export namespace Prisma {
     connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
+  export type CategoryCreateNestedOneWithoutServiceInput = {
+    create?: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput>
+    connectOrCreate?: CategoryCreateOrConnectWithoutServiceInput
+    connect?: CategoryWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutService_Service_createdByIdToUserInput = {
     create?: XOR<UserCreateWithoutService_Service_createdByIdToUserInput, UserUncheckedCreateWithoutService_Service_createdByIdToUserInput>
     connectOrCreate?: UserCreateOrConnectWithoutService_Service_createdByIdToUserInput
@@ -51736,13 +52230,6 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type ServiceItemCreateNestedManyWithoutServiceInput = {
-    create?: XOR<ServiceItemCreateWithoutServiceInput, ServiceItemUncheckedCreateWithoutServiceInput> | ServiceItemCreateWithoutServiceInput[] | ServiceItemUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ServiceItemCreateOrConnectWithoutServiceInput | ServiceItemCreateOrConnectWithoutServiceInput[]
-    createMany?: ServiceItemCreateManyServiceInputEnvelope
-    connect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-  }
-
   export type ServiceTranslationCreateNestedManyWithoutServiceInput = {
     create?: XOR<ServiceTranslationCreateWithoutServiceInput, ServiceTranslationUncheckedCreateWithoutServiceInput> | ServiceTranslationCreateWithoutServiceInput[] | ServiceTranslationUncheckedCreateWithoutServiceInput[]
     connectOrCreate?: ServiceTranslationCreateOrConnectWithoutServiceInput | ServiceTranslationCreateOrConnectWithoutServiceInput[]
@@ -51750,10 +52237,11 @@ export namespace Prisma {
     connect?: ServiceTranslationWhereUniqueInput | ServiceTranslationWhereUniqueInput[]
   }
 
-  export type CategoryCreateNestedManyWithoutServiceInput = {
-    create?: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput> | CategoryCreateWithoutServiceInput[] | CategoryUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: CategoryCreateOrConnectWithoutServiceInput | CategoryCreateOrConnectWithoutServiceInput[]
-    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+  export type Service_ServiceItemsCreateNestedManyWithoutServiceInput = {
+    create?: XOR<Service_ServiceItemsCreateWithoutServiceInput, Service_ServiceItemsUncheckedCreateWithoutServiceInput> | Service_ServiceItemsCreateWithoutServiceInput[] | Service_ServiceItemsUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: Service_ServiceItemsCreateOrConnectWithoutServiceInput | Service_ServiceItemsCreateOrConnectWithoutServiceInput[]
+    createMany?: Service_ServiceItemsCreateManyServiceInputEnvelope
+    connect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
   }
 
   export type ProposedServiceUncheckedCreateNestedManyWithoutServiceInput = {
@@ -51777,13 +52265,6 @@ export namespace Prisma {
     connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
-  export type ServiceItemUncheckedCreateNestedManyWithoutServiceInput = {
-    create?: XOR<ServiceItemCreateWithoutServiceInput, ServiceItemUncheckedCreateWithoutServiceInput> | ServiceItemCreateWithoutServiceInput[] | ServiceItemUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ServiceItemCreateOrConnectWithoutServiceInput | ServiceItemCreateOrConnectWithoutServiceInput[]
-    createMany?: ServiceItemCreateManyServiceInputEnvelope
-    connect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-  }
-
   export type ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput = {
     create?: XOR<ServiceTranslationCreateWithoutServiceInput, ServiceTranslationUncheckedCreateWithoutServiceInput> | ServiceTranslationCreateWithoutServiceInput[] | ServiceTranslationUncheckedCreateWithoutServiceInput[]
     connectOrCreate?: ServiceTranslationCreateOrConnectWithoutServiceInput | ServiceTranslationCreateOrConnectWithoutServiceInput[]
@@ -51791,10 +52272,11 @@ export namespace Prisma {
     connect?: ServiceTranslationWhereUniqueInput | ServiceTranslationWhereUniqueInput[]
   }
 
-  export type CategoryUncheckedCreateNestedManyWithoutServiceInput = {
-    create?: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput> | CategoryCreateWithoutServiceInput[] | CategoryUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: CategoryCreateOrConnectWithoutServiceInput | CategoryCreateOrConnectWithoutServiceInput[]
-    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+  export type Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput = {
+    create?: XOR<Service_ServiceItemsCreateWithoutServiceInput, Service_ServiceItemsUncheckedCreateWithoutServiceInput> | Service_ServiceItemsCreateWithoutServiceInput[] | Service_ServiceItemsUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: Service_ServiceItemsCreateOrConnectWithoutServiceInput | Service_ServiceItemsCreateOrConnectWithoutServiceInput[]
+    createMany?: Service_ServiceItemsCreateManyServiceInputEnvelope
+    connect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -51808,6 +52290,10 @@ export namespace Prisma {
   export type ServiceUpdateimagesInput = {
     set?: string[]
     push?: string | string[]
+  }
+
+  export type EnumUnitFieldUpdateOperationsInput = {
+    set?: $Enums.Unit
   }
 
   export type ProposedServiceUpdateManyWithoutServiceNestedInput = {
@@ -51852,6 +52338,14 @@ export namespace Prisma {
     deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
+  export type CategoryUpdateOneRequiredWithoutServiceNestedInput = {
+    create?: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput>
+    connectOrCreate?: CategoryCreateOrConnectWithoutServiceInput
+    upsert?: CategoryUpsertWithoutServiceInput
+    connect?: CategoryWhereUniqueInput
+    update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutServiceInput, CategoryUpdateWithoutServiceInput>, CategoryUncheckedUpdateWithoutServiceInput>
+  }
+
   export type UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput = {
     create?: XOR<UserCreateWithoutService_Service_createdByIdToUserInput, UserUncheckedCreateWithoutService_Service_createdByIdToUserInput>
     connectOrCreate?: UserCreateOrConnectWithoutService_Service_createdByIdToUserInput
@@ -51890,20 +52384,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutService_Service_updatedByIdToUserInput, UserUpdateWithoutService_Service_updatedByIdToUserInput>, UserUncheckedUpdateWithoutService_Service_updatedByIdToUserInput>
   }
 
-  export type ServiceItemUpdateManyWithoutServiceNestedInput = {
-    create?: XOR<ServiceItemCreateWithoutServiceInput, ServiceItemUncheckedCreateWithoutServiceInput> | ServiceItemCreateWithoutServiceInput[] | ServiceItemUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ServiceItemCreateOrConnectWithoutServiceInput | ServiceItemCreateOrConnectWithoutServiceInput[]
-    upsert?: ServiceItemUpsertWithWhereUniqueWithoutServiceInput | ServiceItemUpsertWithWhereUniqueWithoutServiceInput[]
-    createMany?: ServiceItemCreateManyServiceInputEnvelope
-    set?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-    disconnect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-    delete?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-    connect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-    update?: ServiceItemUpdateWithWhereUniqueWithoutServiceInput | ServiceItemUpdateWithWhereUniqueWithoutServiceInput[]
-    updateMany?: ServiceItemUpdateManyWithWhereWithoutServiceInput | ServiceItemUpdateManyWithWhereWithoutServiceInput[]
-    deleteMany?: ServiceItemScalarWhereInput | ServiceItemScalarWhereInput[]
-  }
-
   export type ServiceTranslationUpdateManyWithoutServiceNestedInput = {
     create?: XOR<ServiceTranslationCreateWithoutServiceInput, ServiceTranslationUncheckedCreateWithoutServiceInput> | ServiceTranslationCreateWithoutServiceInput[] | ServiceTranslationUncheckedCreateWithoutServiceInput[]
     connectOrCreate?: ServiceTranslationCreateOrConnectWithoutServiceInput | ServiceTranslationCreateOrConnectWithoutServiceInput[]
@@ -51918,17 +52398,18 @@ export namespace Prisma {
     deleteMany?: ServiceTranslationScalarWhereInput | ServiceTranslationScalarWhereInput[]
   }
 
-  export type CategoryUpdateManyWithoutServiceNestedInput = {
-    create?: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput> | CategoryCreateWithoutServiceInput[] | CategoryUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: CategoryCreateOrConnectWithoutServiceInput | CategoryCreateOrConnectWithoutServiceInput[]
-    upsert?: CategoryUpsertWithWhereUniqueWithoutServiceInput | CategoryUpsertWithWhereUniqueWithoutServiceInput[]
-    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    update?: CategoryUpdateWithWhereUniqueWithoutServiceInput | CategoryUpdateWithWhereUniqueWithoutServiceInput[]
-    updateMany?: CategoryUpdateManyWithWhereWithoutServiceInput | CategoryUpdateManyWithWhereWithoutServiceInput[]
-    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+  export type Service_ServiceItemsUpdateManyWithoutServiceNestedInput = {
+    create?: XOR<Service_ServiceItemsCreateWithoutServiceInput, Service_ServiceItemsUncheckedCreateWithoutServiceInput> | Service_ServiceItemsCreateWithoutServiceInput[] | Service_ServiceItemsUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: Service_ServiceItemsCreateOrConnectWithoutServiceInput | Service_ServiceItemsCreateOrConnectWithoutServiceInput[]
+    upsert?: Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceInput | Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceInput[]
+    createMany?: Service_ServiceItemsCreateManyServiceInputEnvelope
+    set?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    disconnect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    delete?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    connect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    update?: Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceInput | Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceInput[]
+    updateMany?: Service_ServiceItemsUpdateManyWithWhereWithoutServiceInput | Service_ServiceItemsUpdateManyWithWhereWithoutServiceInput[]
+    deleteMany?: Service_ServiceItemsScalarWhereInput | Service_ServiceItemsScalarWhereInput[]
   }
 
   export type ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput = {
@@ -51973,20 +52454,6 @@ export namespace Prisma {
     deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
-  export type ServiceItemUncheckedUpdateManyWithoutServiceNestedInput = {
-    create?: XOR<ServiceItemCreateWithoutServiceInput, ServiceItemUncheckedCreateWithoutServiceInput> | ServiceItemCreateWithoutServiceInput[] | ServiceItemUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ServiceItemCreateOrConnectWithoutServiceInput | ServiceItemCreateOrConnectWithoutServiceInput[]
-    upsert?: ServiceItemUpsertWithWhereUniqueWithoutServiceInput | ServiceItemUpsertWithWhereUniqueWithoutServiceInput[]
-    createMany?: ServiceItemCreateManyServiceInputEnvelope
-    set?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-    disconnect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-    delete?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-    connect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
-    update?: ServiceItemUpdateWithWhereUniqueWithoutServiceInput | ServiceItemUpdateWithWhereUniqueWithoutServiceInput[]
-    updateMany?: ServiceItemUpdateManyWithWhereWithoutServiceInput | ServiceItemUpdateManyWithWhereWithoutServiceInput[]
-    deleteMany?: ServiceItemScalarWhereInput | ServiceItemScalarWhereInput[]
-  }
-
   export type ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput = {
     create?: XOR<ServiceTranslationCreateWithoutServiceInput, ServiceTranslationUncheckedCreateWithoutServiceInput> | ServiceTranslationCreateWithoutServiceInput[] | ServiceTranslationUncheckedCreateWithoutServiceInput[]
     connectOrCreate?: ServiceTranslationCreateOrConnectWithoutServiceInput | ServiceTranslationCreateOrConnectWithoutServiceInput[]
@@ -52001,17 +52468,18 @@ export namespace Prisma {
     deleteMany?: ServiceTranslationScalarWhereInput | ServiceTranslationScalarWhereInput[]
   }
 
-  export type CategoryUncheckedUpdateManyWithoutServiceNestedInput = {
-    create?: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput> | CategoryCreateWithoutServiceInput[] | CategoryUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: CategoryCreateOrConnectWithoutServiceInput | CategoryCreateOrConnectWithoutServiceInput[]
-    upsert?: CategoryUpsertWithWhereUniqueWithoutServiceInput | CategoryUpsertWithWhereUniqueWithoutServiceInput[]
-    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    update?: CategoryUpdateWithWhereUniqueWithoutServiceInput | CategoryUpdateWithWhereUniqueWithoutServiceInput[]
-    updateMany?: CategoryUpdateManyWithWhereWithoutServiceInput | CategoryUpdateManyWithWhereWithoutServiceInput[]
-    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+  export type Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput = {
+    create?: XOR<Service_ServiceItemsCreateWithoutServiceInput, Service_ServiceItemsUncheckedCreateWithoutServiceInput> | Service_ServiceItemsCreateWithoutServiceInput[] | Service_ServiceItemsUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: Service_ServiceItemsCreateOrConnectWithoutServiceInput | Service_ServiceItemsCreateOrConnectWithoutServiceInput[]
+    upsert?: Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceInput | Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceInput[]
+    createMany?: Service_ServiceItemsCreateManyServiceInputEnvelope
+    set?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    disconnect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    delete?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    connect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    update?: Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceInput | Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceInput[]
+    updateMany?: Service_ServiceItemsUpdateManyWithWhereWithoutServiceInput | Service_ServiceItemsUpdateManyWithWhereWithoutServiceInput[]
+    deleteMany?: Service_ServiceItemsScalarWhereInput | Service_ServiceItemsScalarWhereInput[]
   }
 
   export type BookingCreateNestedManyWithoutServiceProviderInput = {
@@ -52026,6 +52494,13 @@ export namespace Prisma {
     connectOrCreate?: ServiceCreateOrConnectWithoutServiceProviderInput | ServiceCreateOrConnectWithoutServiceProviderInput[]
     createMany?: ServiceCreateManyServiceProviderInputEnvelope
     connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+  }
+
+  export type ServiceItemCreateNestedManyWithoutServiceProviderInput = {
+    create?: XOR<ServiceItemCreateWithoutServiceProviderInput, ServiceItemUncheckedCreateWithoutServiceProviderInput> | ServiceItemCreateWithoutServiceProviderInput[] | ServiceItemUncheckedCreateWithoutServiceProviderInput[]
+    connectOrCreate?: ServiceItemCreateOrConnectWithoutServiceProviderInput | ServiceItemCreateOrConnectWithoutServiceProviderInput[]
+    createMany?: ServiceItemCreateManyServiceProviderInputEnvelope
+    connect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
   }
 
   export type UserCreateNestedOneWithoutServiceProvider_ServiceProvider_userIdToUserInput = {
@@ -52073,6 +52548,13 @@ export namespace Prisma {
     connectOrCreate?: ServiceCreateOrConnectWithoutServiceProviderInput | ServiceCreateOrConnectWithoutServiceProviderInput[]
     createMany?: ServiceCreateManyServiceProviderInputEnvelope
     connect?: ServiceWhereUniqueInput | ServiceWhereUniqueInput[]
+  }
+
+  export type ServiceItemUncheckedCreateNestedManyWithoutServiceProviderInput = {
+    create?: XOR<ServiceItemCreateWithoutServiceProviderInput, ServiceItemUncheckedCreateWithoutServiceProviderInput> | ServiceItemCreateWithoutServiceProviderInput[] | ServiceItemUncheckedCreateWithoutServiceProviderInput[]
+    connectOrCreate?: ServiceItemCreateOrConnectWithoutServiceProviderInput | ServiceItemCreateOrConnectWithoutServiceProviderInput[]
+    createMany?: ServiceItemCreateManyServiceProviderInputEnvelope
+    connect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
   }
 
   export type ServiceProviderTranslationUncheckedCreateNestedManyWithoutServiceProviderInput = {
@@ -52130,6 +52612,20 @@ export namespace Prisma {
     update?: ServiceUpdateWithWhereUniqueWithoutServiceProviderInput | ServiceUpdateWithWhereUniqueWithoutServiceProviderInput[]
     updateMany?: ServiceUpdateManyWithWhereWithoutServiceProviderInput | ServiceUpdateManyWithWhereWithoutServiceProviderInput[]
     deleteMany?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
+  }
+
+  export type ServiceItemUpdateManyWithoutServiceProviderNestedInput = {
+    create?: XOR<ServiceItemCreateWithoutServiceProviderInput, ServiceItemUncheckedCreateWithoutServiceProviderInput> | ServiceItemCreateWithoutServiceProviderInput[] | ServiceItemUncheckedCreateWithoutServiceProviderInput[]
+    connectOrCreate?: ServiceItemCreateOrConnectWithoutServiceProviderInput | ServiceItemCreateOrConnectWithoutServiceProviderInput[]
+    upsert?: ServiceItemUpsertWithWhereUniqueWithoutServiceProviderInput | ServiceItemUpsertWithWhereUniqueWithoutServiceProviderInput[]
+    createMany?: ServiceItemCreateManyServiceProviderInputEnvelope
+    set?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
+    disconnect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
+    delete?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
+    connect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
+    update?: ServiceItemUpdateWithWhereUniqueWithoutServiceProviderInput | ServiceItemUpdateWithWhereUniqueWithoutServiceProviderInput[]
+    updateMany?: ServiceItemUpdateManyWithWhereWithoutServiceProviderInput | ServiceItemUpdateManyWithWhereWithoutServiceProviderInput[]
+    deleteMany?: ServiceItemScalarWhereInput | ServiceItemScalarWhereInput[]
   }
 
   export type UserUpdateOneRequiredWithoutServiceProvider_ServiceProvider_userIdToUserNestedInput = {
@@ -52218,6 +52714,20 @@ export namespace Prisma {
     update?: ServiceUpdateWithWhereUniqueWithoutServiceProviderInput | ServiceUpdateWithWhereUniqueWithoutServiceProviderInput[]
     updateMany?: ServiceUpdateManyWithWhereWithoutServiceProviderInput | ServiceUpdateManyWithWhereWithoutServiceProviderInput[]
     deleteMany?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
+  }
+
+  export type ServiceItemUncheckedUpdateManyWithoutServiceProviderNestedInput = {
+    create?: XOR<ServiceItemCreateWithoutServiceProviderInput, ServiceItemUncheckedCreateWithoutServiceProviderInput> | ServiceItemCreateWithoutServiceProviderInput[] | ServiceItemUncheckedCreateWithoutServiceProviderInput[]
+    connectOrCreate?: ServiceItemCreateOrConnectWithoutServiceProviderInput | ServiceItemCreateOrConnectWithoutServiceProviderInput[]
+    upsert?: ServiceItemUpsertWithWhereUniqueWithoutServiceProviderInput | ServiceItemUpsertWithWhereUniqueWithoutServiceProviderInput[]
+    createMany?: ServiceItemCreateManyServiceProviderInputEnvelope
+    set?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
+    disconnect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
+    delete?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
+    connect?: ServiceItemWhereUniqueInput | ServiceItemWhereUniqueInput[]
+    update?: ServiceItemUpdateWithWhereUniqueWithoutServiceProviderInput | ServiceItemUpdateWithWhereUniqueWithoutServiceProviderInput[]
+    updateMany?: ServiceItemUpdateManyWithWhereWithoutServiceProviderInput | ServiceItemUpdateManyWithWhereWithoutServiceProviderInput[]
+    deleteMany?: ServiceItemScalarWhereInput | ServiceItemScalarWhereInput[]
   }
 
   export type ServiceProviderTranslationUncheckedUpdateManyWithoutServiceProviderNestedInput = {
@@ -53803,18 +54313,60 @@ export namespace Prisma {
     update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutProposedServiceInput, ServiceUpdateWithoutProposedServiceInput>, ServiceUncheckedUpdateWithoutProposedServiceInput>
   }
 
-  export type ServiceCreateNestedOneWithoutServiceItemInput = {
-    create?: XOR<ServiceCreateWithoutServiceItemInput, ServiceUncheckedCreateWithoutServiceItemInput>
-    connectOrCreate?: ServiceCreateOrConnectWithoutServiceItemInput
-    connect?: ServiceWhereUniqueInput
+  export type ServiceProviderCreateNestedOneWithoutServiceItemInput = {
+    create?: XOR<ServiceProviderCreateWithoutServiceItemInput, ServiceProviderUncheckedCreateWithoutServiceItemInput>
+    connectOrCreate?: ServiceProviderCreateOrConnectWithoutServiceItemInput
+    connect?: ServiceProviderWhereUniqueInput
   }
 
-  export type ServiceUpdateOneRequiredWithoutServiceItemNestedInput = {
-    create?: XOR<ServiceCreateWithoutServiceItemInput, ServiceUncheckedCreateWithoutServiceItemInput>
-    connectOrCreate?: ServiceCreateOrConnectWithoutServiceItemInput
-    upsert?: ServiceUpsertWithoutServiceItemInput
-    connect?: ServiceWhereUniqueInput
-    update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutServiceItemInput, ServiceUpdateWithoutServiceItemInput>, ServiceUncheckedUpdateWithoutServiceItemInput>
+  export type Service_ServiceItemsCreateNestedManyWithoutServiceItemInput = {
+    create?: XOR<Service_ServiceItemsCreateWithoutServiceItemInput, Service_ServiceItemsUncheckedCreateWithoutServiceItemInput> | Service_ServiceItemsCreateWithoutServiceItemInput[] | Service_ServiceItemsUncheckedCreateWithoutServiceItemInput[]
+    connectOrCreate?: Service_ServiceItemsCreateOrConnectWithoutServiceItemInput | Service_ServiceItemsCreateOrConnectWithoutServiceItemInput[]
+    createMany?: Service_ServiceItemsCreateManyServiceItemInputEnvelope
+    connect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+  }
+
+  export type Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceItemInput = {
+    create?: XOR<Service_ServiceItemsCreateWithoutServiceItemInput, Service_ServiceItemsUncheckedCreateWithoutServiceItemInput> | Service_ServiceItemsCreateWithoutServiceItemInput[] | Service_ServiceItemsUncheckedCreateWithoutServiceItemInput[]
+    connectOrCreate?: Service_ServiceItemsCreateOrConnectWithoutServiceItemInput | Service_ServiceItemsCreateOrConnectWithoutServiceItemInput[]
+    createMany?: Service_ServiceItemsCreateManyServiceItemInputEnvelope
+    connect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+  }
+
+  export type ServiceProviderUpdateOneRequiredWithoutServiceItemNestedInput = {
+    create?: XOR<ServiceProviderCreateWithoutServiceItemInput, ServiceProviderUncheckedCreateWithoutServiceItemInput>
+    connectOrCreate?: ServiceProviderCreateOrConnectWithoutServiceItemInput
+    upsert?: ServiceProviderUpsertWithoutServiceItemInput
+    connect?: ServiceProviderWhereUniqueInput
+    update?: XOR<XOR<ServiceProviderUpdateToOneWithWhereWithoutServiceItemInput, ServiceProviderUpdateWithoutServiceItemInput>, ServiceProviderUncheckedUpdateWithoutServiceItemInput>
+  }
+
+  export type Service_ServiceItemsUpdateManyWithoutServiceItemNestedInput = {
+    create?: XOR<Service_ServiceItemsCreateWithoutServiceItemInput, Service_ServiceItemsUncheckedCreateWithoutServiceItemInput> | Service_ServiceItemsCreateWithoutServiceItemInput[] | Service_ServiceItemsUncheckedCreateWithoutServiceItemInput[]
+    connectOrCreate?: Service_ServiceItemsCreateOrConnectWithoutServiceItemInput | Service_ServiceItemsCreateOrConnectWithoutServiceItemInput[]
+    upsert?: Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceItemInput | Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceItemInput[]
+    createMany?: Service_ServiceItemsCreateManyServiceItemInputEnvelope
+    set?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    disconnect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    delete?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    connect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    update?: Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceItemInput | Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceItemInput[]
+    updateMany?: Service_ServiceItemsUpdateManyWithWhereWithoutServiceItemInput | Service_ServiceItemsUpdateManyWithWhereWithoutServiceItemInput[]
+    deleteMany?: Service_ServiceItemsScalarWhereInput | Service_ServiceItemsScalarWhereInput[]
+  }
+
+  export type Service_ServiceItemsUncheckedUpdateManyWithoutServiceItemNestedInput = {
+    create?: XOR<Service_ServiceItemsCreateWithoutServiceItemInput, Service_ServiceItemsUncheckedCreateWithoutServiceItemInput> | Service_ServiceItemsCreateWithoutServiceItemInput[] | Service_ServiceItemsUncheckedCreateWithoutServiceItemInput[]
+    connectOrCreate?: Service_ServiceItemsCreateOrConnectWithoutServiceItemInput | Service_ServiceItemsCreateOrConnectWithoutServiceItemInput[]
+    upsert?: Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceItemInput | Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceItemInput[]
+    createMany?: Service_ServiceItemsCreateManyServiceItemInputEnvelope
+    set?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    disconnect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    delete?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    connect?: Service_ServiceItemsWhereUniqueInput | Service_ServiceItemsWhereUniqueInput[]
+    update?: Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceItemInput | Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceItemInput[]
+    updateMany?: Service_ServiceItemsUpdateManyWithWhereWithoutServiceItemInput | Service_ServiceItemsUpdateManyWithWhereWithoutServiceItemInput[]
+    deleteMany?: Service_ServiceItemsScalarWhereInput | Service_ServiceItemsScalarWhereInput[]
   }
 
   export type BookingCreateNestedOneWithoutServiceRequestInput = {
@@ -53893,6 +54445,34 @@ export namespace Prisma {
     delete?: BookingWhereInput | boolean
     connect?: BookingWhereUniqueInput
     update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutServiceRequestInput, BookingUpdateWithoutServiceRequestInput>, BookingUncheckedUpdateWithoutServiceRequestInput>
+  }
+
+  export type ServiceCreateNestedOneWithoutService_ServiceItemsInput = {
+    create?: XOR<ServiceCreateWithoutService_ServiceItemsInput, ServiceUncheckedCreateWithoutService_ServiceItemsInput>
+    connectOrCreate?: ServiceCreateOrConnectWithoutService_ServiceItemsInput
+    connect?: ServiceWhereUniqueInput
+  }
+
+  export type ServiceItemCreateNestedOneWithoutService_ServiceItemsInput = {
+    create?: XOR<ServiceItemCreateWithoutService_ServiceItemsInput, ServiceItemUncheckedCreateWithoutService_ServiceItemsInput>
+    connectOrCreate?: ServiceItemCreateOrConnectWithoutService_ServiceItemsInput
+    connect?: ServiceItemWhereUniqueInput
+  }
+
+  export type ServiceUpdateOneRequiredWithoutService_ServiceItemsNestedInput = {
+    create?: XOR<ServiceCreateWithoutService_ServiceItemsInput, ServiceUncheckedCreateWithoutService_ServiceItemsInput>
+    connectOrCreate?: ServiceCreateOrConnectWithoutService_ServiceItemsInput
+    upsert?: ServiceUpsertWithoutService_ServiceItemsInput
+    connect?: ServiceWhereUniqueInput
+    update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutService_ServiceItemsInput, ServiceUpdateWithoutService_ServiceItemsInput>, ServiceUncheckedUpdateWithoutService_ServiceItemsInput>
+  }
+
+  export type ServiceItemUpdateOneRequiredWithoutService_ServiceItemsNestedInput = {
+    create?: XOR<ServiceItemCreateWithoutService_ServiceItemsInput, ServiceItemUncheckedCreateWithoutService_ServiceItemsInput>
+    connectOrCreate?: ServiceItemCreateOrConnectWithoutService_ServiceItemsInput
+    upsert?: ServiceItemUpsertWithoutService_ServiceItemsInput
+    connect?: ServiceItemWhereUniqueInput
+    update?: XOR<XOR<ServiceItemUpdateToOneWithWhereWithoutService_ServiceItemsInput, ServiceItemUpdateWithoutService_ServiceItemsInput>, ServiceItemUncheckedUpdateWithoutService_ServiceItemsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -54147,6 +54727,13 @@ export namespace Prisma {
     _max?: NestedEnumHTTPMethodFilter<$PrismaModel>
   }
 
+  export type NestedEnumUnitFilter<$PrismaModel = never> = {
+    equals?: $Enums.Unit | EnumUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.Unit[] | ListEnumUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Unit[] | ListEnumUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumUnitFilter<$PrismaModel> | $Enums.Unit
+  }
+
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -54161,6 +54748,16 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUnitWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Unit | EnumUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.Unit[] | ListEnumUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Unit[] | ListEnumUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumUnitWithAggregatesFilter<$PrismaModel> | $Enums.Unit
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUnitFilter<$PrismaModel>
+    _max?: NestedEnumUnitFilter<$PrismaModel>
   }
 
   export type NestedEnumCompanyTypeFilter<$PrismaModel = never> = {
@@ -54331,6 +54928,7 @@ export namespace Prisma {
     verificationStatus?: $Enums.VerificationStatus
     verifiedAt?: Date | string | null
     Service?: ServiceCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceProviderInput
     User_ServiceProvider_userIdToUser: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_userIdToUserInput
     User_ServiceProvider_verifiedByIdToUser?: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserInput
     ServiceProviderTranslation?: ServiceProviderTranslationCreateNestedManyWithoutServiceProviderInput
@@ -54354,6 +54952,7 @@ export namespace Prisma {
     verifiedAt?: Date | string | null
     verifiedById?: number | null
     Service?: ServiceUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutServiceProviderInput
     Staff?: StaffUncheckedCreateNestedManyWithoutServiceProviderInput
@@ -54602,6 +55201,7 @@ export namespace Prisma {
     verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Service?: ServiceUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUpdateManyWithoutServiceProviderNestedInput
     User_ServiceProvider_userIdToUser?: UserUpdateOneRequiredWithoutServiceProvider_ServiceProvider_userIdToUserNestedInput
     User_ServiceProvider_verifiedByIdToUser?: UserUpdateOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUpdateManyWithoutServiceProviderNestedInput
@@ -54625,6 +55225,7 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     verifiedById?: NullableIntFieldUpdateOperationsInput | number | null
     Service?: ServiceUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutServiceProviderNestedInput
     Staff?: StaffUncheckedUpdateManyWithoutServiceProviderNestedInput
@@ -55016,9 +55617,9 @@ export namespace Prisma {
     Category?: CategoryCreateNestedOneWithoutOther_CategoryInput
     User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
+    Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
-    Service?: ServiceCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutOther_CategoryInput = {
@@ -55033,9 +55634,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
-    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutOther_CategoryInput = {
@@ -55054,9 +55655,9 @@ export namespace Prisma {
     other_Category?: CategoryCreateNestedManyWithoutCategoryInput
     User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
+    Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
-    Service?: ServiceCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutCategoryInput = {
@@ -55071,9 +55672,9 @@ export namespace Prisma {
     updatedAt: Date | string
     other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
-    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutCategoryInput = {
@@ -55203,6 +55804,63 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ServiceCreateWithoutCategoryInput = {
+    basePrice: number
+    virtualPrice: number
+    images?: ServiceCreateimagesInput | string[]
+    durationMinutes: number
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    name?: string
+    publishedAt?: Date | string | null
+    description?: string
+    unit?: $Enums.Unit
+    ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
+    RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
+    Review?: ReviewCreateNestedManyWithoutServiceInput
+    User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
+    User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
+    ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
+    User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
+    ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceUncheckedCreateWithoutCategoryInput = {
+    id?: number
+    basePrice: number
+    virtualPrice: number
+    images?: ServiceCreateimagesInput | string[]
+    durationMinutes: number
+    providerId: number
+    createdById?: number | null
+    updatedById?: number | null
+    deletedById?: number | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    name?: string
+    publishedAt?: Date | string | null
+    description?: string
+    unit?: $Enums.Unit
+    ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
+    RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
+    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
+    ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceCreateOrConnectWithoutCategoryInput = {
+    where: ServiceWhereUniqueInput
+    create: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type ServiceCreateManyCategoryInputEnvelope = {
+    data: ServiceCreateManyCategoryInput | ServiceCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ServiceRequestCreateWithoutCategoryInput = {
     note?: string | null
     preferredDate: Date | string
@@ -55256,56 +55914,6 @@ export namespace Prisma {
   export type StaffCategoryCreateManyCategoryInputEnvelope = {
     data: StaffCategoryCreateManyCategoryInput | StaffCategoryCreateManyCategoryInput[]
     skipDuplicates?: boolean
-  }
-
-  export type ServiceCreateWithoutCategoryInput = {
-    basePrice: number
-    virtualPrice: number
-    images?: ServiceCreateimagesInput | string[]
-    durationMinutes: number
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    name?: string
-    publishedAt?: Date | string | null
-    description?: string
-    ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
-    RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
-    User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
-    User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
-    ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
-    User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
-    ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-  }
-
-  export type ServiceUncheckedCreateWithoutCategoryInput = {
-    id?: number
-    basePrice: number
-    virtualPrice: number
-    images?: ServiceCreateimagesInput | string[]
-    durationMinutes: number
-    providerId: number
-    createdById?: number | null
-    updatedById?: number | null
-    deletedById?: number | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    name?: string
-    publishedAt?: Date | string | null
-    description?: string
-    ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
-    RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
-    ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-  }
-
-  export type ServiceCreateOrConnectWithoutCategoryInput = {
-    where: ServiceWhereUniqueInput
-    create: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput>
   }
 
   export type UserUpsertWithoutCategory_Category_createdByIdToUserInput = {
@@ -55518,9 +56126,9 @@ export namespace Prisma {
     Category?: CategoryUpdateOneWithoutOther_CategoryNestedInput
     User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutOther_CategoryInput = {
@@ -55535,9 +56143,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -55696,6 +56304,45 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"CategoryTranslation"> | Date | string | null
   }
 
+  export type ServiceUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: ServiceWhereUniqueInput
+    update: XOR<ServiceUpdateWithoutCategoryInput, ServiceUncheckedUpdateWithoutCategoryInput>
+    create: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type ServiceUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: ServiceWhereUniqueInput
+    data: XOR<ServiceUpdateWithoutCategoryInput, ServiceUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type ServiceUpdateManyWithWhereWithoutCategoryInput = {
+    where: ServiceScalarWhereInput
+    data: XOR<ServiceUpdateManyMutationInput, ServiceUncheckedUpdateManyWithoutCategoryInput>
+  }
+
+  export type ServiceScalarWhereInput = {
+    AND?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
+    OR?: ServiceScalarWhereInput[]
+    NOT?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
+    id?: IntFilter<"Service"> | number
+    basePrice?: FloatFilter<"Service"> | number
+    virtualPrice?: FloatFilter<"Service"> | number
+    images?: StringNullableListFilter<"Service">
+    durationMinutes?: IntFilter<"Service"> | number
+    providerId?: IntFilter<"Service"> | number
+    createdById?: IntNullableFilter<"Service"> | number | null
+    updatedById?: IntNullableFilter<"Service"> | number | null
+    deletedById?: IntNullableFilter<"Service"> | number | null
+    deletedAt?: DateTimeNullableFilter<"Service"> | Date | string | null
+    createdAt?: DateTimeFilter<"Service"> | Date | string
+    updatedAt?: DateTimeFilter<"Service"> | Date | string
+    name?: StringFilter<"Service"> | string
+    publishedAt?: DateTimeNullableFilter<"Service"> | Date | string | null
+    description?: StringFilter<"Service"> | string
+    categoryId?: IntFilter<"Service"> | number
+    unit?: EnumUnitFilter<"Service"> | $Enums.Unit
+  }
+
   export type ServiceRequestUpsertWithWhereUniqueWithoutCategoryInput = {
     where: ServiceRequestWhereUniqueInput
     update: XOR<ServiceRequestUpdateWithoutCategoryInput, ServiceRequestUncheckedUpdateWithoutCategoryInput>
@@ -55753,43 +56400,6 @@ export namespace Prisma {
     categoryId?: IntFilter<"StaffCategory"> | number
   }
 
-  export type ServiceUpsertWithWhereUniqueWithoutCategoryInput = {
-    where: ServiceWhereUniqueInput
-    update: XOR<ServiceUpdateWithoutCategoryInput, ServiceUncheckedUpdateWithoutCategoryInput>
-    create: XOR<ServiceCreateWithoutCategoryInput, ServiceUncheckedCreateWithoutCategoryInput>
-  }
-
-  export type ServiceUpdateWithWhereUniqueWithoutCategoryInput = {
-    where: ServiceWhereUniqueInput
-    data: XOR<ServiceUpdateWithoutCategoryInput, ServiceUncheckedUpdateWithoutCategoryInput>
-  }
-
-  export type ServiceUpdateManyWithWhereWithoutCategoryInput = {
-    where: ServiceScalarWhereInput
-    data: XOR<ServiceUpdateManyMutationInput, ServiceUncheckedUpdateManyWithoutCategoryInput>
-  }
-
-  export type ServiceScalarWhereInput = {
-    AND?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
-    OR?: ServiceScalarWhereInput[]
-    NOT?: ServiceScalarWhereInput | ServiceScalarWhereInput[]
-    id?: IntFilter<"Service"> | number
-    basePrice?: FloatFilter<"Service"> | number
-    virtualPrice?: FloatFilter<"Service"> | number
-    images?: StringNullableListFilter<"Service">
-    durationMinutes?: IntFilter<"Service"> | number
-    providerId?: IntFilter<"Service"> | number
-    createdById?: IntNullableFilter<"Service"> | number | null
-    updatedById?: IntNullableFilter<"Service"> | number | null
-    deletedById?: IntNullableFilter<"Service"> | number | null
-    deletedAt?: DateTimeNullableFilter<"Service"> | Date | string | null
-    createdAt?: DateTimeFilter<"Service"> | Date | string
-    updatedAt?: DateTimeFilter<"Service"> | Date | string
-    name?: StringFilter<"Service"> | string
-    publishedAt?: DateTimeNullableFilter<"Service"> | Date | string | null
-    description?: StringFilter<"Service"> | string
-  }
-
   export type CategoryCreateWithoutCategoryTranslationInput = {
     name: string
     logo?: string | null
@@ -55801,9 +56411,9 @@ export namespace Prisma {
     Category?: CategoryCreateNestedOneWithoutOther_CategoryInput
     other_Category?: CategoryCreateNestedManyWithoutCategoryInput
     User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
+    Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
-    Service?: ServiceCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutCategoryTranslationInput = {
@@ -55818,9 +56428,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
+    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
-    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutCategoryTranslationInput = {
@@ -55881,9 +56491,9 @@ export namespace Prisma {
     Category?: CategoryUpdateOneWithoutOther_CategoryNestedInput
     other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
     User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
+    Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutCategoryTranslationInput = {
@@ -55898,9 +56508,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type LanguageUpsertWithoutCategoryTranslationInput = {
@@ -58452,15 +59062,16 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
     Review?: ReviewCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
     User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateWithoutRecurringBookingInput = {
@@ -58479,11 +59090,12 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
     Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutRecurringBookingInput = {
@@ -58555,15 +59167,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
     Review?: ReviewUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
     User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateWithoutRecurringBookingInput = {
@@ -58582,11 +59195,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
   export type DeviceCreateWithoutRefreshTokenInput = {
@@ -58872,15 +59486,16 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
     User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateWithoutReviewInput = {
@@ -58899,11 +59514,12 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutReviewInput = {
@@ -59005,15 +59621,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
     User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateWithoutReviewInput = {
@@ -59032,11 +59649,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
   export type StaffUpsertWithoutReviewInput = {
@@ -59974,6 +60592,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CategoryCreateWithoutServiceInput = {
+    name: string
+    logo?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    User_Category_createdByIdToUser?: UserCreateNestedOneWithoutCategory_Category_createdByIdToUserInput
+    User_Category_deletedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_deletedByIdToUserInput
+    Category?: CategoryCreateNestedOneWithoutOther_CategoryInput
+    other_Category?: CategoryCreateNestedManyWithoutCategoryInput
+    User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
+    CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
+    ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
+    StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryUncheckedCreateWithoutServiceInput = {
+    id?: number
+    name: string
+    logo?: string | null
+    parentCategoryId?: number | null
+    createdById?: number | null
+    updatedById?: number | null
+    deletedById?: number | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
+    CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
+    StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryCreateOrConnectWithoutServiceInput = {
+    where: CategoryWhereUniqueInput
+    create: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput>
+  }
+
   export type UserCreateWithoutService_Service_createdByIdToUserInput = {
     email: string
     password: string
@@ -60163,6 +60819,7 @@ export namespace Prisma {
     verificationStatus?: $Enums.VerificationStatus
     verifiedAt?: Date | string | null
     Booking?: BookingCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceProviderInput
     User_ServiceProvider_userIdToUser: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_userIdToUserInput
     User_ServiceProvider_verifiedByIdToUser?: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserInput
     ServiceProviderTranslation?: ServiceProviderTranslationCreateNestedManyWithoutServiceProviderInput
@@ -60186,6 +60843,7 @@ export namespace Prisma {
     verifiedAt?: Date | string | null
     verifiedById?: number | null
     Booking?: BookingUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutServiceProviderInput
     Staff?: StaffUncheckedCreateNestedManyWithoutServiceProviderInput
@@ -60284,27 +60942,6 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutService_Service_updatedByIdToUserInput, UserUncheckedCreateWithoutService_Service_updatedByIdToUserInput>
   }
 
-  export type ServiceItemCreateWithoutServiceInput = {
-    name: string
-    unitPrice: number
-  }
-
-  export type ServiceItemUncheckedCreateWithoutServiceInput = {
-    id?: number
-    name: string
-    unitPrice: number
-  }
-
-  export type ServiceItemCreateOrConnectWithoutServiceInput = {
-    where: ServiceItemWhereUniqueInput
-    create: XOR<ServiceItemCreateWithoutServiceInput, ServiceItemUncheckedCreateWithoutServiceInput>
-  }
-
-  export type ServiceItemCreateManyServiceInputEnvelope = {
-    data: ServiceItemCreateManyServiceInput | ServiceItemCreateManyServiceInput[]
-    skipDuplicates?: boolean
-  }
-
   export type ServiceTranslationCreateWithoutServiceInput = {
     name: string
     description: string
@@ -60334,42 +60971,22 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type CategoryCreateWithoutServiceInput = {
-    name: string
-    logo?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    User_Category_createdByIdToUser?: UserCreateNestedOneWithoutCategory_Category_createdByIdToUserInput
-    User_Category_deletedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_deletedByIdToUserInput
-    Category?: CategoryCreateNestedOneWithoutOther_CategoryInput
-    other_Category?: CategoryCreateNestedManyWithoutCategoryInput
-    User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
-    CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
-    ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
-    StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+  export type Service_ServiceItemsCreateWithoutServiceInput = {
+    ServiceItem: ServiceItemCreateNestedOneWithoutService_ServiceItemsInput
   }
 
-  export type CategoryUncheckedCreateWithoutServiceInput = {
-    id?: number
-    name: string
-    logo?: string | null
-    parentCategoryId?: number | null
-    createdById?: number | null
-    updatedById?: number | null
-    deletedById?: number | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
-    CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
-    ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
-    StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+  export type Service_ServiceItemsUncheckedCreateWithoutServiceInput = {
+    serviceItemId: number
   }
 
-  export type CategoryCreateOrConnectWithoutServiceInput = {
-    where: CategoryWhereUniqueInput
-    create: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput>
+  export type Service_ServiceItemsCreateOrConnectWithoutServiceInput = {
+    where: Service_ServiceItemsWhereUniqueInput
+    create: XOR<Service_ServiceItemsCreateWithoutServiceInput, Service_ServiceItemsUncheckedCreateWithoutServiceInput>
+  }
+
+  export type Service_ServiceItemsCreateManyServiceInputEnvelope = {
+    data: Service_ServiceItemsCreateManyServiceInput | Service_ServiceItemsCreateManyServiceInput[]
+    skipDuplicates?: boolean
   }
 
   export type ProposedServiceUpsertWithWhereUniqueWithoutServiceInput = {
@@ -60418,6 +61035,50 @@ export namespace Prisma {
   export type ReviewUpdateManyWithWhereWithoutServiceInput = {
     where: ReviewScalarWhereInput
     data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutServiceInput>
+  }
+
+  export type CategoryUpsertWithoutServiceInput = {
+    update: XOR<CategoryUpdateWithoutServiceInput, CategoryUncheckedUpdateWithoutServiceInput>
+    create: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput>
+    where?: CategoryWhereInput
+  }
+
+  export type CategoryUpdateToOneWithWhereWithoutServiceInput = {
+    where?: CategoryWhereInput
+    data: XOR<CategoryUpdateWithoutServiceInput, CategoryUncheckedUpdateWithoutServiceInput>
+  }
+
+  export type CategoryUpdateWithoutServiceInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    User_Category_createdByIdToUser?: UserUpdateOneWithoutCategory_Category_createdByIdToUserNestedInput
+    User_Category_deletedByIdToUser?: UserUpdateOneWithoutCategory_Category_deletedByIdToUserNestedInput
+    Category?: CategoryUpdateOneWithoutOther_CategoryNestedInput
+    other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
+    User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
+    CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
+    ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
+    StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type CategoryUncheckedUpdateWithoutServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    parentCategoryId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
+    StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type UserUpsertWithoutService_Service_createdByIdToUserInput = {
@@ -60632,6 +61293,7 @@ export namespace Prisma {
     verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Booking?: BookingUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUpdateManyWithoutServiceProviderNestedInput
     User_ServiceProvider_userIdToUser?: UserUpdateOneRequiredWithoutServiceProvider_ServiceProvider_userIdToUserNestedInput
     User_ServiceProvider_verifiedByIdToUser?: UserUpdateOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUpdateManyWithoutServiceProviderNestedInput
@@ -60655,6 +61317,7 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     verifiedById?: NullableIntFieldUpdateOperationsInput | number | null
     Booking?: BookingUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutServiceProviderNestedInput
     Staff?: StaffUncheckedUpdateManyWithoutServiceProviderNestedInput
@@ -60754,32 +61417,6 @@ export namespace Prisma {
     Role_UserRoles?: RoleUncheckedUpdateManyWithoutUser_UserRolesNestedInput
   }
 
-  export type ServiceItemUpsertWithWhereUniqueWithoutServiceInput = {
-    where: ServiceItemWhereUniqueInput
-    update: XOR<ServiceItemUpdateWithoutServiceInput, ServiceItemUncheckedUpdateWithoutServiceInput>
-    create: XOR<ServiceItemCreateWithoutServiceInput, ServiceItemUncheckedCreateWithoutServiceInput>
-  }
-
-  export type ServiceItemUpdateWithWhereUniqueWithoutServiceInput = {
-    where: ServiceItemWhereUniqueInput
-    data: XOR<ServiceItemUpdateWithoutServiceInput, ServiceItemUncheckedUpdateWithoutServiceInput>
-  }
-
-  export type ServiceItemUpdateManyWithWhereWithoutServiceInput = {
-    where: ServiceItemScalarWhereInput
-    data: XOR<ServiceItemUpdateManyMutationInput, ServiceItemUncheckedUpdateManyWithoutServiceInput>
-  }
-
-  export type ServiceItemScalarWhereInput = {
-    AND?: ServiceItemScalarWhereInput | ServiceItemScalarWhereInput[]
-    OR?: ServiceItemScalarWhereInput[]
-    NOT?: ServiceItemScalarWhereInput | ServiceItemScalarWhereInput[]
-    id?: IntFilter<"ServiceItem"> | number
-    name?: StringFilter<"ServiceItem"> | string
-    unitPrice?: FloatFilter<"ServiceItem"> | number
-    serviceId?: IntFilter<"ServiceItem"> | number
-  }
-
   export type ServiceTranslationUpsertWithWhereUniqueWithoutServiceInput = {
     where: ServiceTranslationWhereUniqueInput
     update: XOR<ServiceTranslationUpdateWithoutServiceInput, ServiceTranslationUncheckedUpdateWithoutServiceInput>
@@ -60796,20 +61433,28 @@ export namespace Prisma {
     data: XOR<ServiceTranslationUpdateManyMutationInput, ServiceTranslationUncheckedUpdateManyWithoutServiceInput>
   }
 
-  export type CategoryUpsertWithWhereUniqueWithoutServiceInput = {
-    where: CategoryWhereUniqueInput
-    update: XOR<CategoryUpdateWithoutServiceInput, CategoryUncheckedUpdateWithoutServiceInput>
-    create: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput>
+  export type Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceInput = {
+    where: Service_ServiceItemsWhereUniqueInput
+    update: XOR<Service_ServiceItemsUpdateWithoutServiceInput, Service_ServiceItemsUncheckedUpdateWithoutServiceInput>
+    create: XOR<Service_ServiceItemsCreateWithoutServiceInput, Service_ServiceItemsUncheckedCreateWithoutServiceInput>
   }
 
-  export type CategoryUpdateWithWhereUniqueWithoutServiceInput = {
-    where: CategoryWhereUniqueInput
-    data: XOR<CategoryUpdateWithoutServiceInput, CategoryUncheckedUpdateWithoutServiceInput>
+  export type Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceInput = {
+    where: Service_ServiceItemsWhereUniqueInput
+    data: XOR<Service_ServiceItemsUpdateWithoutServiceInput, Service_ServiceItemsUncheckedUpdateWithoutServiceInput>
   }
 
-  export type CategoryUpdateManyWithWhereWithoutServiceInput = {
-    where: CategoryScalarWhereInput
-    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyWithoutServiceInput>
+  export type Service_ServiceItemsUpdateManyWithWhereWithoutServiceInput = {
+    where: Service_ServiceItemsScalarWhereInput
+    data: XOR<Service_ServiceItemsUpdateManyMutationInput, Service_ServiceItemsUncheckedUpdateManyWithoutServiceInput>
+  }
+
+  export type Service_ServiceItemsScalarWhereInput = {
+    AND?: Service_ServiceItemsScalarWhereInput | Service_ServiceItemsScalarWhereInput[]
+    OR?: Service_ServiceItemsScalarWhereInput[]
+    NOT?: Service_ServiceItemsScalarWhereInput | Service_ServiceItemsScalarWhereInput[]
+    serviceId?: IntFilter<"Service_ServiceItems"> | number
+    serviceItemId?: IntFilter<"Service_ServiceItems"> | number
   }
 
   export type BookingCreateWithoutServiceProviderInput = {
@@ -60862,15 +61507,16 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
     Review?: ReviewCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateWithoutServiceProviderInput = {
@@ -60888,12 +61534,13 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
     Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutServiceProviderInput = {
@@ -60903,6 +61550,49 @@ export namespace Prisma {
 
   export type ServiceCreateManyServiceProviderInputEnvelope = {
     data: ServiceCreateManyServiceProviderInput | ServiceCreateManyServiceProviderInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ServiceItemCreateWithoutServiceProviderInput = {
+    name: string
+    unitPrice: number
+    warrantyPeriod?: number | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedAt: Date | string
+    brand?: string | null
+    description?: string | null
+    isActive?: boolean
+    model?: string | null
+    stockQuantity?: number
+    unit?: $Enums.Unit
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceItemInput
+  }
+
+  export type ServiceItemUncheckedCreateWithoutServiceProviderInput = {
+    id?: number
+    name: string
+    unitPrice: number
+    warrantyPeriod?: number | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedAt: Date | string
+    brand?: string | null
+    description?: string | null
+    isActive?: boolean
+    model?: string | null
+    stockQuantity?: number
+    unit?: $Enums.Unit
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceItemInput
+  }
+
+  export type ServiceItemCreateOrConnectWithoutServiceProviderInput = {
+    where: ServiceItemWhereUniqueInput
+    create: XOR<ServiceItemCreateWithoutServiceProviderInput, ServiceItemUncheckedCreateWithoutServiceProviderInput>
+  }
+
+  export type ServiceItemCreateManyServiceProviderInputEnvelope = {
+    data: ServiceItemCreateManyServiceProviderInput | ServiceItemCreateManyServiceProviderInput[]
     skipDuplicates?: boolean
   }
 
@@ -61215,6 +61905,42 @@ export namespace Prisma {
     data: XOR<ServiceUpdateManyMutationInput, ServiceUncheckedUpdateManyWithoutServiceProviderInput>
   }
 
+  export type ServiceItemUpsertWithWhereUniqueWithoutServiceProviderInput = {
+    where: ServiceItemWhereUniqueInput
+    update: XOR<ServiceItemUpdateWithoutServiceProviderInput, ServiceItemUncheckedUpdateWithoutServiceProviderInput>
+    create: XOR<ServiceItemCreateWithoutServiceProviderInput, ServiceItemUncheckedCreateWithoutServiceProviderInput>
+  }
+
+  export type ServiceItemUpdateWithWhereUniqueWithoutServiceProviderInput = {
+    where: ServiceItemWhereUniqueInput
+    data: XOR<ServiceItemUpdateWithoutServiceProviderInput, ServiceItemUncheckedUpdateWithoutServiceProviderInput>
+  }
+
+  export type ServiceItemUpdateManyWithWhereWithoutServiceProviderInput = {
+    where: ServiceItemScalarWhereInput
+    data: XOR<ServiceItemUpdateManyMutationInput, ServiceItemUncheckedUpdateManyWithoutServiceProviderInput>
+  }
+
+  export type ServiceItemScalarWhereInput = {
+    AND?: ServiceItemScalarWhereInput | ServiceItemScalarWhereInput[]
+    OR?: ServiceItemScalarWhereInput[]
+    NOT?: ServiceItemScalarWhereInput | ServiceItemScalarWhereInput[]
+    id?: IntFilter<"ServiceItem"> | number
+    name?: StringFilter<"ServiceItem"> | string
+    unitPrice?: FloatFilter<"ServiceItem"> | number
+    warrantyPeriod?: IntNullableFilter<"ServiceItem"> | number | null
+    createdAt?: DateTimeFilter<"ServiceItem"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceItem"> | Date | string | null
+    updatedAt?: DateTimeFilter<"ServiceItem"> | Date | string
+    brand?: StringNullableFilter<"ServiceItem"> | string | null
+    description?: StringNullableFilter<"ServiceItem"> | string | null
+    isActive?: BoolFilter<"ServiceItem"> | boolean
+    model?: StringNullableFilter<"ServiceItem"> | string | null
+    stockQuantity?: IntFilter<"ServiceItem"> | number
+    unit?: EnumUnitFilter<"ServiceItem"> | $Enums.Unit
+    providerId?: IntFilter<"ServiceItem"> | number
+  }
+
   export type UserUpsertWithoutServiceProvider_ServiceProvider_userIdToUserInput = {
     update: XOR<UserUpdateWithoutServiceProvider_ServiceProvider_userIdToUserInput, UserUncheckedUpdateWithoutServiceProvider_ServiceProvider_userIdToUserInput>
     create: XOR<UserCreateWithoutServiceProvider_ServiceProvider_userIdToUserInput, UserUncheckedCreateWithoutServiceProvider_ServiceProvider_userIdToUserInput>
@@ -61508,6 +62234,7 @@ export namespace Prisma {
     verifiedAt?: Date | string | null
     Booking?: BookingCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceProviderInput
     User_ServiceProvider_userIdToUser: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_userIdToUserInput
     User_ServiceProvider_verifiedByIdToUser?: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutServiceProviderInput
@@ -61531,6 +62258,7 @@ export namespace Prisma {
     verifiedById?: number | null
     Booking?: BookingUncheckedCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutServiceProviderInput
     Staff?: StaffUncheckedCreateNestedManyWithoutServiceProviderInput
   }
@@ -61602,6 +62330,7 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Booking?: BookingUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUpdateManyWithoutServiceProviderNestedInput
     User_ServiceProvider_userIdToUser?: UserUpdateOneRequiredWithoutServiceProvider_ServiceProvider_userIdToUserNestedInput
     User_ServiceProvider_verifiedByIdToUser?: UserUpdateOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutServiceProviderNestedInput
@@ -61625,6 +62354,7 @@ export namespace Prisma {
     verifiedById?: NullableIntFieldUpdateOperationsInput | number | null
     Booking?: BookingUncheckedUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutServiceProviderNestedInput
     Staff?: StaffUncheckedUpdateManyWithoutServiceProviderNestedInput
   }
@@ -61671,15 +62401,16 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
     Review?: ReviewCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
     User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateWithoutServiceTranslationInput = {
@@ -61698,11 +62429,12 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
     Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutServiceTranslationInput = {
@@ -61769,15 +62501,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
     Review?: ReviewUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
     User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateWithoutServiceTranslationInput = {
@@ -61796,11 +62529,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
   export type BookingCreateWithoutStaff_Booking_staffIdToStaffInput = {
@@ -61905,6 +62639,7 @@ export namespace Prisma {
     verifiedAt?: Date | string | null
     Booking?: BookingCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceProviderInput
     User_ServiceProvider_userIdToUser: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_userIdToUserInput
     User_ServiceProvider_verifiedByIdToUser?: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserInput
     ServiceProviderTranslation?: ServiceProviderTranslationCreateNestedManyWithoutServiceProviderInput
@@ -61928,6 +62663,7 @@ export namespace Prisma {
     verifiedById?: number | null
     Booking?: BookingUncheckedCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutServiceProviderInput
   }
@@ -62182,6 +62918,7 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Booking?: BookingUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUpdateManyWithoutServiceProviderNestedInput
     User_ServiceProvider_userIdToUser?: UserUpdateOneRequiredWithoutServiceProvider_ServiceProvider_userIdToUserNestedInput
     User_ServiceProvider_verifiedByIdToUser?: UserUpdateOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUpdateManyWithoutServiceProviderNestedInput
@@ -62205,6 +62942,7 @@ export namespace Prisma {
     verifiedById?: NullableIntFieldUpdateOperationsInput | number | null
     Booking?: BookingUncheckedUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutServiceProviderNestedInput
   }
@@ -62347,8 +63085,8 @@ export namespace Prisma {
     other_Category?: CategoryCreateNestedManyWithoutCategoryInput
     User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
-    ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     Service?: ServiceCreateNestedManyWithoutCategoryInput
+    ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutStaffCategoryInput = {
@@ -62364,8 +63102,8 @@ export namespace Prisma {
     updatedAt: Date | string
     other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
-    ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
+    ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutStaffCategoryInput = {
@@ -62426,8 +63164,8 @@ export namespace Prisma {
     other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
     User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
-    ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
+    ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutStaffCategoryInput = {
@@ -62443,8 +63181,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
-    ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
+    ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type StaffUpsertWithoutStaffCategoryInput = {
@@ -62568,9 +63306,9 @@ export namespace Prisma {
     other_Category?: CategoryCreateNestedManyWithoutCategoryInput
     User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
+    Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
-    Service?: ServiceCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutUser_Category_createdByIdToUserInput = {
@@ -62585,9 +63323,9 @@ export namespace Prisma {
     updatedAt: Date | string
     other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
-    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutUser_Category_createdByIdToUserInput = {
@@ -62611,9 +63349,9 @@ export namespace Prisma {
     other_Category?: CategoryCreateNestedManyWithoutCategoryInput
     User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
+    Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
-    Service?: ServiceCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutUser_Category_deletedByIdToUserInput = {
@@ -62628,9 +63366,9 @@ export namespace Prisma {
     updatedAt: Date | string
     other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
-    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutUser_Category_deletedByIdToUserInput = {
@@ -62654,9 +63392,9 @@ export namespace Prisma {
     Category?: CategoryCreateNestedOneWithoutOther_CategoryInput
     other_Category?: CategoryCreateNestedManyWithoutCategoryInput
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
+    Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
-    Service?: ServiceCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutUser_Category_updatedByIdToUserInput = {
@@ -62671,9 +63409,9 @@ export namespace Prisma {
     updatedAt: Date | string
     other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
-    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutUser_Category_updatedByIdToUserInput = {
@@ -63134,15 +63872,16 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
     Review?: ReviewCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
     User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateWithoutUser_Service_createdByIdToUserInput = {
@@ -63160,12 +63899,13 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
     Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutUser_Service_createdByIdToUserInput = {
@@ -63189,15 +63929,16 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
     Review?: ReviewCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
     User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateWithoutUser_Service_deletedByIdToUserInput = {
@@ -63215,12 +63956,13 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
     Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutUser_Service_deletedByIdToUserInput = {
@@ -63244,15 +63986,16 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
     Review?: ReviewCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateWithoutUser_Service_updatedByIdToUserInput = {
@@ -63270,12 +64013,13 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
     ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
     Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutUser_Service_updatedByIdToUserInput = {
@@ -63302,6 +64046,7 @@ export namespace Prisma {
     verifiedAt?: Date | string | null
     Booking?: BookingCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceProviderInput
     User_ServiceProvider_verifiedByIdToUser?: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserInput
     ServiceProviderTranslation?: ServiceProviderTranslationCreateNestedManyWithoutServiceProviderInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutServiceProviderInput
@@ -63324,6 +64069,7 @@ export namespace Prisma {
     verifiedById?: number | null
     Booking?: BookingUncheckedCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutServiceProviderInput
     Staff?: StaffUncheckedCreateNestedManyWithoutServiceProviderInput
@@ -63348,6 +64094,7 @@ export namespace Prisma {
     verifiedAt?: Date | string | null
     Booking?: BookingCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceProviderInput
     User_ServiceProvider_userIdToUser: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_userIdToUserInput
     ServiceProviderTranslation?: ServiceProviderTranslationCreateNestedManyWithoutServiceProviderInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutServiceProviderInput
@@ -63370,6 +64117,7 @@ export namespace Prisma {
     verifiedAt?: Date | string | null
     Booking?: BookingUncheckedCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutServiceProviderInput
     Staff?: StaffUncheckedCreateNestedManyWithoutServiceProviderInput
@@ -64379,6 +65127,7 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Booking?: BookingUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUpdateManyWithoutServiceProviderNestedInput
     User_ServiceProvider_verifiedByIdToUser?: UserUpdateOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUpdateManyWithoutServiceProviderNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutServiceProviderNestedInput
@@ -64401,6 +65150,7 @@ export namespace Prisma {
     verifiedById?: NullableIntFieldUpdateOperationsInput | number | null
     Booking?: BookingUncheckedUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutServiceProviderNestedInput
     Staff?: StaffUncheckedUpdateManyWithoutServiceProviderNestedInput
@@ -65149,15 +65899,16 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    unit?: $Enums.Unit
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
     Review?: ReviewCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
     User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateWithoutProposedServiceInput = {
@@ -65176,11 +65927,12 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
     Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceInput
     ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutProposedServiceInput = {
@@ -65250,15 +66002,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
     Review?: ReviewUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
     User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateWithoutProposedServiceInput = {
@@ -65277,117 +66030,148 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
-  export type ServiceCreateWithoutServiceItemInput = {
-    basePrice: number
-    virtualPrice: number
-    images?: ServiceCreateimagesInput | string[]
-    durationMinutes: number
-    deletedAt?: Date | string | null
+  export type ServiceProviderCreateWithoutServiceItemInput = {
+    description?: string | null
+    address: string
     createdAt?: Date | string
     updatedAt: Date | string
-    name?: string
-    publishedAt?: Date | string | null
-    description?: string
-    ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
-    RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
-    User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
-    User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
-    ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
-    User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
-    Category?: CategoryCreateNestedManyWithoutServiceInput
+    companyType?: $Enums.CompanyType
+    industry?: string | null
+    licenseNo?: string | null
+    logo?: string | null
+    taxId?: string
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    Booking?: BookingCreateNestedManyWithoutServiceProviderInput
+    Service?: ServiceCreateNestedManyWithoutServiceProviderInput
+    User_ServiceProvider_userIdToUser: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_userIdToUserInput
+    User_ServiceProvider_verifiedByIdToUser?: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserInput
+    ServiceProviderTranslation?: ServiceProviderTranslationCreateNestedManyWithoutServiceProviderInput
+    ServiceRequest?: ServiceRequestCreateNestedManyWithoutServiceProviderInput
+    Staff?: StaffCreateNestedManyWithoutServiceProviderInput
   }
 
-  export type ServiceUncheckedCreateWithoutServiceItemInput = {
+  export type ServiceProviderUncheckedCreateWithoutServiceItemInput = {
     id?: number
-    basePrice: number
-    virtualPrice: number
-    images?: ServiceCreateimagesInput | string[]
-    durationMinutes: number
-    providerId: number
-    createdById?: number | null
-    updatedById?: number | null
-    deletedById?: number | null
-    deletedAt?: Date | string | null
+    description?: string | null
+    address: string
     createdAt?: Date | string
     updatedAt: Date | string
-    name?: string
-    publishedAt?: Date | string | null
-    description?: string
-    ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
-    RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
-    ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
-    Category?: CategoryUncheckedCreateNestedManyWithoutServiceInput
+    userId: number
+    companyType?: $Enums.CompanyType
+    industry?: string | null
+    licenseNo?: string | null
+    logo?: string | null
+    taxId?: string
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    verifiedById?: number | null
+    Booking?: BookingUncheckedCreateNestedManyWithoutServiceProviderInput
+    Service?: ServiceUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceProviderTranslation?: ServiceProviderTranslationUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutServiceProviderInput
+    Staff?: StaffUncheckedCreateNestedManyWithoutServiceProviderInput
   }
 
-  export type ServiceCreateOrConnectWithoutServiceItemInput = {
-    where: ServiceWhereUniqueInput
-    create: XOR<ServiceCreateWithoutServiceItemInput, ServiceUncheckedCreateWithoutServiceItemInput>
+  export type ServiceProviderCreateOrConnectWithoutServiceItemInput = {
+    where: ServiceProviderWhereUniqueInput
+    create: XOR<ServiceProviderCreateWithoutServiceItemInput, ServiceProviderUncheckedCreateWithoutServiceItemInput>
   }
 
-  export type ServiceUpsertWithoutServiceItemInput = {
-    update: XOR<ServiceUpdateWithoutServiceItemInput, ServiceUncheckedUpdateWithoutServiceItemInput>
-    create: XOR<ServiceCreateWithoutServiceItemInput, ServiceUncheckedCreateWithoutServiceItemInput>
-    where?: ServiceWhereInput
+  export type Service_ServiceItemsCreateWithoutServiceItemInput = {
+    Service: ServiceCreateNestedOneWithoutService_ServiceItemsInput
   }
 
-  export type ServiceUpdateToOneWithWhereWithoutServiceItemInput = {
-    where?: ServiceWhereInput
-    data: XOR<ServiceUpdateWithoutServiceItemInput, ServiceUncheckedUpdateWithoutServiceItemInput>
+  export type Service_ServiceItemsUncheckedCreateWithoutServiceItemInput = {
+    serviceId: number
   }
 
-  export type ServiceUpdateWithoutServiceItemInput = {
-    basePrice?: FloatFieldUpdateOperationsInput | number
-    virtualPrice?: FloatFieldUpdateOperationsInput | number
-    images?: ServiceUpdateimagesInput | string[]
-    durationMinutes?: IntFieldUpdateOperationsInput | number
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  export type Service_ServiceItemsCreateOrConnectWithoutServiceItemInput = {
+    where: Service_ServiceItemsWhereUniqueInput
+    create: XOR<Service_ServiceItemsCreateWithoutServiceItemInput, Service_ServiceItemsUncheckedCreateWithoutServiceItemInput>
+  }
+
+  export type Service_ServiceItemsCreateManyServiceItemInputEnvelope = {
+    data: Service_ServiceItemsCreateManyServiceItemInput | Service_ServiceItemsCreateManyServiceItemInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ServiceProviderUpsertWithoutServiceItemInput = {
+    update: XOR<ServiceProviderUpdateWithoutServiceItemInput, ServiceProviderUncheckedUpdateWithoutServiceItemInput>
+    create: XOR<ServiceProviderCreateWithoutServiceItemInput, ServiceProviderUncheckedCreateWithoutServiceItemInput>
+    where?: ServiceProviderWhereInput
+  }
+
+  export type ServiceProviderUpdateToOneWithWhereWithoutServiceItemInput = {
+    where?: ServiceProviderWhereInput
+    data: XOR<ServiceProviderUpdateWithoutServiceItemInput, ServiceProviderUncheckedUpdateWithoutServiceItemInput>
+  }
+
+  export type ServiceProviderUpdateWithoutServiceItemInput = {
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    description?: StringFieldUpdateOperationsInput | string
-    ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
-    RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
-    User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
-    User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
-    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
-    User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    companyType?: EnumCompanyTypeFieldUpdateOperationsInput | $Enums.CompanyType
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    taxId?: StringFieldUpdateOperationsInput | string
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    Booking?: BookingUpdateManyWithoutServiceProviderNestedInput
+    Service?: ServiceUpdateManyWithoutServiceProviderNestedInput
+    User_ServiceProvider_userIdToUser?: UserUpdateOneRequiredWithoutServiceProvider_ServiceProvider_userIdToUserNestedInput
+    User_ServiceProvider_verifiedByIdToUser?: UserUpdateOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserNestedInput
+    ServiceProviderTranslation?: ServiceProviderTranslationUpdateManyWithoutServiceProviderNestedInput
+    ServiceRequest?: ServiceRequestUpdateManyWithoutServiceProviderNestedInput
+    Staff?: StaffUpdateManyWithoutServiceProviderNestedInput
   }
 
-  export type ServiceUncheckedUpdateWithoutServiceItemInput = {
+  export type ServiceProviderUncheckedUpdateWithoutServiceItemInput = {
     id?: IntFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
-    virtualPrice?: FloatFieldUpdateOperationsInput | number
-    images?: ServiceUpdateimagesInput | string[]
-    durationMinutes?: IntFieldUpdateOperationsInput | number
-    providerId?: IntFieldUpdateOperationsInput | number
-    createdById?: NullableIntFieldUpdateOperationsInput | number | null
-    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    description?: StringFieldUpdateOperationsInput | string
-    ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
-    RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    userId?: IntFieldUpdateOperationsInput | number
+    companyType?: EnumCompanyTypeFieldUpdateOperationsInput | $Enums.CompanyType
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    taxId?: StringFieldUpdateOperationsInput | string
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verifiedById?: NullableIntFieldUpdateOperationsInput | number | null
+    Booking?: BookingUncheckedUpdateManyWithoutServiceProviderNestedInput
+    Service?: ServiceUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceProviderTranslation?: ServiceProviderTranslationUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutServiceProviderNestedInput
+    Staff?: StaffUncheckedUpdateManyWithoutServiceProviderNestedInput
+  }
+
+  export type Service_ServiceItemsUpsertWithWhereUniqueWithoutServiceItemInput = {
+    where: Service_ServiceItemsWhereUniqueInput
+    update: XOR<Service_ServiceItemsUpdateWithoutServiceItemInput, Service_ServiceItemsUncheckedUpdateWithoutServiceItemInput>
+    create: XOR<Service_ServiceItemsCreateWithoutServiceItemInput, Service_ServiceItemsUncheckedCreateWithoutServiceItemInput>
+  }
+
+  export type Service_ServiceItemsUpdateWithWhereUniqueWithoutServiceItemInput = {
+    where: Service_ServiceItemsWhereUniqueInput
+    data: XOR<Service_ServiceItemsUpdateWithoutServiceItemInput, Service_ServiceItemsUncheckedUpdateWithoutServiceItemInput>
+  }
+
+  export type Service_ServiceItemsUpdateManyWithWhereWithoutServiceItemInput = {
+    where: Service_ServiceItemsScalarWhereInput
+    data: XOR<Service_ServiceItemsUpdateManyMutationInput, Service_ServiceItemsUncheckedUpdateManyWithoutServiceItemInput>
   }
 
   export type BookingCreateWithoutServiceRequestInput = {
@@ -65436,8 +66220,8 @@ export namespace Prisma {
     other_Category?: CategoryCreateNestedManyWithoutCategoryInput
     User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
-    StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
     Service?: ServiceCreateNestedManyWithoutCategoryInput
+    StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutServiceRequestInput = {
@@ -65453,8 +66237,8 @@ export namespace Prisma {
     updatedAt: Date | string
     other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
-    StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
+    StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutServiceRequestInput = {
@@ -65512,6 +66296,7 @@ export namespace Prisma {
     verifiedAt?: Date | string | null
     Booking?: BookingCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemCreateNestedManyWithoutServiceProviderInput
     User_ServiceProvider_userIdToUser: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_userIdToUserInput
     User_ServiceProvider_verifiedByIdToUser?: UserCreateNestedOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserInput
     ServiceProviderTranslation?: ServiceProviderTranslationCreateNestedManyWithoutServiceProviderInput
@@ -65535,6 +66320,7 @@ export namespace Prisma {
     verifiedById?: number | null
     Booking?: BookingUncheckedCreateNestedManyWithoutServiceProviderInput
     Service?: ServiceUncheckedCreateNestedManyWithoutServiceProviderInput
+    ServiceItem?: ServiceItemUncheckedCreateNestedManyWithoutServiceProviderInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedCreateNestedManyWithoutServiceProviderInput
     Staff?: StaffUncheckedCreateNestedManyWithoutServiceProviderInput
   }
@@ -65607,8 +66393,8 @@ export namespace Prisma {
     other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
     User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
-    StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
+    StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutServiceRequestInput = {
@@ -65624,8 +66410,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
-    StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
+    StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CustomerProfileUpsertWithoutServiceRequestInput = {
@@ -65695,6 +66481,7 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Booking?: BookingUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUpdateManyWithoutServiceProviderNestedInput
     User_ServiceProvider_userIdToUser?: UserUpdateOneRequiredWithoutServiceProvider_ServiceProvider_userIdToUserNestedInput
     User_ServiceProvider_verifiedByIdToUser?: UserUpdateOneWithoutServiceProvider_ServiceProvider_verifiedByIdToUserNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUpdateManyWithoutServiceProviderNestedInput
@@ -65718,8 +66505,201 @@ export namespace Prisma {
     verifiedById?: NullableIntFieldUpdateOperationsInput | number | null
     Booking?: BookingUncheckedUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedUpdateManyWithoutServiceProviderNestedInput
     Staff?: StaffUncheckedUpdateManyWithoutServiceProviderNestedInput
+  }
+
+  export type ServiceCreateWithoutService_ServiceItemsInput = {
+    basePrice: number
+    virtualPrice: number
+    images?: ServiceCreateimagesInput | string[]
+    durationMinutes: number
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    name?: string
+    publishedAt?: Date | string | null
+    description?: string
+    unit?: $Enums.Unit
+    ProposedService?: ProposedServiceCreateNestedManyWithoutServiceInput
+    RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
+    Review?: ReviewCreateNestedManyWithoutServiceInput
+    Category: CategoryCreateNestedOneWithoutServiceInput
+    User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
+    User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
+    ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
+    User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
+    ServiceTranslation?: ServiceTranslationCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceUncheckedCreateWithoutService_ServiceItemsInput = {
+    id?: number
+    basePrice: number
+    virtualPrice: number
+    images?: ServiceCreateimagesInput | string[]
+    durationMinutes: number
+    providerId: number
+    createdById?: number | null
+    updatedById?: number | null
+    deletedById?: number | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    name?: string
+    publishedAt?: Date | string | null
+    description?: string
+    categoryId: number
+    unit?: $Enums.Unit
+    ProposedService?: ProposedServiceUncheckedCreateNestedManyWithoutServiceInput
+    RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
+    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
+    ServiceTranslation?: ServiceTranslationUncheckedCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceCreateOrConnectWithoutService_ServiceItemsInput = {
+    where: ServiceWhereUniqueInput
+    create: XOR<ServiceCreateWithoutService_ServiceItemsInput, ServiceUncheckedCreateWithoutService_ServiceItemsInput>
+  }
+
+  export type ServiceItemCreateWithoutService_ServiceItemsInput = {
+    name: string
+    unitPrice: number
+    warrantyPeriod?: number | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedAt: Date | string
+    brand?: string | null
+    description?: string | null
+    isActive?: boolean
+    model?: string | null
+    stockQuantity?: number
+    unit?: $Enums.Unit
+    ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceItemInput
+  }
+
+  export type ServiceItemUncheckedCreateWithoutService_ServiceItemsInput = {
+    id?: number
+    name: string
+    unitPrice: number
+    warrantyPeriod?: number | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedAt: Date | string
+    brand?: string | null
+    description?: string | null
+    isActive?: boolean
+    model?: string | null
+    stockQuantity?: number
+    unit?: $Enums.Unit
+    providerId: number
+  }
+
+  export type ServiceItemCreateOrConnectWithoutService_ServiceItemsInput = {
+    where: ServiceItemWhereUniqueInput
+    create: XOR<ServiceItemCreateWithoutService_ServiceItemsInput, ServiceItemUncheckedCreateWithoutService_ServiceItemsInput>
+  }
+
+  export type ServiceUpsertWithoutService_ServiceItemsInput = {
+    update: XOR<ServiceUpdateWithoutService_ServiceItemsInput, ServiceUncheckedUpdateWithoutService_ServiceItemsInput>
+    create: XOR<ServiceCreateWithoutService_ServiceItemsInput, ServiceUncheckedCreateWithoutService_ServiceItemsInput>
+    where?: ServiceWhereInput
+  }
+
+  export type ServiceUpdateToOneWithWhereWithoutService_ServiceItemsInput = {
+    where?: ServiceWhereInput
+    data: XOR<ServiceUpdateWithoutService_ServiceItemsInput, ServiceUncheckedUpdateWithoutService_ServiceItemsInput>
+  }
+
+  export type ServiceUpdateWithoutService_ServiceItemsInput = {
+    basePrice?: FloatFieldUpdateOperationsInput | number
+    virtualPrice?: FloatFieldUpdateOperationsInput | number
+    images?: ServiceUpdateimagesInput | string[]
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
+    RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
+    Review?: ReviewUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
+    User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
+    User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
+    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
+    User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
+    ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
+  }
+
+  export type ServiceUncheckedUpdateWithoutService_ServiceItemsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    basePrice?: FloatFieldUpdateOperationsInput | number
+    virtualPrice?: FloatFieldUpdateOperationsInput | number
+    images?: ServiceUpdateimagesInput | string[]
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    providerId?: IntFieldUpdateOperationsInput | number
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
+    RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
+    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
+    ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
+  }
+
+  export type ServiceItemUpsertWithoutService_ServiceItemsInput = {
+    update: XOR<ServiceItemUpdateWithoutService_ServiceItemsInput, ServiceItemUncheckedUpdateWithoutService_ServiceItemsInput>
+    create: XOR<ServiceItemCreateWithoutService_ServiceItemsInput, ServiceItemUncheckedCreateWithoutService_ServiceItemsInput>
+    where?: ServiceItemWhereInput
+  }
+
+  export type ServiceItemUpdateToOneWithWhereWithoutService_ServiceItemsInput = {
+    where?: ServiceItemWhereInput
+    data: XOR<ServiceItemUpdateWithoutService_ServiceItemsInput, ServiceItemUncheckedUpdateWithoutService_ServiceItemsInput>
+  }
+
+  export type ServiceItemUpdateWithoutService_ServiceItemsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    warrantyPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    stockQuantity?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceItemNestedInput
+  }
+
+  export type ServiceItemUncheckedUpdateWithoutService_ServiceItemsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    warrantyPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    stockQuantity?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    providerId?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposedServiceCreateManyBookingInput = {
@@ -65818,6 +66798,25 @@ export namespace Prisma {
     deletedAt?: Date | string | null
   }
 
+  export type ServiceCreateManyCategoryInput = {
+    id?: number
+    basePrice: number
+    virtualPrice: number
+    images?: ServiceCreateimagesInput | string[]
+    durationMinutes: number
+    providerId: number
+    createdById?: number | null
+    updatedById?: number | null
+    deletedById?: number | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    name?: string
+    publishedAt?: Date | string | null
+    description?: string
+    unit?: $Enums.Unit
+  }
+
   export type ServiceRequestCreateManyCategoryInput = {
     id?: number
     customerId: number
@@ -65846,9 +66845,9 @@ export namespace Prisma {
     other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
     User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutCategoryInput = {
@@ -65863,9 +66862,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateManyWithoutCategoryInput = {
@@ -65907,6 +66906,72 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ServiceUpdateWithoutCategoryInput = {
+    basePrice?: FloatFieldUpdateOperationsInput | number
+    virtualPrice?: FloatFieldUpdateOperationsInput | number
+    images?: ServiceUpdateimagesInput | string[]
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
+    RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
+    Review?: ReviewUpdateManyWithoutServiceNestedInput
+    User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
+    User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
+    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
+    User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
+    ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
+  }
+
+  export type ServiceUncheckedUpdateWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    basePrice?: FloatFieldUpdateOperationsInput | number
+    virtualPrice?: FloatFieldUpdateOperationsInput | number
+    images?: ServiceUpdateimagesInput | string[]
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    providerId?: IntFieldUpdateOperationsInput | number
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
+    RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
+    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
+    ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
+  }
+
+  export type ServiceUncheckedUpdateManyWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    basePrice?: FloatFieldUpdateOperationsInput | number
+    virtualPrice?: FloatFieldUpdateOperationsInput | number
+    images?: ServiceUpdateimagesInput | string[]
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    providerId?: IntFieldUpdateOperationsInput | number
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
   }
 
   export type ServiceRequestUpdateWithoutCategoryInput = {
@@ -65959,69 +67024,6 @@ export namespace Prisma {
 
   export type StaffCategoryUncheckedUpdateManyWithoutCategoryInput = {
     staffId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type ServiceUpdateWithoutCategoryInput = {
-    basePrice?: FloatFieldUpdateOperationsInput | number
-    virtualPrice?: FloatFieldUpdateOperationsInput | number
-    images?: ServiceUpdateimagesInput | string[]
-    durationMinutes?: IntFieldUpdateOperationsInput | number
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    description?: StringFieldUpdateOperationsInput | string
-    ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
-    RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
-    User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
-    User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
-    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
-    User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
-    ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-  }
-
-  export type ServiceUncheckedUpdateWithoutCategoryInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
-    virtualPrice?: FloatFieldUpdateOperationsInput | number
-    images?: ServiceUpdateimagesInput | string[]
-    durationMinutes?: IntFieldUpdateOperationsInput | number
-    providerId?: IntFieldUpdateOperationsInput | number
-    createdById?: NullableIntFieldUpdateOperationsInput | number | null
-    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    description?: StringFieldUpdateOperationsInput | string
-    ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
-    RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-  }
-
-  export type ServiceUncheckedUpdateManyWithoutCategoryInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
-    virtualPrice?: FloatFieldUpdateOperationsInput | number
-    images?: ServiceUpdateimagesInput | string[]
-    durationMinutes?: IntFieldUpdateOperationsInput | number
-    providerId?: IntFieldUpdateOperationsInput | number
-    createdById?: NullableIntFieldUpdateOperationsInput | number | null
-    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type BookingCreateManyCustomerProfileInput = {
@@ -66649,12 +67651,6 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type ServiceItemCreateManyServiceInput = {
-    id?: number
-    name: string
-    unitPrice: number
-  }
-
   export type ServiceTranslationCreateManyServiceInput = {
     id?: number
     languageId: string
@@ -66663,6 +67659,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     deletedAt?: Date | string | null
+  }
+
+  export type Service_ServiceItemsCreateManyServiceInput = {
+    serviceItemId: number
   }
 
   export type ProposedServiceUpdateWithoutServiceInput = {
@@ -66746,23 +67746,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ServiceItemUpdateWithoutServiceInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    unitPrice?: FloatFieldUpdateOperationsInput | number
-  }
-
-  export type ServiceItemUncheckedUpdateWithoutServiceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    unitPrice?: FloatFieldUpdateOperationsInput | number
-  }
-
-  export type ServiceItemUncheckedUpdateManyWithoutServiceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    unitPrice?: FloatFieldUpdateOperationsInput | number
-  }
-
   export type ServiceTranslationUpdateWithoutServiceInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -66792,50 +67775,16 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type CategoryUpdateWithoutServiceInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User_Category_createdByIdToUser?: UserUpdateOneWithoutCategory_Category_createdByIdToUserNestedInput
-    User_Category_deletedByIdToUser?: UserUpdateOneWithoutCategory_Category_deletedByIdToUserNestedInput
-    Category?: CategoryUpdateOneWithoutOther_CategoryNestedInput
-    other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
-    User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
-    CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
-    ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
-    StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+  export type Service_ServiceItemsUpdateWithoutServiceInput = {
+    ServiceItem?: ServiceItemUpdateOneRequiredWithoutService_ServiceItemsNestedInput
   }
 
-  export type CategoryUncheckedUpdateWithoutServiceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    parentCategoryId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdById?: NullableIntFieldUpdateOperationsInput | number | null
-    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
-    CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
-    ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
-    StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+  export type Service_ServiceItemsUncheckedUpdateWithoutServiceInput = {
+    serviceItemId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type CategoryUncheckedUpdateManyWithoutServiceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    parentCategoryId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdById?: NullableIntFieldUpdateOperationsInput | number | null
-    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type Service_ServiceItemsUncheckedUpdateManyWithoutServiceInput = {
+    serviceItemId?: IntFieldUpdateOperationsInput | number
   }
 
   export type BookingCreateManyServiceProviderInput = {
@@ -66864,6 +67813,24 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
+  }
+
+  export type ServiceItemCreateManyServiceProviderInput = {
+    id?: number
+    name: string
+    unitPrice: number
+    warrantyPeriod?: number | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedAt: Date | string
+    brand?: string | null
+    description?: string | null
+    isActive?: boolean
+    model?: string | null
+    stockQuantity?: number
+    unit?: $Enums.Unit
   }
 
   export type ServiceProviderTranslationCreateManyServiceProviderInput = {
@@ -66948,15 +67915,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
     Review?: ReviewUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateWithoutServiceProviderInput = {
@@ -66974,12 +67942,13 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateManyWithoutServiceProviderInput = {
@@ -66997,6 +67966,57 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+  }
+
+  export type ServiceItemUpdateWithoutServiceProviderInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    warrantyPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    stockQuantity?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceItemNestedInput
+  }
+
+  export type ServiceItemUncheckedUpdateWithoutServiceProviderInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    warrantyPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    stockQuantity?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceItemNestedInput
+  }
+
+  export type ServiceItemUncheckedUpdateManyWithoutServiceProviderInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    warrantyPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    stockQuantity?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
   }
 
   export type ServiceProviderTranslationUpdateWithoutServiceProviderInput = {
@@ -67403,6 +68423,8 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
   }
 
   export type ServiceCreateManyUser_Service_deletedByIdToUserInput = {
@@ -67420,6 +68442,8 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
   }
 
   export type ServiceCreateManyUser_Service_updatedByIdToUserInput = {
@@ -67437,6 +68461,8 @@ export namespace Prisma {
     name?: string
     publishedAt?: Date | string | null
     description?: string
+    categoryId: number
+    unit?: $Enums.Unit
   }
 
   export type ServiceProviderCreateManyUser_ServiceProvider_verifiedByIdToUserInput = {
@@ -67514,9 +68540,9 @@ export namespace Prisma {
     other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
     User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutUser_Category_createdByIdToUserInput = {
@@ -67531,9 +68557,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateManyWithoutUser_Category_createdByIdToUserInput = {
@@ -67559,9 +68585,9 @@ export namespace Prisma {
     other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
     User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutUser_Category_deletedByIdToUserInput = {
@@ -67576,9 +68602,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateManyWithoutUser_Category_deletedByIdToUserInput = {
@@ -67604,9 +68630,9 @@ export namespace Prisma {
     Category?: CategoryUpdateOneWithoutOther_CategoryNestedInput
     other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutUser_Category_updatedByIdToUserInput = {
@@ -67621,9 +68647,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
-    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateManyWithoutUser_Category_updatedByIdToUserInput = {
@@ -68056,15 +69082,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
     Review?: ReviewUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
     User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateWithoutUser_Service_createdByIdToUserInput = {
@@ -68082,12 +69109,13 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateManyWithoutUser_Service_createdByIdToUserInput = {
@@ -68105,6 +69133,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
   }
 
   export type ServiceUpdateWithoutUser_Service_deletedByIdToUserInput = {
@@ -68118,15 +69148,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
     Review?: ReviewUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
     User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateWithoutUser_Service_deletedByIdToUserInput = {
@@ -68144,12 +69175,13 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateManyWithoutUser_Service_deletedByIdToUserInput = {
@@ -68167,6 +69199,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
   }
 
   export type ServiceUpdateWithoutUser_Service_updatedByIdToUserInput = {
@@ -68180,15 +69214,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
     Review?: ReviewUpdateManyWithoutServiceNestedInput
+    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateWithoutUser_Service_updatedByIdToUserInput = {
@@ -68206,12 +69241,13 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
     ProposedService?: ProposedServiceUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
     Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
-    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceNestedInput
     ServiceTranslation?: ServiceTranslationUncheckedUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUncheckedUpdateManyWithoutServiceNestedInput
+    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateManyWithoutUser_Service_updatedByIdToUserInput = {
@@ -68229,6 +69265,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     description?: StringFieldUpdateOperationsInput | string
+    categoryId?: IntFieldUpdateOperationsInput | number
+    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
   }
 
   export type ServiceProviderUpdateWithoutUser_ServiceProvider_verifiedByIdToUserInput = {
@@ -68245,6 +69283,7 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Booking?: BookingUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUpdateManyWithoutServiceProviderNestedInput
     User_ServiceProvider_userIdToUser?: UserUpdateOneRequiredWithoutServiceProvider_ServiceProvider_userIdToUserNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUpdateManyWithoutServiceProviderNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutServiceProviderNestedInput
@@ -68267,6 +69306,7 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Booking?: BookingUncheckedUpdateManyWithoutServiceProviderNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutServiceProviderNestedInput
+    ServiceItem?: ServiceItemUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceProviderTranslation?: ServiceProviderTranslationUncheckedUpdateManyWithoutServiceProviderNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutServiceProviderNestedInput
     Staff?: StaffUncheckedUpdateManyWithoutServiceProviderNestedInput
@@ -68617,6 +69657,22 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Service_ServiceItemsCreateManyServiceItemInput = {
+    serviceId: number
+  }
+
+  export type Service_ServiceItemsUpdateWithoutServiceItemInput = {
+    Service?: ServiceUpdateOneRequiredWithoutService_ServiceItemsNestedInput
+  }
+
+  export type Service_ServiceItemsUncheckedUpdateWithoutServiceItemInput = {
+    serviceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type Service_ServiceItemsUncheckedUpdateManyWithoutServiceItemInput = {
+    serviceId?: IntFieldUpdateOperationsInput | number
   }
 
 

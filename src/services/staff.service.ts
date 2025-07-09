@@ -361,4 +361,23 @@ export const StaffService = {
 
     return StaffRepository.getMonthlyStats(staffId, month, year);
   },
+
+  async getAllInspectionReportsByStaff(
+    staffId: number,
+    options?: { page?: number; limit?: number }
+  ) {
+    if (!staffId || typeof staffId !== 'number') {
+      throw new AppError(
+        'Invalid staff ID',
+        [{ message: 'Error.InvalidStaffId', path: ['staffId'] }],
+        { staffId },
+        400
+      );
+    }
+
+    return await StaffRepository.getAllInspectionReports(staffId, options);
+  }
+  
 } as const;
+
+  

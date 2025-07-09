@@ -937,5 +937,90 @@ export const StaffRepository = {
       firstCheckIn,
       lastCheckOut
     };
+  },
+
+    async getAllInspectionReports(
+    staffId: number,
+    options?: { page?: number; limit?: number }
+  ) {
+    try {
+      const { page, limit, skip } = calculatePagination(options?.page, options?.limit);
+
+      const [total, reports] = await Promise.all([
+        prisma.inspectionReport.count({ where: { staffId } }),
+        prisma.inspectionReport.findMany({
+          where: { staffId },
+          orderBy: { createdAt: 'desc' },
+          skip,
+          take: limit,
+          include: {
+            Staff: {
+              include: { User: { select: { name: true, avatar: true } } }
+            },
+            Booking: {
+              include: {
+                CustomerProfile: {
+                  include: { User: { select: { name: true, phone: true } } }
+                },
+                ServiceRequest: {
+                  select: {
+                    preferredDate: true,
+                    location: true,
+                    phoneNumber: true,
+                    Category: { select: { name: true } }
+                  }
+                }
+              }
+            }
+          }
+        })
+      ]);
+
+      const totalPages = Math.ceil(total / limit);
+
+      return {
+        inspectionReports: reports.map(report => ({
+          id: report.id,
+          bookingId: report.bookingId,
+          staffId: report.staffId,
+          estimatedTime: report.estimatedTime,
+          note: report.note,
+          images: report.images,
+          createdAt: report.createdAt,
+          staff: {
+            id: report.Staff.id,
+            name: report.Staff.User?.name,
+            avatar: report.Staff.User?.avatar
+          },
+          booking: {
+            id: report.Booking.id,
+            status: report.Booking.status,
+            createdAt: report.Booking.createdAt,
+            customer: {
+              name: report.Booking.CustomerProfile?.User?.name,
+              phone: report.Booking.CustomerProfile?.User?.phone,
+              address: report.Booking.CustomerProfile?.address ?? null
+            },
+            serviceRequest: report.Booking.ServiceRequest ? {
+              preferredDate: report.Booking.ServiceRequest.preferredDate,
+              location: report.Booking.ServiceRequest.location,
+              phoneNumber: report.Booking.ServiceRequest.phoneNumber,
+              categoryName: report.Booking.ServiceRequest.Category?.name ?? null
+            } : undefined
+          }
+        })),
+        total,
+        page,
+        limit,
+        totalPages
+      };
+    } catch (error) {
+      throw new AppError(
+        'Failed to fetch all inspection reports',
+        [{ message: 'Error.GetAllInspectionReportsError', path: [] }],
+        { error },
+        500
+      );
+    }
   }
 };
