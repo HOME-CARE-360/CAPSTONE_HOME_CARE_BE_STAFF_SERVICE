@@ -211,7 +211,7 @@ async function handleGetMonthlyStats(data: any): Promise<HandlerResult> {
 
 async function handleGetInspectionByStaff(data: any): Promise<HandlerResult> {
   const parsed = parseWithSchema(GetInspectionReportsSchema, data);
-  const result = await StaffService.getInspectionReportsByStaff(parsed.staffId, parsed);
+  const result = await StaffService.getAllInspectionReportsByStaff(parsed.staffId, parsed);
   return { message: 'Inspection reports retrieved successfully', data: result };
 }
 
