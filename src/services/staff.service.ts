@@ -24,10 +24,6 @@ interface DateRangeQuery {
   toDate?: string;
 }
 
-interface BookingsListQuery extends PaginationQuery, DateRangeQuery {
-  status?: string;
-  keyword?: string;
-}
 
 export const StaffService = {
   /**

@@ -141,8 +141,10 @@ export const StaffRepository = {
           },
         }
         : {}),
-      ...(options?.keyword
-        ? {
+...(options?.keyword
+  ? {
+      OR: [
+        {
           CustomerProfile: {
             OR: [
               { address: { contains: options.keyword, mode: 'insensitive' } },
@@ -156,8 +158,25 @@ export const StaffRepository = {
               },
             ],
           },
-        }
-        : {}),
+        },
+        {
+          ServiceRequest: {
+            OR: [
+              { note: { contains: options.keyword, mode: 'insensitive' } },
+              { phoneNumber: { contains: options.keyword, mode: 'insensitive' } },
+              { location: { contains: options.keyword, mode: 'insensitive' } },
+              {
+                Category: {
+                  name: { contains: options.keyword, mode: 'insensitive' },
+                },
+              },
+            ],
+          },
+        },
+      ],
+    }
+  : {})
+,
     };
 
     const [total, bookings] = await Promise.all([
@@ -431,80 +450,86 @@ export const StaffRepository = {
     }
   },
 
-  async getInspectionReportsByStaff(
-    staffId: number,
-    options?: { page?: number; limit?: number }
-  ) {
-    try {
-      const { page, limit, skip } = calculatePagination(options?.page, options?.limit);
+async getInspectionReportsByStaff(
+  staffId: number,
+  options?: { page?: number; limit?: number }
+) {
+  try {
+    const { page, limit, skip } = calculatePagination(options?.page, options?.limit);
 
-      const [total, reports] = await Promise.all([
-        prisma.inspectionReport.count({ where: { staffId } }),
-        prisma.inspectionReport.findMany({
-          where: { staffId },
-          orderBy: { createdAt: 'desc' },
-          skip,
-          take: limit,
-          include: {
-            Booking: {
-              select: {
-                id: true,
-                status: true,
-                createdAt: true,
-                CustomerProfile: { include: CUSTOMER_PROFILE_INCLUDE },
-                ServiceRequest: {
-                  select: {
-                    preferredDate: true,
-                    location: true,
-                    phoneNumber: true,
-                    Category: { select: { name: true } }
-                  }
+    const [total, reports] = await Promise.all([
+      prisma.inspectionReport.count({ where: { staffId } }),
+      prisma.inspectionReport.findMany({
+        where: { staffId },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+        include: {
+          Booking: {
+            select: {
+              id: true,
+              status: true,
+              createdAt: true,
+              CustomerProfile: {
+                include: {
+                  address: true,
+                  User: { select: { name: true, phone: true } }
+                }
+              },
+              ServiceRequest: {
+                select: {
+                  preferredDate: true,
+                  location: true,
+                  phoneNumber: true,
+                  Category: { select: { name: true } }
                 }
               }
             }
           }
-        })
-      ]);
+        }
+      })
+    ]);
 
-      const totalPages = Math.ceil(total / limit);
-
-      return {
-        inspectionReports: reports.map(report => ({
-          id: report.id,
-          createdAt: report.createdAt,
-          estimatedTime: report.estimatedTime ?? null,
-          note: report.note ?? '',
-          images: report.images ?? [],
-          booking: {
-            id: report.Booking.id,
-            status: report.Booking.status,
-            createdAt: report.Booking.createdAt,
-            customer: {
-              name: report.Booking.CustomerProfile?.User?.name,
-              phone: report.Booking.CustomerProfile?.User?.phone
-            },
-            serviceRequest: report.Booking.ServiceRequest ? {
-              preferredDate: report.Booking.ServiceRequest.preferredDate,
-              location: report.Booking.ServiceRequest.location,
-              phoneNumber: report.Booking.ServiceRequest.phoneNumber,
-              categoryName: report.Booking.ServiceRequest.Category?.name
-            } : undefined
-          }
-        })),
-        total,
-        page,
-        limit,
-        totalPages
-      };
-    } catch (error) {
-      throw new AppError(
-        'Failed to fetch inspection reports for staff',
-        [{ message: 'Error.GetInspectionReportsByStaffError', path: ['staffId'] }],
-        { staffId, error },
-        500
-      );
-    }
-  },
+    return {
+      inspectionReports: reports.map(report => ({
+        id: report.id,
+        createdAt: report.createdAt,
+        estimatedTime: report.estimatedTime ?? null,
+        note: report.note ?? '',
+        images: report.images ?? [],
+        booking: {
+          id: report.Booking.id,
+          status: report.Booking.status,
+          createdAt: report.Booking.createdAt,
+          customer: {
+            name: report.Booking.CustomerProfile?.User?.name,
+            phone: report.Booking.CustomerProfile?.User?.phone,
+            address: report.Booking.CustomerProfile?.address ?? null
+          },
+          serviceRequest: report.Booking.ServiceRequest
+            ? {
+                preferredDate: report.Booking.ServiceRequest.preferredDate,
+                location: report.Booking.ServiceRequest.location,
+                phoneNumber: report.Booking.ServiceRequest.phoneNumber,
+                categoryName: report.Booking.ServiceRequest.Category?.name ?? null
+              }
+            : undefined
+        }
+      })),
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  } catch (error) {
+    throw new AppError(
+      'Failed to fetch inspection reports for staff',
+      [{ message: 'Error.GetInspectionReportsByStaffError', path: ['staffId'] }],
+      { staffId, error },
+      500
+    );
+  }
+},
 
   async updateInspectionReport(
     id: number,
