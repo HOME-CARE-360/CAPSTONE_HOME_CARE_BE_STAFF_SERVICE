@@ -299,6 +299,8 @@ export const StaffRepository = {
         return await tx.inspectionReport.create({ data });
       });
     } catch (error) {
+      console.log(error);
+
       if (error instanceof AppError) throw error;
 
       throw new AppError(
