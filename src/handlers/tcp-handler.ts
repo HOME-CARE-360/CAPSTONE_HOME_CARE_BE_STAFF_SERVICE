@@ -44,7 +44,7 @@ const HANDLER_MAP = new Map<string, (data: any) => Promise<HandlerResult>>([
     ['STAFF_GET_BOOKINGS_BY_DATE', handleGetBookingsByDate],
     ['STAFF_GET_MONTHLY_STATS', handleGetMonthlyStats],
     ['STAFF_GET_INSPECTION_STAFF', handleGetInspectionByStaff],
-
+    ['STAFF_GET_PROPOSAL', handleGetBookingWorkflow],
 ]);
 
 export async function handleTCPRequest(payload: TCPPayload): Promise<HandleTCPReturn> {
@@ -248,4 +248,15 @@ function validateUpdateData(data: any, entityType: string): void {
 
 function capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+async function handleGetBookingWorkflow(data: any): Promise<HandlerResult> {
+    validateId(data?.staffId, 'staffId');
+    validateId(data?.bookingId, 'bookingId');
+
+    const result = await StaffService.getBookingWorkflow(data.staffId, data.bookingId);
+    return {
+        message: 'Booking workflow retrieved successfully',
+        data: result,
+    };
 }

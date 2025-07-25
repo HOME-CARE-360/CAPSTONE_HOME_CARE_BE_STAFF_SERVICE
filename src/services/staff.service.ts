@@ -372,7 +372,31 @@ export const StaffService = {
     }
 
     return await StaffRepository.getAllInspectionReports(staffId, options);
+  },
+  
+  async getBookingWorkflow(staffId: number, bookingId: number) {
+  if (!staffId || !bookingId) {
+    throw new AppError(
+      'Missing required parameters',
+      [{ message: 'Error.MissingParameters', path: ['staffId', 'bookingId'] }],
+      { staffId, bookingId },
+      400
+    );
   }
+
+  const result = await StaffRepository.getProposalByBookingId(staffId, bookingId);
+
+  if (!result) {
+    throw new AppError(
+      'Booking not found or not owned by staff',
+      [{ message: 'Error.BookingNotFound', path: ['bookingId'] }],
+      { staffId, bookingId },
+      404
+    );
+  }
+
+  return result;
+}
   
 } as const;
 

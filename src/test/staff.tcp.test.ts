@@ -268,6 +268,21 @@ class StaffApiClient {
             data: { staffId, month, year }
         });
     }
+
+    static async getBookingWorkflow(staffId: number, bookingId: number): Promise<TCPResponse | null> {
+    if (!staffId || staffId <= 0) {
+        throw new Error('Valid staffId is required');
+    }
+    if (!bookingId || bookingId <= 0) {
+        throw new Error('Valid bookingId is required');
+    }
+
+    return this.safeRequest('STAFF_GET_BOOKING_WORKFLOW', {
+        type: 'STAFF_GET_BOOKING_WORKFLOW',
+        data: { staffId, bookingId }
+    });
+}
+
 }
 
 // Test configuration
@@ -302,6 +317,17 @@ class TestRunner {
             console.error('Basic tests failed:', error);
         }
     }
+
+    async runWorkflowTests(): Promise<void> {
+    console.log('\n🧩 Starting Workflow Tests (Booking + Inspection + Proposal)...\n');
+
+    try {
+        await StaffApiClient.getBookingWorkflow(this.config.staffId, this.config.bookingId);
+    } catch (error) {
+        console.error('Workflow tests failed:', error);
+    }
+}
+
 
     async runInspectionTests(): Promise<void> {
         console.log('\n🔍 Starting Inspection Tests...\n');
@@ -380,6 +406,7 @@ class TestRunner {
         await this.runInspectionTests();
         await this.runPerformanceTests();
         await this.runUpdateTests();
+        await this.runWorkflowTests();
 
         const endTime = Date.now();
         const duration = (endTime - startTime) / 1000;

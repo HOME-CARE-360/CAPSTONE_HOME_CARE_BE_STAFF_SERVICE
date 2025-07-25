@@ -278,39 +278,61 @@ export const StaffRepository = {
     }
   },
 
-  async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
-    try {
-      return await prisma.$transaction(async (tx) => {
-        const bookingId = validateBookingConnection(data);
+async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const bookingId = validateBookingConnection(data);
 
-        const existingReport = await tx.inspectionReport.findUnique({
-          where: { bookingId }
-        });
-
-        if (existingReport) {
-          throw new AppError(
-            'Inspection report already exists for this booking',
-            [{ message: 'Error.InspectionReportExists', path: ['bookingId'] }],
-            { bookingId },
-            400
-          );
-        }
-
-        return await tx.inspectionReport.create({ data });
+      const existingReport = await tx.inspectionReport.findUnique({
+        where: { bookingId }
       });
-    } catch (error) {
-      console.log(error);
 
-      if (error instanceof AppError) throw error;
+      if (existingReport) {
+        throw new AppError(
+          'Inspection report already exists for this booking',
+          [{ message: 'Error.InspectionReportExists', path: ['bookingId'] }],
+          { bookingId },
+          400
+        );
+      }
 
-      throw new AppError(
-        'Failed to create inspection report',
-        [{ message: 'Error.CreateInspectionReportError', path: ['bookingId'] }],
-        { data, error },
-        500
-      );
-    }
-  },
+      const booking = await tx.booking.findUnique({
+        where: { id: bookingId },
+        include: { ServiceRequest: { select: { id: true } } }
+      });
+
+      if (!booking?.ServiceRequest?.id) {
+        throw new AppError(
+          'Missing ServiceRequest ID for this booking',
+          [{ message: 'Error.MissingServiceRequestId', path: ['bookingId'] }],
+          { bookingId },
+          500
+        );
+      }
+
+      const [report] = await Promise.all([
+        tx.inspectionReport.create({ data }),
+        tx.serviceRequest.update({
+          where: { id: booking.ServiceRequest.id },
+          data: { status: RequestStatus.ESTIMATED }
+        })
+      ]);
+
+      return report;
+    });
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof AppError) throw error;
+
+    throw new AppError(
+      'Failed to create inspection report',
+      [{ message: 'Error.CreateInspectionReportError', path: ['bookingId'] }],
+      { data, error },
+      500
+    );
+  }
+},
 
   async getReviews(
     staffId: number,
@@ -704,7 +726,7 @@ export const StaffRepository = {
         const booking = await tx.booking.findUnique({
           where: { id: bookingId },
           include: {
-            ServiceRequest: { select: { id: true, preferredDate: true } }
+            ServiceRequest: { select: { id: true, preferredDate: true, status: true } }
           }
         });
 
@@ -717,11 +739,11 @@ export const StaffRepository = {
           );
         }
 
-        if (([BookingStatus.COMPLETED, BookingStatus.CANCELLED] as BookingStatus[]).includes(booking.status)) {
+        if (booking.ServiceRequest?.status && ([RequestStatus.ESTIMATED, RequestStatus.CANCELLED] as RequestStatus[]).includes(booking.ServiceRequest.status)) {
           throw new AppError(
             'Cannot check in to a completed or canceled booking',
             [{ message: 'Error.InvalidBookingStatusForCheckIn', path: ['bookingId'] }],
-            { bookingId, status: booking.status },
+            { bookingId, status: booking.ServiceRequest.status },
             400
           );
         }
@@ -1043,5 +1065,81 @@ export const StaffRepository = {
         500
       );
     }
+  },
+
+  async  getProposalByBookingId(staffId: number, bookingId: number) {
+  try {
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      select: {
+        id: true,
+        staffId: true,
+        Proposal: {
+          include: {
+            ProposalItem: {
+              include: {
+                Service: {
+                  select: {
+                    id: true,
+                    name: true,
+                    basePrice: true,
+                    durationMinutes: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (!booking) {
+      throw new AppError(
+        'Booking not found',
+        [{ message: 'Error.BookingNotFound', path: ['bookingId'] }],
+        { bookingId },
+        404
+      );
+    }
+
+    if (booking.staffId !== staffId) {
+      throw new AppError(
+        'Access denied: Staff does not own this booking',
+        [{ message: 'Error.UnauthorizedAccess', path: ['staffId'] }],
+        { staffId, bookingStaffId: booking.staffId },
+        403
+      );
+    }
+
+    if (!booking.Proposal) {
+      throw new AppError(
+        'No proposal found for this booking',
+        [{ message: 'Error.NoProposalFound', path: ['bookingId'] }],
+        { bookingId },
+        404
+      );
+    }
+
+    return {
+      id: booking.Proposal.id,
+      status: booking.Proposal.status,
+      notes: booking.Proposal.notes ?? '',
+      createdAt: booking.Proposal.createdAt,
+      items: booking.Proposal.ProposalItem.map(item => ({
+        id: item.id,
+        quantity: item.quantity,
+        service: item.Service
+      }))
+    };
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+
+    throw new AppError(
+      'Failed to fetch proposal by booking ID',
+      [{ message: 'Error.GetProposalByBookingError', path: ['bookingId'] }],
+      { staffId, bookingId, error },
+      500
+    );
   }
-};
+}
+}

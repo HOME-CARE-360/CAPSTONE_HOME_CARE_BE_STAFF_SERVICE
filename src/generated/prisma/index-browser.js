@@ -182,18 +182,8 @@ exports.Prisma.DeviceScalarFieldEnum = {
   ip: 'ip',
   lastActive: 'lastActive',
   createdAt: 'createdAt',
-  isActive: 'isActive'
-};
-
-exports.Prisma.LanguageScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  createdById: 'createdById',
-  updatedById: 'updatedById',
-  deletedById: 'deletedById',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  isActive: 'isActive',
+  fcmToken: 'fcmToken'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -226,7 +216,10 @@ exports.Prisma.PaymentTransactionScalarFieldEnum = {
   referenceNumber: 'referenceNumber',
   transactionContent: 'transactionContent',
   body: 'body',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  serviceRequestId: 'serviceRequestId',
+  status: 'status',
+  userId: 'userId'
 };
 
 exports.Prisma.PermissionScalarFieldEnum = {
@@ -310,7 +303,8 @@ exports.Prisma.ServiceScalarFieldEnum = {
   publishedAt: 'publishedAt',
   description: 'description',
   categoryId: 'categoryId',
-  unit: 'unit'
+  unit: 'unit',
+  status: 'status'
 };
 
 exports.Prisma.ServiceProviderScalarFieldEnum = {
@@ -333,17 +327,6 @@ exports.Prisma.ServiceProviderScalarFieldEnum = {
 exports.Prisma.ServiceProviderTranslationScalarFieldEnum = {
   id: 'id',
   providerId: 'providerId',
-  languageId: 'languageId',
-  name: 'name',
-  description: 'description',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-};
-
-exports.Prisma.ServiceTranslationScalarFieldEnum = {
-  id: 'id',
-  serviceId: 'serviceId',
   languageId: 'languageId',
   name: 'name',
   description: 'description',
@@ -428,16 +411,6 @@ exports.Prisma.InspectionReportScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.ProposedServiceScalarFieldEnum = {
-  id: 'id',
-  bookingId: 'bookingId',
-  serviceId: 'serviceId',
-  quantity: 'quantity',
-  price: 'price',
-  notes: 'notes',
-  createdAt: 'createdAt'
-};
-
 exports.Prisma.ServiceItemScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -474,6 +447,44 @@ exports.Prisma.Service_ServiceItemsScalarFieldEnum = {
   serviceItemId: 'serviceItemId'
 };
 
+exports.Prisma.ProposalScalarFieldEnum = {
+  id: 'id',
+  bookingId: 'bookingId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  status: 'status'
+};
+
+exports.Prisma.ProposalItemScalarFieldEnum = {
+  id: 'id',
+  proposalId: 'proposalId',
+  serviceId: 'serviceId',
+  quantity: 'quantity',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WalletScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  balance: 'balance',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  accountHolder: 'accountHolder',
+  bankAccount: 'bankAccount',
+  bankName: 'bankName'
+};
+
+exports.Prisma.WithdrawalRequestScalarFieldEnum = {
+  id: 'id',
+  providerId: 'providerId',
+  amount: 'amount',
+  status: 'status',
+  createdAt: 'createdAt',
+  processedAt: 'processedAt',
+  processedById: 'processedById',
+  note: 'note'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -501,6 +512,17 @@ exports.Gender = exports.$Enums.Gender = {
   OTHER: 'OTHER'
 };
 
+exports.PaymentTransactionStatus = exports.$Enums.PaymentTransactionStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED',
+  EXPIRED: 'EXPIRED',
+  MANUAL_REVIEW: 'MANUAL_REVIEW'
+};
+
 exports.HTTPMethod = exports.$Enums.HTTPMethod = {
   GET: 'GET',
   POST: 'POST',
@@ -516,6 +538,12 @@ exports.Unit = exports.$Enums.Unit = {
   PER_ITEM: 'PER_ITEM',
   PER_SQUARE_METER: 'PER_SQUARE_METER',
   PER_JOB: 'PER_JOB'
+};
+
+exports.ServiceStatus = exports.$Enums.ServiceStatus = {
+  PENDING: 'PENDING',
+  REJECTED: 'REJECTED',
+  ACCEPTED: 'ACCEPTED'
 };
 
 exports.CompanyType = exports.$Enums.CompanyType = {
@@ -562,7 +590,22 @@ exports.VerificationCodeType = exports.$Enums.VerificationCodeType = {
 exports.RequestStatus = exports.$Enums.RequestStatus = {
   PENDING: 'PENDING',
   IN_PROGRESS: 'IN_PROGRESS',
-  ESTIMATED: 'ESTIMATED'
+  ESTIMATED: 'ESTIMATED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.ProposalStatus = exports.$Enums.ProposalStatus = {
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  PENDING: 'PENDING'
+};
+
+exports.WithdrawalStatus = exports.$Enums.WithdrawalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+  COMPLETED: 'COMPLETED'
 };
 
 exports.Prisma.ModelName = {
@@ -572,7 +615,6 @@ exports.Prisma.ModelName = {
   ChatMessage: 'ChatMessage',
   CustomerProfile: 'CustomerProfile',
   Device: 'Device',
-  Language: 'Language',
   Notification: 'Notification',
   PackageRecommendation: 'PackageRecommendation',
   PaymentTransaction: 'PaymentTransaction',
@@ -585,7 +627,6 @@ exports.Prisma.ModelName = {
   Service: 'Service',
   ServiceProvider: 'ServiceProvider',
   ServiceProviderTranslation: 'ServiceProviderTranslation',
-  ServiceTranslation: 'ServiceTranslation',
   Staff: 'Staff',
   StaffCategory: 'StaffCategory',
   Transaction: 'Transaction',
@@ -593,10 +634,13 @@ exports.Prisma.ModelName = {
   VerificationCode: 'VerificationCode',
   WorkLog: 'WorkLog',
   InspectionReport: 'InspectionReport',
-  ProposedService: 'ProposedService',
   ServiceItem: 'ServiceItem',
   ServiceRequest: 'ServiceRequest',
-  Service_ServiceItems: 'Service_ServiceItems'
+  Service_ServiceItems: 'Service_ServiceItems',
+  Proposal: 'Proposal',
+  ProposalItem: 'ProposalItem',
+  Wallet: 'Wallet',
+  WithdrawalRequest: 'WithdrawalRequest'
 };
 
 /**
