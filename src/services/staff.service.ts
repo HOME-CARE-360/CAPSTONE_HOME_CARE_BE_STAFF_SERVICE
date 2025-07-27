@@ -1,11 +1,11 @@
-import { StaffRepository } from '../repositories/staff.repository';
+import { StaffRepository } from "../repositories/staff.repository";
 import {
   CreateInspectionReportDto,
   UpdateInspectionReportDto,
   UpdateInspectionStatusDto,
-} from '../schemas/type';
-import { AppError } from '../handlers/error';
-import { BookingStatus } from '../generated/prisma';
+} from "../schemas/type";
+import { AppError } from "../handlers/error";
+import { BookingStatus } from "../generated/prisma";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
@@ -24,7 +24,6 @@ interface DateRangeQuery {
   toDate?: string;
 }
 
-
 export const StaffService = {
   /**
    * Retrieves paginated bookings list for staff with optional filtering
@@ -39,7 +38,7 @@ export const StaffService = {
       fromDate?: string;
       toDate?: string;
       keyword?: string;
-    } = {}
+    } = {},
   ) {
     const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT, ...filters } = options;
 
@@ -54,10 +53,10 @@ export const StaffService = {
     let bookingStatus: BookingStatus | undefined;
     if (status && !VALID_BOOKING_STATUSES.has(status as BookingStatus)) {
       throw new AppError(
-        'Invalid booking status',
-        [{ message: 'Error.InvalidBookingStatus', path: ['status'] }],
+        "Invalid booking status",
+        [{ message: "Error.InvalidBookingStatus", path: ["status"] }],
         { status },
-        400
+        400,
       );
     }
 
@@ -73,10 +72,15 @@ export const StaffService = {
   async getBookingDetail(bookingId: number, staffId: number) {
     if (!bookingId || !staffId) {
       throw new AppError(
-        'Missing required parameters',
-        [{ message: 'Error.MissingParameters', path: ['bookingId', 'staffId'] }],
+        "Missing required parameters",
+        [
+          {
+            message: "Error.MissingParameters",
+            path: ["bookingId", "staffId"],
+          },
+        ],
         { bookingId, staffId },
-        400
+        400,
       );
     }
 
@@ -94,10 +98,15 @@ export const StaffService = {
     // Validate required fields
     if (!staffId || !bookingId) {
       throw new AppError(
-        'Missing required fields',
-        [{ message: 'Error.MissingRequiredFields', path: ['staffId', 'bookingId'] }],
+        "Missing required fields",
+        [
+          {
+            message: "Error.MissingRequiredFields",
+            path: ["staffId", "bookingId"],
+          },
+        ],
         { dto },
-        400
+        400,
       );
     }
 
@@ -124,7 +133,7 @@ export const StaffService = {
       rating?: number;
       fromDate?: string;
       toDate?: string;
-    } = {}
+    } = {},
   ) {
     const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT, ...filters } = options;
     const sanitizedOptions = {
@@ -144,10 +153,10 @@ export const StaffService = {
   async getInspectionReportById(inspectionId: number) {
     if (!inspectionId || inspectionId <= 0) {
       throw new AppError(
-        'Invalid inspection ID',
-        [{ message: 'Error.InvalidInspectionId', path: ['inspectionId'] }],
+        "Invalid inspection ID",
+        [{ message: "Error.InvalidInspectionId", path: ["inspectionId"] }],
         { inspectionId },
-        400
+        400,
       );
     }
 
@@ -162,7 +171,7 @@ export const StaffService = {
    */
   async getInspectionReportsByStaff(
     staffId: number,
-    options: PaginationQuery = {}
+    options: PaginationQuery = {},
   ) {
     const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT } = options;
     const sanitizedOptions = {
@@ -170,7 +179,10 @@ export const StaffService = {
       limit: Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT),
     };
 
-    return StaffRepository.getInspectionReportsByStaff(staffId, sanitizedOptions);
+    return StaffRepository.getInspectionReportsByStaff(
+      staffId,
+      sanitizedOptions,
+    );
   },
 
   /**
@@ -181,23 +193,26 @@ export const StaffService = {
    */
   async updateInspectionReport(
     inspectionId: number,
-    dto: UpdateInspectionReportDto
+    dto: UpdateInspectionReportDto,
   ) {
     const { note, images, estimatedTime } = dto;
 
     // Early validation for empty updates
     const hasValidUpdates = Boolean(
-      note?.trim() ||
-      (images && images.length > 0) ||
-      estimatedTime
+      note?.trim() || (images && images.length > 0) || estimatedTime,
     );
 
     if (!hasValidUpdates) {
       throw new AppError(
-        'No valid update data provided',
-        [{ message: 'Error.NoValidUpdateData', path: ['note', 'images', 'estimatedTime'] }],
+        "No valid update data provided",
+        [
+          {
+            message: "Error.NoValidUpdateData",
+            path: ["note", "images", "estimatedTime"],
+          },
+        ],
         { inspectionId, dto },
-        400
+        400,
       );
     }
 
@@ -215,10 +230,7 @@ export const StaffService = {
    * @param options - Pagination options
    * @returns Paginated work logs
    */
-  async getRecentWorkLogs(
-    staffId: number,
-    options: PaginationQuery = {}
-  ) {
+  async getRecentWorkLogs(staffId: number, options: PaginationQuery = {}) {
     const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT } = options;
     const sanitizedOptions = {
       page: Math.max(page, DEFAULT_PAGE),
@@ -236,10 +248,10 @@ export const StaffService = {
   async getStaffPerformanceById(staffId: number) {
     if (!staffId || staffId <= 0) {
       throw new AppError(
-        'Invalid staff ID',
-        [{ message: 'Error.InvalidStaffId', path: ['staffId'] }],
+        "Invalid staff ID",
+        [{ message: "Error.InvalidStaffId", path: ["staffId"] }],
         { staffId },
-        400
+        400,
       );
     }
 
@@ -265,10 +277,15 @@ export const StaffService = {
     // Validate required parameters
     if (!staffId || !bookingId) {
       throw new AppError(
-        'Missing required parameters',
-        [{ message: 'Error.MissingParameters', path: ['staffId', 'bookingId'] }],
+        "Missing required parameters",
+        [
+          {
+            message: "Error.MissingParameters",
+            path: ["staffId", "bookingId"],
+          },
+        ],
         { staffId, bookingId },
-        400
+        400,
       );
     }
 
@@ -283,10 +300,10 @@ export const StaffService = {
   async checkOutWorkLog(bookingId: number) {
     if (!bookingId || bookingId <= 0) {
       throw new AppError(
-        'Invalid booking ID',
-        [{ message: 'Error.InvalidBookingId', path: ['bookingId'] }],
+        "Invalid booking ID",
+        [{ message: "Error.InvalidBookingId", path: ["bookingId"] }],
         { bookingId },
-        400
+        400,
       );
     }
 
@@ -305,14 +322,14 @@ export const StaffService = {
     staffId: number,
     date: string,
     page = DEFAULT_PAGE,
-    limit = DEFAULT_LIMIT
+    limit = DEFAULT_LIMIT,
   ) {
     if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       throw new AppError(
-        'Invalid date format',
-        [{ message: 'Error.InvalidDateFormat', path: ['date'] }],
+        "Invalid date format",
+        [{ message: "Error.InvalidDateFormat", path: ["date"] }],
         { date },
-        400
+        400,
       );
     }
 
@@ -323,7 +340,7 @@ export const StaffService = {
       staffId,
       date,
       sanitizedPage,
-      sanitizedLimit
+      sanitizedLimit,
     );
   },
 
@@ -338,20 +355,20 @@ export const StaffService = {
     // Validate month and year
     if (!month || month < 1 || month > 12) {
       throw new AppError(
-        'Invalid month',
-        [{ message: 'Error.InvalidMonth', path: ['month'] }],
+        "Invalid month",
+        [{ message: "Error.InvalidMonth", path: ["month"] }],
         { month },
-        400
+        400,
       );
     }
 
     const currentYear = new Date().getFullYear();
     if (!year || year < 2000 || year > currentYear + 10) {
       throw new AppError(
-        'Invalid year',
-        [{ message: 'Error.InvalidYear', path: ['year'] }],
+        "Invalid year",
+        [{ message: "Error.InvalidYear", path: ["year"] }],
         { year },
-        400
+        400,
       );
     }
 
@@ -360,44 +377,49 @@ export const StaffService = {
 
   async getAllInspectionReportsByStaff(
     staffId: number,
-    options?: { page?: number; limit?: number }
+    options?: { page?: number; limit?: number },
   ) {
-    if (!staffId || typeof staffId !== 'number') {
+    if (!staffId || typeof staffId !== "number") {
       throw new AppError(
-        'Invalid staff ID',
-        [{ message: 'Error.InvalidStaffId', path: ['staffId'] }],
+        "Invalid staff ID",
+        [{ message: "Error.InvalidStaffId", path: ["staffId"] }],
         { staffId },
-        400
+        400,
       );
     }
 
     return await StaffRepository.getAllInspectionReports(staffId, options);
   },
-  
+
   async getBookingWorkflow(staffId: number, bookingId: number) {
-  if (!staffId || !bookingId) {
-    throw new AppError(
-      'Missing required parameters',
-      [{ message: 'Error.MissingParameters', path: ['staffId', 'bookingId'] }],
-      { staffId, bookingId },
-      400
+    if (!staffId || !bookingId) {
+      throw new AppError(
+        "Missing required parameters",
+        [
+          {
+            message: "Error.MissingParameters",
+            path: ["staffId", "bookingId"],
+          },
+        ],
+        { staffId, bookingId },
+        400,
+      );
+    }
+
+    const result = await StaffRepository.getProposalByBookingId(
+      staffId,
+      bookingId,
     );
-  }
 
-  const result = await StaffRepository.getProposalByBookingId(staffId, bookingId);
+    if (!result) {
+      throw new AppError(
+        "Booking not found or not owned by staff",
+        [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
+        { staffId, bookingId },
+        404,
+      );
+    }
 
-  if (!result) {
-    throw new AppError(
-      'Booking not found or not owned by staff',
-      [{ message: 'Error.BookingNotFound', path: ['bookingId'] }],
-      { staffId, bookingId },
-      404
-    );
-  }
-
-  return result;
-}
-  
+    return result;
+  },
 } as const;
-
-  

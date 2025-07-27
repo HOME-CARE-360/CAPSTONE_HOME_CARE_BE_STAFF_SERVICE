@@ -1,5 +1,11 @@
-import { PrismaClient, Prisma, BookingStatus, InspectionStatus, RequestStatus } from '../generated/prisma';
-import { AppError } from '../handlers/error';
+import {
+  PrismaClient,
+  Prisma,
+  BookingStatus,
+  InspectionStatus,
+  RequestStatus,
+} from "../generated/prisma";
+import { AppError } from "../handlers/error";
 
 const prisma = new PrismaClient();
 
@@ -15,7 +21,7 @@ const CATEGORY_SELECT = { id: true, name: true } as const;
 const SERVICE_SELECT = { name: true } as const;
 
 const CUSTOMER_PROFILE_INCLUDE = {
-  User: { select: USER_SELECT }
+  User: { select: USER_SELECT },
 } as const;
 
 const SERVICE_REQUEST_SELECT = {
@@ -25,12 +31,12 @@ const SERVICE_REQUEST_SELECT = {
   location: true,
   phoneNumber: true,
   status: true,
-  Category: { select: CATEGORY_SELECT }
+  Category: { select: CATEGORY_SELECT },
 } as const;
 
 const BOOKING_INCLUDE = {
   CustomerProfile: { include: CUSTOMER_PROFILE_INCLUDE },
-  ServiceRequest: { select: SERVICE_REQUEST_SELECT }
+  ServiceRequest: { select: SERVICE_REQUEST_SELECT },
 } as const;
 
 const calculatePagination = (page?: number, limit?: number) => {
@@ -47,8 +53,8 @@ const buildDateFilter = (fromDate?: string, toDate?: string) => {
   return {
     createdAt: {
       ...(fromDate && { gte: new Date(fromDate) }),
-      ...(toDate && { lte: new Date(toDate) })
-    }
+      ...(toDate && { lte: new Date(toDate) }),
+    },
   };
 };
 
@@ -58,17 +64,17 @@ const buildKeywordFilter = (keyword?: string) => {
   return {
     CustomerProfile: {
       OR: [
-        { address: { contains: keyword, mode: 'insensitive' as const } },
+        { address: { contains: keyword, mode: "insensitive" as const } },
         {
           User: {
             OR: [
-              { name: { contains: keyword, mode: 'insensitive' as const } },
-              { phone: { contains: keyword, mode: 'insensitive' as const } }
-            ]
-          }
-        }
-      ]
-    }
+              { name: { contains: keyword, mode: "insensitive" as const } },
+              { phone: { contains: keyword, mode: "insensitive" as const } },
+            ],
+          },
+        },
+      ],
+    },
   };
 };
 
@@ -80,18 +86,20 @@ const mapBookingResponse = (booking: any) => ({
   customer: {
     name: booking.CustomerProfile?.User?.name ?? null,
     phone: booking.CustomerProfile?.User?.phone ?? null,
-    address: booking.CustomerProfile?.address ?? null
+    address: booking.CustomerProfile?.address ?? null,
   },
-  serviceRequest: booking.ServiceRequest ? {
-    id: booking.ServiceRequest.id,
-    preferredDate: booking.ServiceRequest.preferredDate,
-    note: booking.ServiceRequest.note,
-    location: booking.ServiceRequest.location,
-    phoneNumber: booking.ServiceRequest.phoneNumber,
-    status: booking.ServiceRequest.status,
-    categoryId: booking.ServiceRequest.Category?.id ?? null,
-    categoryName: booking.ServiceRequest.Category?.name ?? null
-  } : null
+  serviceRequest: booking.ServiceRequest
+    ? {
+        id: booking.ServiceRequest.id,
+        preferredDate: booking.ServiceRequest.preferredDate,
+        note: booking.ServiceRequest.note,
+        location: booking.ServiceRequest.location,
+        phoneNumber: booking.ServiceRequest.phoneNumber,
+        status: booking.ServiceRequest.status,
+        categoryId: booking.ServiceRequest.Category?.id ?? null,
+        categoryName: booking.ServiceRequest.Category?.name ?? null,
+      }
+    : null,
 });
 
 const calculateHoursDifference = (startDate: Date, endDate: Date): number => {
@@ -99,16 +107,25 @@ const calculateHoursDifference = (startDate: Date, endDate: Date): number => {
 };
 
 const calculateDaysDifference = (date1: Date, date2: Date): number => {
-  return Math.abs(Math.floor((date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24)));
+  return Math.abs(
+    Math.floor((date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24)),
+  );
 };
 
-const validateBookingConnection = (data: Prisma.InspectionReportCreateInput) => {
-  if (!data.Booking?.connect || typeof data.Booking.connect.id !== 'number') {
+const validateBookingConnection = (
+  data: Prisma.InspectionReportCreateInput,
+) => {
+  if (!data.Booking?.connect || typeof data.Booking.connect.id !== "number") {
     throw new AppError(
-      'Booking connection is missing or invalid in inspection report data',
-      [{ message: 'Error.CreateInspectionReportBookingConnectError', path: ['Booking.connect.id'] }],
+      "Booking connection is missing or invalid in inspection report data",
+      [
+        {
+          message: "Error.CreateInspectionReportBookingConnectError",
+          path: ["Booking.connect.id"],
+        },
+      ],
       { data },
-      400
+      400,
     );
   }
   return data.Booking.connect.id;
@@ -124,7 +141,7 @@ export const StaffRepository = {
       fromDate?: string;
       toDate?: string;
       keyword?: string;
-    }
+    },
   ) {
     const page = options?.page ?? 1;
     const limit = options?.limit ?? 10;
@@ -135,55 +152,84 @@ export const StaffRepository = {
       ...(status ? { status } : {}),
       ...(options?.fromDate || options?.toDate
         ? {
-          createdAt: {
-            ...(options.fromDate ? { gte: new Date(options.fromDate) } : {}),
-            ...(options.toDate ? { lte: new Date(options.toDate) } : {}),
-          },
-        }
+            createdAt: {
+              ...(options.fromDate ? { gte: new Date(options.fromDate) } : {}),
+              ...(options.toDate ? { lte: new Date(options.toDate) } : {}),
+            },
+          }
         : {}),
-...(options?.keyword
-  ? {
-      OR: [
-        {
-          CustomerProfile: {
+      ...(options?.keyword
+        ? {
             OR: [
-              { address: { contains: options.keyword, mode: 'insensitive' } },
               {
-                User: {
+                CustomerProfile: {
                   OR: [
-                    { name: { contains: options.keyword, mode: 'insensitive' } },
-                    { phone: { contains: options.keyword, mode: 'insensitive' } },
+                    {
+                      address: {
+                        contains: options.keyword,
+                        mode: "insensitive",
+                      },
+                    },
+                    {
+                      User: {
+                        OR: [
+                          {
+                            name: {
+                              contains: options.keyword,
+                              mode: "insensitive",
+                            },
+                          },
+                          {
+                            phone: {
+                              contains: options.keyword,
+                              mode: "insensitive",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                ServiceRequest: {
+                  OR: [
+                    {
+                      note: { contains: options.keyword, mode: "insensitive" },
+                    },
+                    {
+                      phoneNumber: {
+                        contains: options.keyword,
+                        mode: "insensitive",
+                      },
+                    },
+                    {
+                      location: {
+                        contains: options.keyword,
+                        mode: "insensitive",
+                      },
+                    },
+                    {
+                      Category: {
+                        name: {
+                          contains: options.keyword,
+                          mode: "insensitive",
+                        },
+                      },
+                    },
                   ],
                 },
               },
             ],
-          },
-        },
-        {
-          ServiceRequest: {
-            OR: [
-              { note: { contains: options.keyword, mode: 'insensitive' } },
-              { phoneNumber: { contains: options.keyword, mode: 'insensitive' } },
-              { location: { contains: options.keyword, mode: 'insensitive' } },
-              {
-                Category: {
-                  name: { contains: options.keyword, mode: 'insensitive' },
-                },
-              },
-            ],
-          },
-        },
-      ],
-    }
-  : {})
-,
+          }
+        : {}),
     };
 
     const [total, bookings] = await Promise.all([
       prisma.booking.count({ where }),
       prisma.booking.findMany({
         where,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         skip,
         take: limit,
         include: {
@@ -220,15 +266,15 @@ export const StaffRepository = {
         },
         serviceRequest: b.ServiceRequest
           ? {
-            id: b.ServiceRequest.id,
-            preferredDate: b.ServiceRequest.preferredDate,
-            note: b.ServiceRequest.note,
-            location: b.ServiceRequest.location,
-            phoneNumber: b.ServiceRequest.phoneNumber,
-            status: b.ServiceRequest.status,
-            categoryId: b.ServiceRequest.Category?.id ?? null,
-            categoryName: b.ServiceRequest.Category?.name ?? null,
-          }
+              id: b.ServiceRequest.id,
+              preferredDate: b.ServiceRequest.preferredDate,
+              note: b.ServiceRequest.note,
+              location: b.ServiceRequest.location,
+              phoneNumber: b.ServiceRequest.phoneNumber,
+              status: b.ServiceRequest.status,
+              categoryId: b.ServiceRequest.Category?.id ?? null,
+              categoryName: b.ServiceRequest.Category?.name ?? null,
+            }
           : null,
       })),
       total,
@@ -242,7 +288,7 @@ export const StaffRepository = {
     try {
       const booking = await prisma.booking.findFirstOrThrow({
         where: { id: bookingId, staffId },
-        include: BOOKING_INCLUDE
+        include: BOOKING_INCLUDE,
       });
 
       return {
@@ -253,86 +299,95 @@ export const StaffRepository = {
           id: booking.CustomerProfile?.id,
           name: booking.CustomerProfile?.User?.name,
           phone: booking.CustomerProfile?.User?.phone,
-          address: booking.CustomerProfile?.address
+          address: booking.CustomerProfile?.address,
         },
-        serviceRequest: booking.ServiceRequest ? {
-          id: booking.ServiceRequest.id,
-          preferredDate: booking.ServiceRequest.preferredDate,
-          note: booking.ServiceRequest.note,
-          location: booking.ServiceRequest.location,
-          phoneNumber: booking.ServiceRequest.phoneNumber,
-          status: booking.ServiceRequest.status,
-          category: booking.ServiceRequest.Category ? {
-            id: booking.ServiceRequest.Category.id,
-            name: booking.ServiceRequest.Category.name
-          } : undefined
-        } : undefined
+        serviceRequest: booking.ServiceRequest
+          ? {
+              id: booking.ServiceRequest.id,
+              preferredDate: booking.ServiceRequest.preferredDate,
+              note: booking.ServiceRequest.note,
+              location: booking.ServiceRequest.location,
+              phoneNumber: booking.ServiceRequest.phoneNumber,
+              status: booking.ServiceRequest.status,
+              category: booking.ServiceRequest.Category
+                ? {
+                    id: booking.ServiceRequest.Category.id,
+                    name: booking.ServiceRequest.Category.name,
+                  }
+                : undefined,
+            }
+          : undefined,
       };
     } catch (error) {
       throw new AppError(
-        'Failed to get booking detail',
-        [{ message: 'Repo.GetBookingDetailError', path: ['bookingId', 'staffId'] }],
+        "Failed to get booking detail",
+        [
+          {
+            message: "Repo.GetBookingDetailError",
+            path: ["bookingId", "staffId"],
+          },
+        ],
         { bookingId, staffId, error },
-        500
+        500,
       );
     }
   },
 
-async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
-  try {
-    return await prisma.$transaction(async (tx) => {
-      const bookingId = validateBookingConnection(data);
+  async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
+    try {
+      return await prisma.$transaction(async (tx) => {
+        const bookingId = validateBookingConnection(data);
 
-      const existingReport = await tx.inspectionReport.findUnique({
-        where: { bookingId }
+        const existingReport = await tx.inspectionReport.findUnique({
+          where: { bookingId },
+        });
+
+        if (existingReport) {
+          throw new AppError(
+            "Inspection report already exists for this booking",
+            [{ message: "Error.InspectionReportExists", path: ["bookingId"] }],
+            { bookingId },
+            400,
+          );
+        }
+
+        const booking = await tx.booking.findUnique({
+          where: { id: bookingId },
+          include: { ServiceRequest: { select: { id: true } } },
+        });
+
+        if (!booking?.ServiceRequest?.id) {
+          throw new AppError(
+            "Missing ServiceRequest ID for this booking",
+            [{ message: "Error.MissingServiceRequestId", path: ["bookingId"] }],
+            { bookingId },
+            500,
+          );
+        }
+
+        const [report] = await Promise.all([
+          tx.inspectionReport.create({ data }),
+          tx.serviceRequest.update({
+            where: { id: booking.ServiceRequest.id },
+            data: { status: RequestStatus.ESTIMATED },
+          }),
+        ]);
+
+        return report;
       });
+    } catch (error) {
+      console.log(error);
 
-      if (existingReport) {
-        throw new AppError(
-          'Inspection report already exists for this booking',
-          [{ message: 'Error.InspectionReportExists', path: ['bookingId'] }],
-          { bookingId },
-          400
-        );
-      }
+      if (error instanceof AppError) throw error;
 
-      const booking = await tx.booking.findUnique({
-        where: { id: bookingId },
-        include: { ServiceRequest: { select: { id: true } } }
-      });
-
-      if (!booking?.ServiceRequest?.id) {
-        throw new AppError(
-          'Missing ServiceRequest ID for this booking',
-          [{ message: 'Error.MissingServiceRequestId', path: ['bookingId'] }],
-          { bookingId },
-          500
-        );
-      }
-
-      const [report] = await Promise.all([
-        tx.inspectionReport.create({ data }),
-        tx.serviceRequest.update({
-          where: { id: booking.ServiceRequest.id },
-          data: { status: RequestStatus.ESTIMATED }
-        })
-      ]);
-
-      return report;
-    });
-  } catch (error) {
-    console.log(error);
-
-    if (error instanceof AppError) throw error;
-
-    throw new AppError(
-      'Failed to create inspection report',
-      [{ message: 'Error.CreateInspectionReportError', path: ['bookingId'] }],
-      { data, error },
-      500
-    );
-  }
-},
+      throw new AppError(
+        "Failed to create inspection report",
+        [{ message: "Error.CreateInspectionReportError", path: ["bookingId"] }],
+        { data, error },
+        500,
+      );
+    }
+  },
 
   async getReviews(
     staffId: number,
@@ -342,22 +397,25 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
       rating?: number;
       fromDate?: string;
       toDate?: string;
-    }
+    },
   ) {
     try {
-      const { page, limit, skip } = calculatePagination(options?.page, options?.limit);
+      const { page, limit, skip } = calculatePagination(
+        options?.page,
+        options?.limit,
+      );
 
       const where: Prisma.ReviewWhereInput = {
         staffId,
         ...(options?.rating && { rating: options.rating }),
-        ...buildDateFilter(options?.fromDate, options?.toDate)
+        ...buildDateFilter(options?.fromDate, options?.toDate),
       };
 
       const [total, reviews] = await Promise.all([
         prisma.review.count({ where }),
         prisma.review.findMany({
           where,
-          orderBy: { createdAt: 'desc' },
+          orderBy: { createdAt: "desc" },
           skip,
           take: limit,
           select: {
@@ -366,43 +424,46 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
             comment: true,
             createdAt: true,
             CustomerProfile: {
-              select: { User: { select: { name: true } } }
+              select: { User: { select: { name: true } } },
             },
-            Service: { select: SERVICE_SELECT }
-          }
-        })
+            Service: { select: SERVICE_SELECT },
+          },
+        }),
       ]);
 
       const totalPages = Math.ceil(total / limit);
 
       return {
-        reviews: reviews.map(review => ({
+        reviews: reviews.map((review) => ({
           id: review.id,
           rating: review.rating,
           comment: review.comment,
           createdAt: review.createdAt,
           customerName: review.CustomerProfile?.User?.name ?? null,
-          serviceName: review.Service?.name ?? null
+          serviceName: review.Service?.name ?? null,
         })),
         total,
         page,
         limit,
-        totalPages
+        totalPages,
       };
     } catch (error) {
       throw new AppError(
-        'Failed to get staff reviews',
-        [{ message: 'Error.GetReviewsError', path: ['staffId'] }],
+        "Failed to get staff reviews",
+        [{ message: "Error.GetReviewsError", path: ["staffId"] }],
         { staffId, error },
-        500
+        500,
       );
     }
   },
 
-  async countBookings(staffId: number, status?: BookingStatus): Promise<number> {
+  async countBookings(
+    staffId: number,
+    status?: BookingStatus,
+  ): Promise<number> {
     const where: Prisma.BookingWhereInput = {
       staffId,
-      ...(status && { status })
+      ...(status && { status }),
     };
 
     return prisma.booking.count({ where });
@@ -414,7 +475,7 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
         where: { id: inspectionId },
         include: {
           Staff: {
-            include: { User: { select: STAFF_USER_SELECT } }
+            include: { User: { select: STAFF_USER_SELECT } },
           },
           Booking: {
             include: {
@@ -424,12 +485,12 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
                   preferredDate: true,
                   location: true,
                   phoneNumber: true,
-                  Category: { select: { name: true } }
-                }
-              }
-            }
-          }
-        }
+                  Category: { select: { name: true } },
+                },
+              },
+            },
+          },
+        },
       });
 
       if (!report) return null;
@@ -445,7 +506,7 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
         staff: {
           id: report.Staff.id,
           name: report.Staff.User?.name,
-          avatar: report.Staff.User?.avatar
+          avatar: report.Staff.User?.avatar,
         },
         booking: {
           id: report.Booking.id,
@@ -454,38 +515,44 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
           customer: {
             name: report.Booking.CustomerProfile?.User?.name,
             phone: report.Booking.CustomerProfile?.User?.phone,
-            address: report.Booking.CustomerProfile?.address ?? null
+            address: report.Booking.CustomerProfile?.address ?? null,
           },
-          serviceRequest: report.Booking.ServiceRequest ? {
-            preferredDate: report.Booking.ServiceRequest.preferredDate,
-            location: report.Booking.ServiceRequest.location,
-            phoneNumber: report.Booking.ServiceRequest.phoneNumber,
-            categoryName: report.Booking.ServiceRequest.Category?.name ?? null
-          } : undefined
-        }
+          serviceRequest: report.Booking.ServiceRequest
+            ? {
+                preferredDate: report.Booking.ServiceRequest.preferredDate,
+                location: report.Booking.ServiceRequest.location,
+                phoneNumber: report.Booking.ServiceRequest.phoneNumber,
+                categoryName:
+                  report.Booking.ServiceRequest.Category?.name ?? null,
+              }
+            : undefined,
+        },
       };
     } catch (error) {
       throw new AppError(
-        'Failed to get inspection report by id',
-        [{ message: 'Error.GetInspectionReportByIdError', path: ['id'] }],
+        "Failed to get inspection report by id",
+        [{ message: "Error.GetInspectionReportByIdError", path: ["id"] }],
         { inspectionId, error },
-        500
+        500,
       );
     }
   },
 
- async getInspectionReportsByStaff(
+  async getInspectionReportsByStaff(
     staffId: number,
-    options?: { page?: number; limit?: number }
+    options?: { page?: number; limit?: number },
   ) {
     try {
-      const { page, limit, skip } = calculatePagination(options?.page, options?.limit);
+      const { page, limit, skip } = calculatePagination(
+        options?.page,
+        options?.limit,
+      );
 
       const [total, reports] = await Promise.all([
         prisma.inspectionReport.count({ where: { staffId } }),
         prisma.inspectionReport.findMany({
           where: { staffId },
-          orderBy: { createdAt: 'desc' },
+          orderBy: { createdAt: "desc" },
           skip,
           take: limit,
           include: {
@@ -500,23 +567,23 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
                     preferredDate: true,
                     location: true,
                     phoneNumber: true,
-                    Category: { select: { name: true } }
-                  }
-                }
-              }
-            }
-          }
-        })
+                    Category: { select: { name: true } },
+                  },
+                },
+              },
+            },
+          },
+        }),
       ]);
 
       const totalPages = Math.ceil(total / limit);
 
       return {
-        inspectionReports: reports.map(report => ({
+        inspectionReports: reports.map((report) => ({
           id: report.id,
           createdAt: report.createdAt,
           estimatedTime: report.estimatedTime ?? null,
-          note: report.note ?? '',
+          note: report.note ?? "",
           images: report.images ?? [],
           booking: {
             id: report.Booking.id,
@@ -524,73 +591,88 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
             createdAt: report.Booking.createdAt,
             customer: {
               name: report.Booking.CustomerProfile?.User?.name,
-              phone: report.Booking.CustomerProfile?.User?.phone
+              phone: report.Booking.CustomerProfile?.User?.phone,
             },
-            serviceRequest: report.Booking.ServiceRequest ? {
-              preferredDate: report.Booking.ServiceRequest.preferredDate,
-              location: report.Booking.ServiceRequest.location,
-              phoneNumber: report.Booking.ServiceRequest.phoneNumber,
-              categoryName: report.Booking.ServiceRequest.Category?.name
-            } : undefined
-          }
+            serviceRequest: report.Booking.ServiceRequest
+              ? {
+                  preferredDate: report.Booking.ServiceRequest.preferredDate,
+                  location: report.Booking.ServiceRequest.location,
+                  phoneNumber: report.Booking.ServiceRequest.phoneNumber,
+                  categoryName: report.Booking.ServiceRequest.Category?.name,
+                }
+              : undefined,
+          },
         })),
         total,
         page,
         limit,
-        totalPages
+        totalPages,
       };
     } catch (error) {
       throw new AppError(
-        'Failed to fetch inspection reports for staff',
-        [{ message: 'Error.GetInspectionReportsByStaffError', path: ['staffId'] }],
+        "Failed to fetch inspection reports for staff",
+        [
+          {
+            message: "Error.GetInspectionReportsByStaffError",
+            path: ["staffId"],
+          },
+        ],
         { staffId, error },
-        500
+        500,
       );
     }
   },
 
   async updateInspectionReport(
     id: number,
-    data: Partial<Pick<Prisma.InspectionReportUpdateInput, 'note' | 'images' | 'estimatedTime'>>
+    data: Partial<
+      Pick<
+        Prisma.InspectionReportUpdateInput,
+        "note" | "images" | "estimatedTime"
+      >
+    >,
   ) {
     try {
       const report = await prisma.inspectionReport.findUnique({
         where: { id },
-        select: { id: true, createdAt: true }
+        select: { id: true, createdAt: true },
       });
 
       if (!report) {
         throw new AppError(
-          'Inspection report not found',
-          [{ message: 'NotFound', path: ['id'] }],
+          "Inspection report not found",
+          [{ message: "NotFound", path: ["id"] }],
           { id },
-          404
+          404,
         );
       }
 
-      const hoursPassed = calculateHoursDifference(new Date(report.createdAt), new Date());
+      const hoursPassed = calculateHoursDifference(
+        new Date(report.createdAt),
+        new Date(),
+      );
 
       if (hoursPassed > MAX_UPDATE_HOURS) {
         throw new AppError(
           `Inspection report can no longer be updated after ${MAX_UPDATE_HOURS} hours`,
-          [{ message: 'Error.ReportUpdateTooLate', path: ['id'] }],
+          [{ message: "Error.ReportUpdateTooLate", path: ["id"] }],
           { id, hoursPassed },
-          400
+          400,
         );
       }
 
       return await prisma.inspectionReport.update({
         where: { id },
-        data
+        data,
       });
     } catch (error) {
       if (error instanceof AppError) throw error;
 
       throw new AppError(
-        'Failed to update inspection report',
-        [{ message: 'Error.UpdateInspectionReportError', path: ['id'] }],
+        "Failed to update inspection report",
+        [{ message: "Error.UpdateInspectionReportError", path: ["id"] }],
         { id, data, error },
-        500
+        500,
       );
     }
   },
@@ -601,18 +683,24 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
         prisma.booking.count({ where: { staffId } }),
         prisma.workLog.findMany({
           where: { staffId },
-          select: { checkIn: true, checkOut: true }
+          select: { checkIn: true, checkOut: true },
         }),
         prisma.review.aggregate({
           where: { staffId },
           _count: { rating: true },
-          _avg: { rating: true }
-        })
+          _avg: { rating: true },
+        }),
       ]);
 
       const totalHoursWorked = workLogs.reduce((sum, log) => {
         if (log.checkIn && log.checkOut) {
-          return sum + calculateHoursDifference(new Date(log.checkIn), new Date(log.checkOut));
+          return (
+            sum +
+            calculateHoursDifference(
+              new Date(log.checkIn),
+              new Date(log.checkOut),
+            )
+          );
         }
         return sum;
       }, 0);
@@ -622,30 +710,35 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
         totalBookings: bookingsCount,
         totalHoursWorked: Number(totalHoursWorked.toFixed(2)),
         totalReviews: reviewsData._count.rating,
-        averageRating: reviewsData._avg.rating ? Number(reviewsData._avg.rating.toFixed(2)) : null
+        averageRating: reviewsData._avg.rating
+          ? Number(reviewsData._avg.rating.toFixed(2))
+          : null,
       };
     } catch (error) {
       throw new AppError(
-        'Failed to get staff performance',
-        [{ message: 'Error.GetStaffPerformanceError', path: ['staffId'] }],
+        "Failed to get staff performance",
+        [{ message: "Error.GetStaffPerformanceError", path: ["staffId"] }],
         { staffId, error },
-        500
+        500,
       );
     }
   },
 
   async getRecentWorkLogs(
     staffId: number,
-    options?: { page?: number; limit?: number }
+    options?: { page?: number; limit?: number },
   ) {
     try {
-      const { page, limit, skip } = calculatePagination(options?.page, options?.limit);
+      const { page, limit, skip } = calculatePagination(
+        options?.page,
+        options?.limit,
+      );
 
       const [total, logs] = await Promise.all([
         prisma.workLog.count({ where: { staffId } }),
         prisma.workLog.findMany({
           where: { staffId },
-          orderBy: { checkIn: 'desc' },
+          orderBy: { checkIn: "desc" },
           skip,
           take: limit,
           select: {
@@ -658,39 +751,41 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
               select: {
                 id: true,
                 status: true,
-                createdAt: true
-              }
-            }
-          }
-        })
+                createdAt: true,
+              },
+            },
+          },
+        }),
       ]);
 
       const totalPages = Math.ceil(total / limit);
 
       return {
-        workLogs: logs.map(log => ({
+        workLogs: logs.map((log) => ({
           id: log.id,
           checkIn: log.checkIn,
           checkOut: log.checkOut,
           note: log.note,
           createdAt: log.createdAt,
-          booking: log.Booking ? {
-            id: log.Booking.id,
-            status: log.Booking.status,
-            createdAt: log.Booking.createdAt
-          } : undefined
+          booking: log.Booking
+            ? {
+                id: log.Booking.id,
+                status: log.Booking.status,
+                createdAt: log.Booking.createdAt,
+              }
+            : undefined,
         })),
         total,
         page,
         limit,
-        totalPages
+        totalPages,
       };
     } catch (error) {
       throw new AppError(
-        'Failed to fetch recent work logs',
-        [{ message: 'Error.GetRecentWorkLogsError', path: ['staffId'] }],
+        "Failed to fetch recent work logs",
+        [{ message: "Error.GetRecentWorkLogsError", path: ["staffId"] }],
         { staffId, error },
-        500
+        500,
       );
     }
   },
@@ -698,24 +793,27 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
   async getReviewSummary(staffId: number) {
     try {
       const reviewCounts = await prisma.review.groupBy({
-        by: ['rating'],
+        by: ["rating"],
         where: { staffId },
-        _count: { rating: true }
+        _count: { rating: true },
       });
 
-      const summary = [1, 2, 3, 4, 5].reduce((acc, star) => {
-        const found = reviewCounts.find(r => r.rating === star);
-        acc[star] = found?._count.rating ?? 0;
-        return acc;
-      }, {} as Record<number, number>);
+      const summary = [1, 2, 3, 4, 5].reduce(
+        (acc, star) => {
+          const found = reviewCounts.find((r) => r.rating === star);
+          acc[star] = found?._count.rating ?? 0;
+          return acc;
+        },
+        {} as Record<number, number>,
+      );
 
       return summary;
     } catch (error) {
       throw new AppError(
-        'Failed to summarize reviews',
-        [{ message: 'Error.GetReviewSummaryError', path: ['staffId'] }],
+        "Failed to summarize reviews",
+        [{ message: "Error.GetReviewSummaryError", path: ["staffId"] }],
         { staffId, error },
-        500
+        500,
       );
     }
   },
@@ -726,39 +824,54 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
         const booking = await tx.booking.findUnique({
           where: { id: bookingId },
           include: {
-            ServiceRequest: { select: { id: true, preferredDate: true, status: true } }
-          }
+            ServiceRequest: {
+              select: { id: true, preferredDate: true, status: true },
+            },
+          },
         });
 
         if (!booking) {
           throw new AppError(
-            'Booking not found',
-            [{ message: 'Error.BookingNotFound', path: ['bookingId'] }],
+            "Booking not found",
+            [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
             { bookingId },
-            404
+            404,
           );
         }
 
-        if (booking.ServiceRequest?.status && ([RequestStatus.ESTIMATED, RequestStatus.CANCELLED] as RequestStatus[]).includes(booking.ServiceRequest.status)) {
+        if (
+          booking.ServiceRequest?.status &&
+          (
+            [
+              RequestStatus.ESTIMATED,
+              RequestStatus.CANCELLED,
+            ] as RequestStatus[]
+          ).includes(booking.ServiceRequest.status)
+        ) {
           throw new AppError(
-            'Cannot check in to a completed or canceled booking',
-            [{ message: 'Error.InvalidBookingStatusForCheckIn', path: ['bookingId'] }],
+            "Cannot check in to a completed or canceled booking",
+            [
+              {
+                message: "Error.InvalidBookingStatusForCheckIn",
+                path: ["bookingId"],
+              },
+            ],
             { bookingId, status: booking.ServiceRequest.status },
-            400
+            400,
           );
         }
 
         const existingLog = await tx.workLog.findFirst({
           where: { bookingId, staffId },
-          select: { id: true }
+          select: { id: true },
         });
 
         if (existingLog) {
           throw new AppError(
-            'Staff already checked in for this booking',
-            [{ message: 'Error.AlreadyCheckedIn', path: ['bookingId'] }],
+            "Staff already checked in for this booking",
+            [{ message: "Error.AlreadyCheckedIn", path: ["bookingId"] }],
             { bookingId, staffId },
-            400
+            400,
           );
         }
 
@@ -766,23 +879,31 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
         const preferredDate = booking.ServiceRequest?.preferredDate;
 
         if (preferredDate) {
-          const daysDiff = calculateDaysDifference(now, new Date(preferredDate));
+          const daysDiff = calculateDaysDifference(
+            now,
+            new Date(preferredDate),
+          );
           if (daysDiff > MAX_DATE_DIFF_DAYS) {
             throw new AppError(
-              'Cannot check in far from preferred date',
-              [{ message: 'Error.DateMismatchPreferredDate', path: ['bookingId'] }],
+              "Cannot check in far from preferred date",
+              [
+                {
+                  message: "Error.DateMismatchPreferredDate",
+                  path: ["bookingId"],
+                },
+              ],
               { bookingId, preferredDate, today: now },
-              400
+              400,
             );
           }
         }
 
         if (!booking.ServiceRequest?.id) {
           throw new AppError(
-            'Missing ServiceRequest ID',
-            [{ message: 'Error.MissingServiceRequestId', path: ['bookingId'] }],
+            "Missing ServiceRequest ID",
+            [{ message: "Error.MissingServiceRequestId", path: ["bookingId"] }],
             { bookingId },
-            500
+            500,
           );
         }
 
@@ -792,13 +913,13 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
               Staff: { connect: { id: staffId } },
               Booking: { connect: { id: bookingId } },
               checkIn: now,
-              updatedAt: now
-            }
+              updatedAt: now,
+            },
           }),
           tx.serviceRequest.update({
             where: { id: booking.ServiceRequest.id },
-            data: { status: RequestStatus.IN_PROGRESS }
-          })
+            data: { status: RequestStatus.IN_PROGRESS },
+          }),
         ]);
 
         return workLog;
@@ -807,10 +928,10 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
       if (error instanceof AppError) throw error;
 
       throw new AppError(
-        'Failed to create work log and update service request status',
-        [{ message: 'Error.CreateWorkLogError', path: ['bookingId'] }],
+        "Failed to create work log and update service request status",
+        [{ message: "Error.CreateWorkLogError", path: ["bookingId"] }],
         { bookingId, staffId, error },
-        500
+        500,
       );
     }
   },
@@ -819,33 +940,33 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
     return await prisma.$transaction(async (tx) => {
       const log = await tx.workLog.findFirst({
         where: { bookingId },
-        select: { id: true, checkIn: true, checkOut: true }
+        select: { id: true, checkIn: true, checkOut: true },
       });
 
       if (!log) {
         throw new AppError(
-          'Work log not found',
-          [{ message: 'NotFound', path: ['bookingId'] }],
+          "Work log not found",
+          [{ message: "NotFound", path: ["bookingId"] }],
           { bookingId },
-          404
+          404,
         );
       }
 
       if (log.checkOut) {
         throw new AppError(
-          'Already checked out',
-          [{ message: 'Error.AlreadyCheckedOut', path: ['bookingId'] }],
+          "Already checked out",
+          [{ message: "Error.AlreadyCheckedOut", path: ["bookingId"] }],
           { bookingId },
-          400
+          400,
         );
       }
 
       if (!log.checkIn) {
         throw new AppError(
-          'Check-in time is missing',
-          [{ message: 'Error.MissingCheckIn', path: ['bookingId'] }],
+          "Check-in time is missing",
+          [{ message: "Error.MissingCheckIn", path: ["bookingId"] }],
           { bookingId },
-          400
+          400,
         );
       }
 
@@ -854,28 +975,28 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
 
       if (hoursPassed > MAX_CHECKOUT_HOURS) {
         throw new AppError(
-          'Check-out expired',
-          [{ message: 'Error.CheckOutTooLate', path: ['bookingId'] }],
+          "Check-out expired",
+          [{ message: "Error.CheckOutTooLate", path: ["bookingId"] }],
           { bookingId, hoursPassed },
-          400
+          400,
         );
       }
 
       await Promise.all([
         tx.workLog.update({
           where: { id: log.id },
-          data: { checkOut: now, updatedAt: now }
+          data: { checkOut: now, updatedAt: now },
         }),
         tx.booking.update({
           where: { id: bookingId },
-          data: { status: BookingStatus.COMPLETED }
-        })
+          data: { status: BookingStatus.COMPLETED },
+        }),
       ]);
 
       return {
-        message: 'Check-out successful',
+        message: "Check-out successful",
         bookingId,
-        updatedAt: now
+        updatedAt: now,
       };
     });
   },
@@ -893,23 +1014,23 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
           staffId,
           createdAt: {
             gte: targetDate,
-            lt: nextDay
-          }
+            lt: nextDay,
+          },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         skip,
         take: limit,
-        include: BOOKING_INCLUDE
+        include: BOOKING_INCLUDE,
       }),
       prisma.booking.count({
         where: {
           staffId,
           createdAt: {
             gte: targetDate,
-            lt: nextDay
-          }
-        }
-      })
+            lt: nextDay,
+          },
+        },
+      }),
     ]);
 
     const totalPages = Math.ceil(total / limit);
@@ -919,7 +1040,7 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
       total,
       page,
       limit,
-      totalPages
+      totalPages,
     };
   },
 
@@ -932,16 +1053,16 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
         where: {
           staffId,
           status: BookingStatus.COMPLETED,
-          createdAt: { gte: fromDate, lt: toDate }
-        }
+          createdAt: { gte: fromDate, lt: toDate },
+        },
       }),
       prisma.workLog.findMany({
         where: {
           staffId,
-          checkIn: { gte: fromDate, lt: toDate }
+          checkIn: { gte: fromDate, lt: toDate },
         },
-        select: { checkIn: true, checkOut: true }
-      })
+        select: { checkIn: true, checkOut: true },
+      }),
     ]);
 
     let totalHoursWorked = 0;
@@ -956,7 +1077,7 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
 
         totalHoursWorked += calculateHoursDifference(startTime, endTime);
 
-        const dateKey = startTime.toISOString().split('T')[0];
+        const dateKey = startTime.toISOString().split("T")[0];
         workDates.add(dateKey);
 
         if (!firstCheckIn || startTime < firstCheckIn) firstCheckIn = startTime;
@@ -965,9 +1086,10 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
     }
 
     const totalWorkLogs = workLogs.length;
-    const averageHoursPerLog = totalWorkLogs > 0
-      ? Number((totalHoursWorked / totalWorkLogs).toFixed(2))
-      : 0;
+    const averageHoursPerLog =
+      totalWorkLogs > 0
+        ? Number((totalHoursWorked / totalWorkLogs).toFixed(2))
+        : 0;
 
     return {
       month,
@@ -978,51 +1100,54 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
       averageHoursPerLog,
       workDays: workDates.size,
       firstCheckIn,
-      lastCheckOut
+      lastCheckOut,
     };
   },
 
-    async getAllInspectionReports(
+  async getAllInspectionReports(
     staffId: number,
-    options?: { page?: number; limit?: number }
+    options?: { page?: number; limit?: number },
   ) {
     try {
-      const { page, limit, skip } = calculatePagination(options?.page, options?.limit);
+      const { page, limit, skip } = calculatePagination(
+        options?.page,
+        options?.limit,
+      );
 
       const [total, reports] = await Promise.all([
         prisma.inspectionReport.count({ where: { staffId } }),
         prisma.inspectionReport.findMany({
           where: { staffId },
-          orderBy: { createdAt: 'desc' },
+          orderBy: { createdAt: "desc" },
           skip,
           take: limit,
           include: {
             Staff: {
-              include: { User: { select: { name: true, avatar: true } } }
+              include: { User: { select: { name: true, avatar: true } } },
             },
             Booking: {
               include: {
                 CustomerProfile: {
-                  include: { User: { select: { name: true, phone: true } } }
+                  include: { User: { select: { name: true, phone: true } } },
                 },
                 ServiceRequest: {
                   select: {
                     preferredDate: true,
                     location: true,
                     phoneNumber: true,
-                    Category: { select: { name: true } }
-                  }
-                }
-              }
-            }
-          }
-        })
+                    Category: { select: { name: true } },
+                  },
+                },
+              },
+            },
+          },
+        }),
       ]);
 
       const totalPages = Math.ceil(total / limit);
 
       return {
-        inspectionReports: reports.map(report => ({
+        inspectionReports: reports.map((report) => ({
           id: report.id,
           bookingId: report.bookingId,
           staffId: report.staffId,
@@ -1033,7 +1158,7 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
           staff: {
             id: report.Staff.id,
             name: report.Staff.User?.name,
-            avatar: report.Staff.User?.avatar
+            avatar: report.Staff.User?.avatar,
           },
           booking: {
             id: report.Booking.id,
@@ -1042,104 +1167,107 @@ async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
             customer: {
               name: report.Booking.CustomerProfile?.User?.name,
               phone: report.Booking.CustomerProfile?.User?.phone,
-              address: report.Booking.CustomerProfile?.address ?? null
+              address: report.Booking.CustomerProfile?.address ?? null,
             },
-            serviceRequest: report.Booking.ServiceRequest ? {
-              preferredDate: report.Booking.ServiceRequest.preferredDate,
-              location: report.Booking.ServiceRequest.location,
-              phoneNumber: report.Booking.ServiceRequest.phoneNumber,
-              categoryName: report.Booking.ServiceRequest.Category?.name ?? null
-            } : undefined
-          }
+            serviceRequest: report.Booking.ServiceRequest
+              ? {
+                  preferredDate: report.Booking.ServiceRequest.preferredDate,
+                  location: report.Booking.ServiceRequest.location,
+                  phoneNumber: report.Booking.ServiceRequest.phoneNumber,
+                  categoryName:
+                    report.Booking.ServiceRequest.Category?.name ?? null,
+                }
+              : undefined,
+          },
         })),
         total,
         page,
         limit,
-        totalPages
+        totalPages,
       };
     } catch (error) {
       throw new AppError(
-        'Failed to fetch all inspection reports',
-        [{ message: 'Error.GetAllInspectionReportsError', path: [] }],
+        "Failed to fetch all inspection reports",
+        [{ message: "Error.GetAllInspectionReportsError", path: [] }],
         { error },
-        500
+        500,
       );
     }
   },
 
-  async  getProposalByBookingId(staffId: number, bookingId: number) {
-  try {
-    const booking = await prisma.booking.findUnique({
-      where: { id: bookingId },
-      select: {
-        id: true,
-        staffId: true,
-        Proposal: {
-          include: {
-            ProposalItem: {
-              include: {
-                Service: {
-                  select: {
-                    id: true,
-                    name: true,
-                    basePrice: true,
-                    durationMinutes: true
-                  }
-                }
-              }
-            }
-          }
-        }
+  async getProposalByBookingId(staffId: number, bookingId: number) {
+    try {
+      const booking = await prisma.booking.findUnique({
+        where: { id: bookingId },
+        select: {
+          id: true,
+          staffId: true,
+          Proposal: {
+            include: {
+              ProposalItem: {
+                include: {
+                  Service: {
+                    select: {
+                      id: true,
+                      name: true,
+                      basePrice: true,
+                      durationMinutes: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!booking) {
+        throw new AppError(
+          "Booking not found",
+          [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
+          { bookingId },
+          404,
+        );
       }
-    });
 
-    if (!booking) {
+      if (booking.staffId !== staffId) {
+        throw new AppError(
+          "Access denied: Staff does not own this booking",
+          [{ message: "Error.UnauthorizedAccess", path: ["staffId"] }],
+          { staffId, bookingStaffId: booking.staffId },
+          403,
+        );
+      }
+
+      if (!booking.Proposal) {
+        throw new AppError(
+          "No proposal found for this booking",
+          [{ message: "Error.NoProposalFound", path: ["bookingId"] }],
+          { bookingId },
+          404,
+        );
+      }
+
+      return {
+        id: booking.Proposal.id,
+        status: booking.Proposal.status,
+        notes: booking.Proposal.notes ?? "",
+        createdAt: booking.Proposal.createdAt,
+        items: booking.Proposal.ProposalItem.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+          service: item.Service,
+        })),
+      };
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+
       throw new AppError(
-        'Booking not found',
-        [{ message: 'Error.BookingNotFound', path: ['bookingId'] }],
-        { bookingId },
-        404
+        "Failed to fetch proposal by booking ID",
+        [{ message: "Error.GetProposalByBookingError", path: ["bookingId"] }],
+        { staffId, bookingId, error },
+        500,
       );
     }
-
-    if (booking.staffId !== staffId) {
-      throw new AppError(
-        'Access denied: Staff does not own this booking',
-        [{ message: 'Error.UnauthorizedAccess', path: ['staffId'] }],
-        { staffId, bookingStaffId: booking.staffId },
-        403
-      );
-    }
-
-    if (!booking.Proposal) {
-      throw new AppError(
-        'No proposal found for this booking',
-        [{ message: 'Error.NoProposalFound', path: ['bookingId'] }],
-        { bookingId },
-        404
-      );
-    }
-
-    return {
-      id: booking.Proposal.id,
-      status: booking.Proposal.status,
-      notes: booking.Proposal.notes ?? '',
-      createdAt: booking.Proposal.createdAt,
-      items: booking.Proposal.ProposalItem.map(item => ({
-        id: item.id,
-        quantity: item.quantity,
-        service: item.Service
-      }))
-    };
-  } catch (error) {
-    if (error instanceof AppError) throw error;
-
-    throw new AppError(
-      'Failed to fetch proposal by booking ID',
-      [{ message: 'Error.GetProposalByBookingError', path: ['bookingId'] }],
-      { staffId, bookingId, error },
-      500
-    );
-  }
-}
-}
+  },
+};
