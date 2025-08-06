@@ -195,21 +195,60 @@ async function handleGetReviewSummary(data: any): Promise<HandlerResult> {
 async function handleCreateWorkLog(data: any): Promise<HandlerResult> {
   validateId(data?.staffId, "staffId");
   validateId(data?.bookingId, "bookingId");
+
+  // Validate optional check-in images
+  if (
+    data?.imageUrls &&
+    (!Array.isArray(data.imageUrls) || !data.imageUrls.every((url: string) => typeof url === "string"))
+  ) {
+    throw new AppError(
+      "Invalid check-in image URLs",
+      [{ message: "Error.InvalidCheckInImages", path: ["imageUrls"] }],
+      { imageUrls: data?.imageUrls as string[] },
+      400,
+    );
+  }
+
   const result = await StaffService.createWorkLogWithStatusUpdate(
     data.staffId,
     data.bookingId,
+    data.imageUrls ?? [],
   );
+
   return {
     message: "Work log created and booking updated successfully",
     data: result,
   };
 }
 
+
 async function handleCheckOut(data: any): Promise<HandlerResult> {
   validateId(data?.bookingId, "bookingId");
-  const result = await StaffService.checkOutWorkLog(data.bookingId);
-  return { message: "Staff checked out successfully", data: result };
+
+  // Validate optional check-out images
+  if (
+    data?.imageUrls &&
+    (!Array.isArray(data.imageUrls) || !data.imageUrls.every((url: string) => typeof url === "string"))
+  ) {
+    throw new AppError(
+      "Invalid check-out image URLs",
+      [{ message: "Error.InvalidCheckOutImages", path: ["imageUrls"] }],
+      { imageUrls: data?.imageUrls as string[] },
+      400,
+    );
+  }
+
+  const result = await StaffService.checkOutWorkLog(
+    data.bookingId,
+    data.imageUrls ?? [],
+  );
+
+  return {
+    message: "Staff checked out successfully",
+    data: result,
+  };
 }
+
 
 async function handleGetBookingsByDate(data: any): Promise<HandlerResult> {
   const parsed = parseWithSchema(GetBookingsByDateSchema, data);

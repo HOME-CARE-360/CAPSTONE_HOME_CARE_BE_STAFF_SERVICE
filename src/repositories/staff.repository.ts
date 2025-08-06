@@ -818,188 +818,200 @@ export const StaffRepository = {
     }
   },
 
-  async createWorkLogWithStatusUpdate(staffId: number, bookingId: number) {
-    try {
-      return await prisma.$transaction(async (tx) => {
-        const booking = await tx.booking.findUnique({
-          where: { id: bookingId },
-          include: {
-            ServiceRequest: {
-              select: { id: true, preferredDate: true, status: true },
-            },
-          },
-        });
-
-        if (!booking) {
-          throw new AppError(
-            "Booking not found",
-            [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
-            { bookingId },
-            404,
-          );
-        }
-
-        if (
-          booking.ServiceRequest?.status &&
-          (
-            [
-              RequestStatus.ESTIMATED,
-              RequestStatus.CANCELLED,
-            ] as RequestStatus[]
-          ).includes(booking.ServiceRequest.status)
-        ) {
-          throw new AppError(
-            "Cannot check in to a completed or canceled booking",
-            [
-              {
-                message: "Error.InvalidBookingStatusForCheckIn",
-                path: ["bookingId"],
-              },
-            ],
-            { bookingId, status: booking.ServiceRequest.status },
-            400,
-          );
-        }
-
-        const existingLog = await tx.workLog.findFirst({
-          where: { bookingId, staffId },
-          select: { id: true },
-        });
-
-        if (existingLog) {
-          throw new AppError(
-            "Staff already checked in for this booking",
-            [{ message: "Error.AlreadyCheckedIn", path: ["bookingId"] }],
-            { bookingId, staffId },
-            400,
-          );
-        }
-
-        const now = new Date();
-        const preferredDate = booking.ServiceRequest?.preferredDate;
-
-        if (preferredDate) {
-          const daysDiff = calculateDaysDifference(
-            now,
-            new Date(preferredDate),
-          );
-          if (daysDiff > MAX_DATE_DIFF_DAYS) {
-            throw new AppError(
-              "Cannot check in far from preferred date",
-              [
-                {
-                  message: "Error.DateMismatchPreferredDate",
-                  path: ["bookingId"],
-                },
-              ],
-              { bookingId, preferredDate, today: now },
-              400,
-            );
-          }
-        }
-
-        if (!booking.ServiceRequest?.id) {
-          throw new AppError(
-            "Missing ServiceRequest ID",
-            [{ message: "Error.MissingServiceRequestId", path: ["bookingId"] }],
-            { bookingId },
-            500,
-          );
-        }
-
-        const [workLog] = await Promise.all([
-          tx.workLog.create({
-            data: {
-              Staff: { connect: { id: staffId } },
-              Booking: { connect: { id: bookingId } },
-              checkIn: now,
-              updatedAt: now,
-            },
-          }),
-          tx.serviceRequest.update({
-            where: { id: booking.ServiceRequest.id },
-            data: { status: RequestStatus.IN_PROGRESS },
-          }),
-        ]);
-
-        return workLog;
-      });
-    } catch (error) {
-      if (error instanceof AppError) throw error;
-
-      throw new AppError(
-        "Failed to create work log and update service request status",
-        [{ message: "Error.CreateWorkLogError", path: ["bookingId"] }],
-        { bookingId, staffId, error },
-        500,
-      );
-    }
-  },
-
-  async checkOutWorkLogByBookingId(bookingId: number) {
+async createWorkLogWithStatusUpdate(
+  staffId: number,
+  bookingId: number,
+  imageUrls: string[] = [],
+) {
+  try {
     return await prisma.$transaction(async (tx) => {
-      const log = await tx.workLog.findFirst({
-        where: { bookingId },
-        select: { id: true, checkIn: true, checkOut: true },
+      const booking = await tx.booking.findUnique({
+        where: { id: bookingId },
+        include: {
+          ServiceRequest: {
+            select: { id: true, preferredDate: true, status: true },
+          },
+        },
       });
 
-      if (!log) {
+      if (!booking) {
         throw new AppError(
-          "Work log not found",
-          [{ message: "NotFound", path: ["bookingId"] }],
+          "Booking not found",
+          [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
           { bookingId },
           404,
         );
       }
 
-      if (log.checkOut) {
+      const serviceRequest = booking.ServiceRequest;
+
+      if (
+        serviceRequest?.status &&
+        [RequestStatus.ESTIMATED, RequestStatus.CANCELLED].includes(
+          serviceRequest.status as "CANCELLED" | "ESTIMATED",
+        )
+      ) {
         throw new AppError(
-          "Already checked out",
-          [{ message: "Error.AlreadyCheckedOut", path: ["bookingId"] }],
-          { bookingId },
+          "Cannot check in to a completed or canceled booking",
+          [
+            {
+              message: "Error.InvalidBookingStatusForCheckIn",
+              path: ["bookingId"],
+            },
+          ],
+          { bookingId, status: serviceRequest.status },
           400,
         );
       }
 
-      if (!log.checkIn) {
+      const existingLog = await tx.workLog.findFirst({
+        where: { bookingId, staffId },
+        select: { id: true },
+      });
+
+      if (existingLog) {
         throw new AppError(
-          "Check-in time is missing",
-          [{ message: "Error.MissingCheckIn", path: ["bookingId"] }],
-          { bookingId },
+          "Staff already checked in for this booking",
+          [{ message: "Error.AlreadyCheckedIn", path: ["bookingId"] }],
+          { bookingId, staffId },
           400,
         );
       }
 
       const now = new Date();
-      const hoursPassed = calculateHoursDifference(new Date(log.checkIn), now);
+      const preferredDate = serviceRequest?.preferredDate;
 
-      if (hoursPassed > MAX_CHECKOUT_HOURS) {
+      if (preferredDate) {
+        const daysDiff = calculateDaysDifference(now, new Date(preferredDate));
+        if (daysDiff > MAX_DATE_DIFF_DAYS) {
+          throw new AppError(
+            "Cannot check in far from preferred date",
+            [
+              {
+                message: "Error.DateMismatchPreferredDate",
+                path: ["bookingId"],
+              },
+            ],
+            { bookingId, preferredDate, today: now },
+            400,
+          );
+        }
+      }
+
+      if (!serviceRequest?.id) {
         throw new AppError(
-          "Check-out expired",
-          [{ message: "Error.CheckOutTooLate", path: ["bookingId"] }],
-          { bookingId, hoursPassed },
-          400,
+          "Missing ServiceRequest ID",
+          [{ message: "Error.MissingServiceRequestId", path: ["bookingId"] }],
+          { bookingId },
+          500,
         );
       }
 
-      await Promise.all([
-        tx.workLog.update({
-          where: { id: log.id },
-          data: { checkOut: now, updatedAt: now },
+      const [workLog] = await Promise.all([
+        tx.workLog.create({
+          data: {
+            staffId,
+            bookingId,
+            checkIn: now,
+            checkInImages: imageUrls,
+            updatedAt: now,
+          },
         }),
-        tx.booking.update({
-          where: { id: bookingId },
-          data: { status: BookingStatus.COMPLETED },
+        tx.serviceRequest.update({
+          where: { id: serviceRequest.id },
+          data: { status: RequestStatus.IN_PROGRESS },
         }),
       ]);
 
       return {
-        message: "Check-out successful",
+        message: "Check-in successful",
+        workLogId: workLog.id,
         bookingId,
-        updatedAt: now,
+        checkInTime: now,
+        imageCount: imageUrls.length,
       };
     });
-  },
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+
+    throw new AppError(
+      "Failed to create work log and update service request status",
+      [{ message: "Error.CreateWorkLogError", path: ["bookingId"] }],
+      { bookingId, staffId, error },
+      500,
+    );
+  }
+},
+
+async checkOutWorkLogByBookingId(bookingId: number, imageUrls: string[] = []) {
+  return await prisma.$transaction(async (tx) => {
+    const log = await tx.workLog.findFirst({
+      where: { bookingId },
+      select: { id: true, checkIn: true, checkOut: true },
+    });
+
+    if (!log) {
+      throw new AppError(
+        "Work log not found",
+        [{ message: "NotFound", path: ["bookingId"] }],
+        { bookingId },
+        404,
+      );
+    }
+
+    if (log.checkOut) {
+      throw new AppError(
+        "Already checked out",
+        [{ message: "Error.AlreadyCheckedOut", path: ["bookingId"] }],
+        { bookingId },
+        400,
+      );
+    }
+
+    if (!log.checkIn) {
+      throw new AppError(
+        "Check-in time is missing",
+        [{ message: "Error.MissingCheckIn", path: ["bookingId"] }],
+        { bookingId },
+        400,
+      );
+    }
+
+    const now = new Date();
+    const hoursPassed = calculateHoursDifference(new Date(log.checkIn), now);
+
+    if (hoursPassed > MAX_CHECKOUT_HOURS) {
+      throw new AppError(
+        "Check-out expired",
+        [{ message: "Error.CheckOutTooLate", path: ["bookingId"] }],
+        { bookingId, hoursPassed },
+        400,
+      );
+    }
+
+    await Promise.all([
+      tx.workLog.update({
+        where: { id: log.id },
+        data: {
+          checkOut: now,
+          updatedAt: now,
+          checkOutImages: imageUrls,
+        },
+      }),
+      tx.booking.update({
+        where: { id: bookingId },
+        data: { status: BookingStatus.COMPLETED },
+      }),
+    ]);
+
+    return {
+      message: "Check-out successful",
+      bookingId,
+      checkOutTime: now,
+      imageCount: imageUrls.length,
+    };
+  });
+},
 
   async getBookingsByDate(staffId: number, date: string, page = 1, limit = 10) {
     const targetDate = new Date(date);

@@ -273,42 +273,67 @@ export const StaffService = {
    * @param bookingId - Booking identifier
    * @returns Work log creation result
    */
-  async createWorkLogWithStatusUpdate(staffId: number, bookingId: number) {
-    // Validate required parameters
-    if (!staffId || !bookingId) {
-      throw new AppError(
-        "Missing required parameters",
-        [
-          {
-            message: "Error.MissingParameters",
-            path: ["staffId", "bookingId"],
-          },
-        ],
-        { staffId, bookingId },
-        400,
-      );
-    }
+async createWorkLogWithStatusUpdate(
+  staffId: number,
+  bookingId: number,
+  imageUrls: string[] = [],
+) {
+  if (
+    typeof staffId !== 'number' || staffId <= 0 ||
+    typeof bookingId !== 'number' || bookingId <= 0
+  ) {
+    throw new AppError(
+      "Invalid or missing required parameters",
+      [
+        {
+          message: "Error.InvalidParameters",
+          path: ["staffId", "bookingId"],
+        },
+      ],
+      { staffId, bookingId },
+      400,
+    );
+  }
 
-    return StaffRepository.createWorkLogWithStatusUpdate(staffId, bookingId);
-  },
+  // Optionally validate imageUrls here
+  if (!Array.isArray(imageUrls) || !imageUrls.every(url => typeof url === 'string')) {
+    throw new AppError(
+      "Invalid imageUrls",
+      [{ message: "Error.InvalidImageUrls", path: ["imageUrls"] }],
+      { imageUrls },
+      400,
+    );
+  }
+
+  return StaffRepository.createWorkLogWithStatusUpdate(staffId, bookingId, imageUrls);
+},
 
   /**
    * Checks out work log for a booking
    * @param bookingId - Booking identifier
    * @returns Check-out result
    */
-  async checkOutWorkLog(bookingId: number) {
-    if (!bookingId || bookingId <= 0) {
-      throw new AppError(
-        "Invalid booking ID",
-        [{ message: "Error.InvalidBookingId", path: ["bookingId"] }],
-        { bookingId },
-        400,
-      );
-    }
+ async checkOutWorkLog(bookingId: number, imageUrls: string[] = []) {
+  if (typeof bookingId !== 'number' || bookingId <= 0) {
+    throw new AppError(
+      "Invalid booking ID",
+      [{ message: "Error.InvalidBookingId", path: ["bookingId"] }],
+      { bookingId },
+      400,
+    );
+  }
 
-    return StaffRepository.checkOutWorkLogByBookingId(bookingId);
-  },
+  if (!Array.isArray(imageUrls) || !imageUrls.every(url => typeof url === 'string')) {
+    throw new AppError(
+      "Invalid check-out images",
+      [{ message: "Error.InvalidImageUrls", path: ["imageUrls"] }],
+      { imageUrls },
+      400,
+    );
+  }
+
+  return StaffRepository.checkOutWorkLogByBookingId(bookingId, imageUrls);
+},
 
   /**
    * Retrieves bookings for a specific date with pagination
