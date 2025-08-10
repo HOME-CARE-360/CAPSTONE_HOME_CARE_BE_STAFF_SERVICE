@@ -4,6 +4,7 @@ import {
   BookingStatus,
   InspectionStatus,
   RequestStatus,
+  ProposalStatus,
 } from "../generated/prisma";
 import { AppError } from "../handlers/error";
 
@@ -945,10 +946,37 @@ async createWorkLogWithStatusUpdate(
 
 async checkOutWorkLogByBookingId(bookingId: number, imageUrls: string[] = []) {
   return await prisma.$transaction(async (tx) => {
-    const log = await tx.workLog.findFirst({
-      where: { bookingId },
-      select: { id: true, checkIn: true, checkOut: true },
+    const booking = await tx.booking.findUnique({
+      where: { id: bookingId },
+      select: {
+        id: true,
+        status: true,
+        WorkLog: {
+          select: {
+            id: true,
+            checkIn: true,
+            checkOut: true,
+          },
+        },
+        Proposal: {
+          select: {
+            status: true,
+          },
+        },
+      },
     });
+
+    if (!booking) {
+      throw new AppError(
+        "Booking not found",
+        [{ message: "NotFound", path: ["bookingId"] }],
+        { bookingId },
+        404,
+      );
+    }
+
+    const log = booking.WorkLog[0];
+    const proposal = booking.Proposal;
 
     if (!log) {
       throw new AppError(
@@ -956,6 +984,15 @@ async checkOutWorkLogByBookingId(bookingId: number, imageUrls: string[] = []) {
         [{ message: "NotFound", path: ["bookingId"] }],
         { bookingId },
         404,
+      );
+    }
+
+    if (!proposal || proposal.status !== ProposalStatus.ACCEPTED) {
+      throw new AppError(
+        "Proposal must be accepted before checking out",
+        [{ message: "Error.ProposalNotAccepted", path: ["bookingId"] }],
+        { bookingId, proposalStatus: proposal?.status },
+        400,
       );
     }
 

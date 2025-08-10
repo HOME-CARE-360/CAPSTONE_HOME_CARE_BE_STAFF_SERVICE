@@ -129,7 +129,8 @@ exports.Prisma.BookingScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   staffId: 'staffId',
-  serviceRequestId: 'serviceRequestId'
+  serviceRequestId: 'serviceRequestId',
+  completedAt: 'completedAt'
 };
 
 exports.Prisma.CategoryScalarFieldEnum = {
@@ -532,6 +533,17 @@ exports.Prisma.ProviderReportScalarFieldEnum = {
   note: 'note'
 };
 
+exports.Prisma.Suggested_services_configScalarFieldEnum = {
+  id: 'id',
+  category_id: 'category_id',
+  display_name: 'display_name',
+  suggested_interval_months: 'suggested_interval_months',
+  notification_template: 'notification_template',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -549,6 +561,7 @@ exports.Prisma.QueryMode = {
 exports.BookingStatus = exports.$Enums.BookingStatus = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
+  IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
 };
@@ -703,7 +716,8 @@ exports.Prisma.ModelName = {
   Conversation: 'Conversation',
   FavoriteService: 'FavoriteService',
   Message: 'Message',
-  ProviderReport: 'ProviderReport'
+  ProviderReport: 'ProviderReport',
+  suggested_services_config: 'suggested_services_config'
 };
 
 /**

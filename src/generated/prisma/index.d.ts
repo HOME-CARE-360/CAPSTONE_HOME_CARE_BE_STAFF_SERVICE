@@ -193,6 +193,11 @@ export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
  * 
  */
 export type ProviderReport = $Result.DefaultSelection<Prisma.$ProviderReportPayload>
+/**
+ * Model suggested_services_config
+ * 
+ */
+export type suggested_services_config = $Result.DefaultSelection<Prisma.$suggested_services_configPayload>
 
 /**
  * Enums
@@ -201,6 +206,7 @@ export namespace $Enums {
   export const BookingStatus: {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
+  IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
 };
@@ -965,6 +971,16 @@ export class PrismaClient<
     * ```
     */
   get providerReport(): Prisma.ProviderReportDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.suggested_services_config`: Exposes CRUD operations for the **suggested_services_config** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Suggested_services_configs
+    * const suggested_services_configs = await prisma.suggested_services_config.findMany()
+    * ```
+    */
+  get suggested_services_config(): Prisma.suggested_services_configDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1440,7 +1456,8 @@ export namespace Prisma {
     Conversation: 'Conversation',
     FavoriteService: 'FavoriteService',
     Message: 'Message',
-    ProviderReport: 'ProviderReport'
+    ProviderReport: 'ProviderReport',
+    suggested_services_config: 'suggested_services_config'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1459,7 +1476,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "booking" | "category" | "categoryTranslation" | "chatMessage" | "customerProfile" | "device" | "notification" | "packageRecommendation" | "paymentTransaction" | "permission" | "recurringBooking" | "refreshToken" | "review" | "rewardPoint" | "role" | "service" | "serviceProvider" | "serviceProviderTranslation" | "staff" | "staffCategory" | "transaction" | "user" | "verificationCode" | "workLog" | "inspectionReport" | "serviceItem" | "serviceRequest" | "service_ServiceItems" | "proposal" | "proposalItem" | "wallet" | "withdrawalRequest" | "conversation" | "favoriteService" | "message" | "providerReport"
+      modelProps: "booking" | "category" | "categoryTranslation" | "chatMessage" | "customerProfile" | "device" | "notification" | "packageRecommendation" | "paymentTransaction" | "permission" | "recurringBooking" | "refreshToken" | "review" | "rewardPoint" | "role" | "service" | "serviceProvider" | "serviceProviderTranslation" | "staff" | "staffCategory" | "transaction" | "user" | "verificationCode" | "workLog" | "inspectionReport" | "serviceItem" | "serviceRequest" | "service_ServiceItems" | "proposal" | "proposalItem" | "wallet" | "withdrawalRequest" | "conversation" | "favoriteService" | "message" | "providerReport" | "suggested_services_config"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4127,6 +4144,80 @@ export namespace Prisma {
           }
         }
       }
+      suggested_services_config: {
+        payload: Prisma.$suggested_services_configPayload<ExtArgs>
+        fields: Prisma.suggested_services_configFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.suggested_services_configFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.suggested_services_configFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload>
+          }
+          findFirst: {
+            args: Prisma.suggested_services_configFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.suggested_services_configFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload>
+          }
+          findMany: {
+            args: Prisma.suggested_services_configFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload>[]
+          }
+          create: {
+            args: Prisma.suggested_services_configCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload>
+          }
+          createMany: {
+            args: Prisma.suggested_services_configCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.suggested_services_configCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload>[]
+          }
+          delete: {
+            args: Prisma.suggested_services_configDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload>
+          }
+          update: {
+            args: Prisma.suggested_services_configUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload>
+          }
+          deleteMany: {
+            args: Prisma.suggested_services_configDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.suggested_services_configUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.suggested_services_configUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload>[]
+          }
+          upsert: {
+            args: Prisma.suggested_services_configUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$suggested_services_configPayload>
+          }
+          aggregate: {
+            args: Prisma.Suggested_services_configAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSuggested_services_config>
+          }
+          groupBy: {
+            args: Prisma.suggested_services_configGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Suggested_services_configGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.suggested_services_configCountArgs<ExtArgs>
+            result: $Utils.Optional<Suggested_services_configCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4247,6 +4338,7 @@ export namespace Prisma {
     favoriteService?: FavoriteServiceOmit
     message?: MessageOmit
     providerReport?: ProviderReportOmit
+    suggested_services_config?: suggested_services_configOmit
   }
 
   /* Types for Logging */
@@ -4386,6 +4478,7 @@ export namespace Prisma {
     Service: number
     ServiceRequest: number
     StaffCategory: number
+    suggested_services_config: number
   }
 
   export type CategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4394,6 +4487,7 @@ export namespace Prisma {
     Service?: boolean | CategoryCountOutputTypeCountServiceArgs
     ServiceRequest?: boolean | CategoryCountOutputTypeCountServiceRequestArgs
     StaffCategory?: boolean | CategoryCountOutputTypeCountStaffCategoryArgs
+    suggested_services_config?: boolean | CategoryCountOutputTypeCountSuggested_services_configArgs
   }
 
   // Custom InputTypes
@@ -4440,6 +4534,13 @@ export namespace Prisma {
    */
   export type CategoryCountOutputTypeCountStaffCategoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StaffCategoryWhereInput
+  }
+
+  /**
+   * CategoryCountOutputType without action
+   */
+  export type CategoryCountOutputTypeCountSuggested_services_configArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: suggested_services_configWhereInput
   }
 
 
@@ -5249,6 +5350,7 @@ export namespace Prisma {
     updatedAt: Date | null
     staffId: number | null
     serviceRequestId: number | null
+    completedAt: Date | null
   }
 
   export type BookingMaxAggregateOutputType = {
@@ -5261,6 +5363,7 @@ export namespace Prisma {
     updatedAt: Date | null
     staffId: number | null
     serviceRequestId: number | null
+    completedAt: Date | null
   }
 
   export type BookingCountAggregateOutputType = {
@@ -5273,6 +5376,7 @@ export namespace Prisma {
     updatedAt: number
     staffId: number
     serviceRequestId: number
+    completedAt: number
     _all: number
   }
 
@@ -5303,6 +5407,7 @@ export namespace Prisma {
     updatedAt?: true
     staffId?: true
     serviceRequestId?: true
+    completedAt?: true
   }
 
   export type BookingMaxAggregateInputType = {
@@ -5315,6 +5420,7 @@ export namespace Prisma {
     updatedAt?: true
     staffId?: true
     serviceRequestId?: true
+    completedAt?: true
   }
 
   export type BookingCountAggregateInputType = {
@@ -5327,6 +5433,7 @@ export namespace Prisma {
     updatedAt?: true
     staffId?: true
     serviceRequestId?: true
+    completedAt?: true
     _all?: true
   }
 
@@ -5426,6 +5533,7 @@ export namespace Prisma {
     updatedAt: Date
     staffId: number | null
     serviceRequestId: number | null
+    completedAt: Date | null
     _count: BookingCountAggregateOutputType | null
     _avg: BookingAvgAggregateOutputType | null
     _sum: BookingSumAggregateOutputType | null
@@ -5457,6 +5565,7 @@ export namespace Prisma {
     updatedAt?: boolean
     staffId?: boolean
     serviceRequestId?: boolean
+    completedAt?: boolean
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     ServiceRequest?: boolean | Booking$ServiceRequestArgs<ExtArgs>
@@ -5479,6 +5588,7 @@ export namespace Prisma {
     updatedAt?: boolean
     staffId?: boolean
     serviceRequestId?: boolean
+    completedAt?: boolean
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     ServiceRequest?: boolean | Booking$ServiceRequestArgs<ExtArgs>
@@ -5495,6 +5605,7 @@ export namespace Prisma {
     updatedAt?: boolean
     staffId?: boolean
     serviceRequestId?: boolean
+    completedAt?: boolean
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     ServiceRequest?: boolean | Booking$ServiceRequestArgs<ExtArgs>
@@ -5511,9 +5622,10 @@ export namespace Prisma {
     updatedAt?: boolean
     staffId?: boolean
     serviceRequestId?: boolean
+    completedAt?: boolean
   }
 
-  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "customerId" | "providerId" | "status" | "deletedAt" | "createdAt" | "updatedAt" | "staffId" | "serviceRequestId", ExtArgs["result"]["booking"]>
+  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "customerId" | "providerId" | "status" | "deletedAt" | "createdAt" | "updatedAt" | "staffId" | "serviceRequestId" | "completedAt", ExtArgs["result"]["booking"]>
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
@@ -5562,6 +5674,7 @@ export namespace Prisma {
       updatedAt: Date
       staffId: number | null
       serviceRequestId: number | null
+      completedAt: Date | null
     }, ExtArgs["result"]["booking"]>
     composites: {}
   }
@@ -6003,6 +6116,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Booking", 'DateTime'>
     readonly staffId: FieldRef<"Booking", 'Int'>
     readonly serviceRequestId: FieldRef<"Booking", 'Int'>
+    readonly completedAt: FieldRef<"Booking", 'DateTime'>
   }
     
 
@@ -6823,6 +6937,7 @@ export namespace Prisma {
     Service?: boolean | Category$ServiceArgs<ExtArgs>
     ServiceRequest?: boolean | Category$ServiceRequestArgs<ExtArgs>
     StaffCategory?: boolean | Category$StaffCategoryArgs<ExtArgs>
+    suggested_services_config?: boolean | Category$suggested_services_configArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["category"]>
 
@@ -6884,6 +6999,7 @@ export namespace Prisma {
     Service?: boolean | Category$ServiceArgs<ExtArgs>
     ServiceRequest?: boolean | Category$ServiceRequestArgs<ExtArgs>
     StaffCategory?: boolean | Category$StaffCategoryArgs<ExtArgs>
+    suggested_services_config?: boolean | Category$suggested_services_configArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6911,6 +7027,7 @@ export namespace Prisma {
       Service: Prisma.$ServicePayload<ExtArgs>[]
       ServiceRequest: Prisma.$ServiceRequestPayload<ExtArgs>[]
       StaffCategory: Prisma.$StaffCategoryPayload<ExtArgs>[]
+      suggested_services_config: Prisma.$suggested_services_configPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7326,6 +7443,7 @@ export namespace Prisma {
     Service<T extends Category$ServiceArgs<ExtArgs> = {}>(args?: Subset<T, Category$ServiceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ServiceRequest<T extends Category$ServiceRequestArgs<ExtArgs> = {}>(args?: Subset<T, Category$ServiceRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     StaffCategory<T extends Category$StaffCategoryArgs<ExtArgs> = {}>(args?: Subset<T, Category$StaffCategoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    suggested_services_config<T extends Category$suggested_services_configArgs<ExtArgs> = {}>(args?: Subset<T, Category$suggested_services_configArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7954,6 +8072,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StaffCategoryScalarFieldEnum | StaffCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * Category.suggested_services_config
+   */
+  export type Category$suggested_services_configArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    where?: suggested_services_configWhereInput
+    orderBy?: suggested_services_configOrderByWithRelationInput | suggested_services_configOrderByWithRelationInput[]
+    cursor?: suggested_services_configWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Suggested_services_configScalarFieldEnum | Suggested_services_configScalarFieldEnum[]
   }
 
   /**
@@ -49172,6 +49314,1145 @@ export namespace Prisma {
 
 
   /**
+   * Model suggested_services_config
+   */
+
+  export type AggregateSuggested_services_config = {
+    _count: Suggested_services_configCountAggregateOutputType | null
+    _avg: Suggested_services_configAvgAggregateOutputType | null
+    _sum: Suggested_services_configSumAggregateOutputType | null
+    _min: Suggested_services_configMinAggregateOutputType | null
+    _max: Suggested_services_configMaxAggregateOutputType | null
+  }
+
+  export type Suggested_services_configAvgAggregateOutputType = {
+    id: number | null
+    category_id: number | null
+    suggested_interval_months: number | null
+  }
+
+  export type Suggested_services_configSumAggregateOutputType = {
+    id: number | null
+    category_id: number | null
+    suggested_interval_months: number | null
+  }
+
+  export type Suggested_services_configMinAggregateOutputType = {
+    id: number | null
+    category_id: number | null
+    display_name: string | null
+    suggested_interval_months: number | null
+    notification_template: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type Suggested_services_configMaxAggregateOutputType = {
+    id: number | null
+    category_id: number | null
+    display_name: string | null
+    suggested_interval_months: number | null
+    notification_template: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type Suggested_services_configCountAggregateOutputType = {
+    id: number
+    category_id: number
+    display_name: number
+    suggested_interval_months: number
+    notification_template: number
+    is_active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type Suggested_services_configAvgAggregateInputType = {
+    id?: true
+    category_id?: true
+    suggested_interval_months?: true
+  }
+
+  export type Suggested_services_configSumAggregateInputType = {
+    id?: true
+    category_id?: true
+    suggested_interval_months?: true
+  }
+
+  export type Suggested_services_configMinAggregateInputType = {
+    id?: true
+    category_id?: true
+    display_name?: true
+    suggested_interval_months?: true
+    notification_template?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type Suggested_services_configMaxAggregateInputType = {
+    id?: true
+    category_id?: true
+    display_name?: true
+    suggested_interval_months?: true
+    notification_template?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type Suggested_services_configCountAggregateInputType = {
+    id?: true
+    category_id?: true
+    display_name?: true
+    suggested_interval_months?: true
+    notification_template?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type Suggested_services_configAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which suggested_services_config to aggregate.
+     */
+    where?: suggested_services_configWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of suggested_services_configs to fetch.
+     */
+    orderBy?: suggested_services_configOrderByWithRelationInput | suggested_services_configOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: suggested_services_configWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` suggested_services_configs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` suggested_services_configs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned suggested_services_configs
+    **/
+    _count?: true | Suggested_services_configCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Suggested_services_configAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Suggested_services_configSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Suggested_services_configMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Suggested_services_configMaxAggregateInputType
+  }
+
+  export type GetSuggested_services_configAggregateType<T extends Suggested_services_configAggregateArgs> = {
+        [P in keyof T & keyof AggregateSuggested_services_config]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSuggested_services_config[P]>
+      : GetScalarType<T[P], AggregateSuggested_services_config[P]>
+  }
+
+
+
+
+  export type suggested_services_configGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: suggested_services_configWhereInput
+    orderBy?: suggested_services_configOrderByWithAggregationInput | suggested_services_configOrderByWithAggregationInput[]
+    by: Suggested_services_configScalarFieldEnum[] | Suggested_services_configScalarFieldEnum
+    having?: suggested_services_configScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Suggested_services_configCountAggregateInputType | true
+    _avg?: Suggested_services_configAvgAggregateInputType
+    _sum?: Suggested_services_configSumAggregateInputType
+    _min?: Suggested_services_configMinAggregateInputType
+    _max?: Suggested_services_configMaxAggregateInputType
+  }
+
+  export type Suggested_services_configGroupByOutputType = {
+    id: number
+    category_id: number
+    display_name: string
+    suggested_interval_months: number
+    notification_template: string
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+    _count: Suggested_services_configCountAggregateOutputType | null
+    _avg: Suggested_services_configAvgAggregateOutputType | null
+    _sum: Suggested_services_configSumAggregateOutputType | null
+    _min: Suggested_services_configMinAggregateOutputType | null
+    _max: Suggested_services_configMaxAggregateOutputType | null
+  }
+
+  type GetSuggested_services_configGroupByPayload<T extends suggested_services_configGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Suggested_services_configGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Suggested_services_configGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Suggested_services_configGroupByOutputType[P]>
+            : GetScalarType<T[P], Suggested_services_configGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type suggested_services_configSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    category_id?: boolean
+    display_name?: boolean
+    suggested_interval_months?: boolean
+    notification_template?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["suggested_services_config"]>
+
+  export type suggested_services_configSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    category_id?: boolean
+    display_name?: boolean
+    suggested_interval_months?: boolean
+    notification_template?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["suggested_services_config"]>
+
+  export type suggested_services_configSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    category_id?: boolean
+    display_name?: boolean
+    suggested_interval_months?: boolean
+    notification_template?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["suggested_services_config"]>
+
+  export type suggested_services_configSelectScalar = {
+    id?: boolean
+    category_id?: boolean
+    display_name?: boolean
+    suggested_interval_months?: boolean
+    notification_template?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type suggested_services_configOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category_id" | "display_name" | "suggested_interval_months" | "notification_template" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["suggested_services_config"]>
+  export type suggested_services_configInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }
+  export type suggested_services_configIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }
+  export type suggested_services_configIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }
+
+  export type $suggested_services_configPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "suggested_services_config"
+    objects: {
+      Category: Prisma.$CategoryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      category_id: number
+      display_name: string
+      suggested_interval_months: number
+      notification_template: string
+      is_active: boolean | null
+      created_at: Date | null
+      updated_at: Date | null
+    }, ExtArgs["result"]["suggested_services_config"]>
+    composites: {}
+  }
+
+  type suggested_services_configGetPayload<S extends boolean | null | undefined | suggested_services_configDefaultArgs> = $Result.GetResult<Prisma.$suggested_services_configPayload, S>
+
+  type suggested_services_configCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<suggested_services_configFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Suggested_services_configCountAggregateInputType | true
+    }
+
+  export interface suggested_services_configDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['suggested_services_config'], meta: { name: 'suggested_services_config' } }
+    /**
+     * Find zero or one Suggested_services_config that matches the filter.
+     * @param {suggested_services_configFindUniqueArgs} args - Arguments to find a Suggested_services_config
+     * @example
+     * // Get one Suggested_services_config
+     * const suggested_services_config = await prisma.suggested_services_config.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends suggested_services_configFindUniqueArgs>(args: SelectSubset<T, suggested_services_configFindUniqueArgs<ExtArgs>>): Prisma__suggested_services_configClient<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Suggested_services_config that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {suggested_services_configFindUniqueOrThrowArgs} args - Arguments to find a Suggested_services_config
+     * @example
+     * // Get one Suggested_services_config
+     * const suggested_services_config = await prisma.suggested_services_config.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends suggested_services_configFindUniqueOrThrowArgs>(args: SelectSubset<T, suggested_services_configFindUniqueOrThrowArgs<ExtArgs>>): Prisma__suggested_services_configClient<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Suggested_services_config that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {suggested_services_configFindFirstArgs} args - Arguments to find a Suggested_services_config
+     * @example
+     * // Get one Suggested_services_config
+     * const suggested_services_config = await prisma.suggested_services_config.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends suggested_services_configFindFirstArgs>(args?: SelectSubset<T, suggested_services_configFindFirstArgs<ExtArgs>>): Prisma__suggested_services_configClient<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Suggested_services_config that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {suggested_services_configFindFirstOrThrowArgs} args - Arguments to find a Suggested_services_config
+     * @example
+     * // Get one Suggested_services_config
+     * const suggested_services_config = await prisma.suggested_services_config.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends suggested_services_configFindFirstOrThrowArgs>(args?: SelectSubset<T, suggested_services_configFindFirstOrThrowArgs<ExtArgs>>): Prisma__suggested_services_configClient<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Suggested_services_configs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {suggested_services_configFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Suggested_services_configs
+     * const suggested_services_configs = await prisma.suggested_services_config.findMany()
+     * 
+     * // Get first 10 Suggested_services_configs
+     * const suggested_services_configs = await prisma.suggested_services_config.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const suggested_services_configWithIdOnly = await prisma.suggested_services_config.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends suggested_services_configFindManyArgs>(args?: SelectSubset<T, suggested_services_configFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Suggested_services_config.
+     * @param {suggested_services_configCreateArgs} args - Arguments to create a Suggested_services_config.
+     * @example
+     * // Create one Suggested_services_config
+     * const Suggested_services_config = await prisma.suggested_services_config.create({
+     *   data: {
+     *     // ... data to create a Suggested_services_config
+     *   }
+     * })
+     * 
+     */
+    create<T extends suggested_services_configCreateArgs>(args: SelectSubset<T, suggested_services_configCreateArgs<ExtArgs>>): Prisma__suggested_services_configClient<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Suggested_services_configs.
+     * @param {suggested_services_configCreateManyArgs} args - Arguments to create many Suggested_services_configs.
+     * @example
+     * // Create many Suggested_services_configs
+     * const suggested_services_config = await prisma.suggested_services_config.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends suggested_services_configCreateManyArgs>(args?: SelectSubset<T, suggested_services_configCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Suggested_services_configs and returns the data saved in the database.
+     * @param {suggested_services_configCreateManyAndReturnArgs} args - Arguments to create many Suggested_services_configs.
+     * @example
+     * // Create many Suggested_services_configs
+     * const suggested_services_config = await prisma.suggested_services_config.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Suggested_services_configs and only return the `id`
+     * const suggested_services_configWithIdOnly = await prisma.suggested_services_config.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends suggested_services_configCreateManyAndReturnArgs>(args?: SelectSubset<T, suggested_services_configCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Suggested_services_config.
+     * @param {suggested_services_configDeleteArgs} args - Arguments to delete one Suggested_services_config.
+     * @example
+     * // Delete one Suggested_services_config
+     * const Suggested_services_config = await prisma.suggested_services_config.delete({
+     *   where: {
+     *     // ... filter to delete one Suggested_services_config
+     *   }
+     * })
+     * 
+     */
+    delete<T extends suggested_services_configDeleteArgs>(args: SelectSubset<T, suggested_services_configDeleteArgs<ExtArgs>>): Prisma__suggested_services_configClient<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Suggested_services_config.
+     * @param {suggested_services_configUpdateArgs} args - Arguments to update one Suggested_services_config.
+     * @example
+     * // Update one Suggested_services_config
+     * const suggested_services_config = await prisma.suggested_services_config.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends suggested_services_configUpdateArgs>(args: SelectSubset<T, suggested_services_configUpdateArgs<ExtArgs>>): Prisma__suggested_services_configClient<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Suggested_services_configs.
+     * @param {suggested_services_configDeleteManyArgs} args - Arguments to filter Suggested_services_configs to delete.
+     * @example
+     * // Delete a few Suggested_services_configs
+     * const { count } = await prisma.suggested_services_config.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends suggested_services_configDeleteManyArgs>(args?: SelectSubset<T, suggested_services_configDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Suggested_services_configs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {suggested_services_configUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Suggested_services_configs
+     * const suggested_services_config = await prisma.suggested_services_config.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends suggested_services_configUpdateManyArgs>(args: SelectSubset<T, suggested_services_configUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Suggested_services_configs and returns the data updated in the database.
+     * @param {suggested_services_configUpdateManyAndReturnArgs} args - Arguments to update many Suggested_services_configs.
+     * @example
+     * // Update many Suggested_services_configs
+     * const suggested_services_config = await prisma.suggested_services_config.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Suggested_services_configs and only return the `id`
+     * const suggested_services_configWithIdOnly = await prisma.suggested_services_config.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends suggested_services_configUpdateManyAndReturnArgs>(args: SelectSubset<T, suggested_services_configUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Suggested_services_config.
+     * @param {suggested_services_configUpsertArgs} args - Arguments to update or create a Suggested_services_config.
+     * @example
+     * // Update or create a Suggested_services_config
+     * const suggested_services_config = await prisma.suggested_services_config.upsert({
+     *   create: {
+     *     // ... data to create a Suggested_services_config
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Suggested_services_config we want to update
+     *   }
+     * })
+     */
+    upsert<T extends suggested_services_configUpsertArgs>(args: SelectSubset<T, suggested_services_configUpsertArgs<ExtArgs>>): Prisma__suggested_services_configClient<$Result.GetResult<Prisma.$suggested_services_configPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Suggested_services_configs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {suggested_services_configCountArgs} args - Arguments to filter Suggested_services_configs to count.
+     * @example
+     * // Count the number of Suggested_services_configs
+     * const count = await prisma.suggested_services_config.count({
+     *   where: {
+     *     // ... the filter for the Suggested_services_configs we want to count
+     *   }
+     * })
+    **/
+    count<T extends suggested_services_configCountArgs>(
+      args?: Subset<T, suggested_services_configCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Suggested_services_configCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Suggested_services_config.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Suggested_services_configAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Suggested_services_configAggregateArgs>(args: Subset<T, Suggested_services_configAggregateArgs>): Prisma.PrismaPromise<GetSuggested_services_configAggregateType<T>>
+
+    /**
+     * Group by Suggested_services_config.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {suggested_services_configGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends suggested_services_configGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: suggested_services_configGroupByArgs['orderBy'] }
+        : { orderBy?: suggested_services_configGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, suggested_services_configGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSuggested_services_configGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the suggested_services_config model
+   */
+  readonly fields: suggested_services_configFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for suggested_services_config.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__suggested_services_configClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the suggested_services_config model
+   */
+  interface suggested_services_configFieldRefs {
+    readonly id: FieldRef<"suggested_services_config", 'Int'>
+    readonly category_id: FieldRef<"suggested_services_config", 'Int'>
+    readonly display_name: FieldRef<"suggested_services_config", 'String'>
+    readonly suggested_interval_months: FieldRef<"suggested_services_config", 'Int'>
+    readonly notification_template: FieldRef<"suggested_services_config", 'String'>
+    readonly is_active: FieldRef<"suggested_services_config", 'Boolean'>
+    readonly created_at: FieldRef<"suggested_services_config", 'DateTime'>
+    readonly updated_at: FieldRef<"suggested_services_config", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * suggested_services_config findUnique
+   */
+  export type suggested_services_configFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    /**
+     * Filter, which suggested_services_config to fetch.
+     */
+    where: suggested_services_configWhereUniqueInput
+  }
+
+  /**
+   * suggested_services_config findUniqueOrThrow
+   */
+  export type suggested_services_configFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    /**
+     * Filter, which suggested_services_config to fetch.
+     */
+    where: suggested_services_configWhereUniqueInput
+  }
+
+  /**
+   * suggested_services_config findFirst
+   */
+  export type suggested_services_configFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    /**
+     * Filter, which suggested_services_config to fetch.
+     */
+    where?: suggested_services_configWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of suggested_services_configs to fetch.
+     */
+    orderBy?: suggested_services_configOrderByWithRelationInput | suggested_services_configOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for suggested_services_configs.
+     */
+    cursor?: suggested_services_configWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` suggested_services_configs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` suggested_services_configs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of suggested_services_configs.
+     */
+    distinct?: Suggested_services_configScalarFieldEnum | Suggested_services_configScalarFieldEnum[]
+  }
+
+  /**
+   * suggested_services_config findFirstOrThrow
+   */
+  export type suggested_services_configFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    /**
+     * Filter, which suggested_services_config to fetch.
+     */
+    where?: suggested_services_configWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of suggested_services_configs to fetch.
+     */
+    orderBy?: suggested_services_configOrderByWithRelationInput | suggested_services_configOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for suggested_services_configs.
+     */
+    cursor?: suggested_services_configWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` suggested_services_configs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` suggested_services_configs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of suggested_services_configs.
+     */
+    distinct?: Suggested_services_configScalarFieldEnum | Suggested_services_configScalarFieldEnum[]
+  }
+
+  /**
+   * suggested_services_config findMany
+   */
+  export type suggested_services_configFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    /**
+     * Filter, which suggested_services_configs to fetch.
+     */
+    where?: suggested_services_configWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of suggested_services_configs to fetch.
+     */
+    orderBy?: suggested_services_configOrderByWithRelationInput | suggested_services_configOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing suggested_services_configs.
+     */
+    cursor?: suggested_services_configWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` suggested_services_configs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` suggested_services_configs.
+     */
+    skip?: number
+    distinct?: Suggested_services_configScalarFieldEnum | Suggested_services_configScalarFieldEnum[]
+  }
+
+  /**
+   * suggested_services_config create
+   */
+  export type suggested_services_configCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    /**
+     * The data needed to create a suggested_services_config.
+     */
+    data: XOR<suggested_services_configCreateInput, suggested_services_configUncheckedCreateInput>
+  }
+
+  /**
+   * suggested_services_config createMany
+   */
+  export type suggested_services_configCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many suggested_services_configs.
+     */
+    data: suggested_services_configCreateManyInput | suggested_services_configCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * suggested_services_config createManyAndReturn
+   */
+  export type suggested_services_configCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * The data used to create many suggested_services_configs.
+     */
+    data: suggested_services_configCreateManyInput | suggested_services_configCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * suggested_services_config update
+   */
+  export type suggested_services_configUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    /**
+     * The data needed to update a suggested_services_config.
+     */
+    data: XOR<suggested_services_configUpdateInput, suggested_services_configUncheckedUpdateInput>
+    /**
+     * Choose, which suggested_services_config to update.
+     */
+    where: suggested_services_configWhereUniqueInput
+  }
+
+  /**
+   * suggested_services_config updateMany
+   */
+  export type suggested_services_configUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update suggested_services_configs.
+     */
+    data: XOR<suggested_services_configUpdateManyMutationInput, suggested_services_configUncheckedUpdateManyInput>
+    /**
+     * Filter which suggested_services_configs to update
+     */
+    where?: suggested_services_configWhereInput
+    /**
+     * Limit how many suggested_services_configs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * suggested_services_config updateManyAndReturn
+   */
+  export type suggested_services_configUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * The data used to update suggested_services_configs.
+     */
+    data: XOR<suggested_services_configUpdateManyMutationInput, suggested_services_configUncheckedUpdateManyInput>
+    /**
+     * Filter which suggested_services_configs to update
+     */
+    where?: suggested_services_configWhereInput
+    /**
+     * Limit how many suggested_services_configs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * suggested_services_config upsert
+   */
+  export type suggested_services_configUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    /**
+     * The filter to search for the suggested_services_config to update in case it exists.
+     */
+    where: suggested_services_configWhereUniqueInput
+    /**
+     * In case the suggested_services_config found by the `where` argument doesn't exist, create a new suggested_services_config with this data.
+     */
+    create: XOR<suggested_services_configCreateInput, suggested_services_configUncheckedCreateInput>
+    /**
+     * In case the suggested_services_config was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<suggested_services_configUpdateInput, suggested_services_configUncheckedUpdateInput>
+  }
+
+  /**
+   * suggested_services_config delete
+   */
+  export type suggested_services_configDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+    /**
+     * Filter which suggested_services_config to delete.
+     */
+    where: suggested_services_configWhereUniqueInput
+  }
+
+  /**
+   * suggested_services_config deleteMany
+   */
+  export type suggested_services_configDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which suggested_services_configs to delete
+     */
+    where?: suggested_services_configWhereInput
+    /**
+     * Limit how many suggested_services_configs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * suggested_services_config without action
+   */
+  export type suggested_services_configDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the suggested_services_config
+     */
+    select?: suggested_services_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the suggested_services_config
+     */
+    omit?: suggested_services_configOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: suggested_services_configInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -49194,7 +50475,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     staffId: 'staffId',
-    serviceRequestId: 'serviceRequestId'
+    serviceRequestId: 'serviceRequestId',
+    completedAt: 'completedAt'
   };
 
   export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
@@ -49705,6 +50987,20 @@ export namespace Prisma {
   export type ProviderReportScalarFieldEnum = (typeof ProviderReportScalarFieldEnum)[keyof typeof ProviderReportScalarFieldEnum]
 
 
+  export const Suggested_services_configScalarFieldEnum: {
+    id: 'id',
+    category_id: 'category_id',
+    display_name: 'display_name',
+    suggested_interval_months: 'suggested_interval_months',
+    notification_template: 'notification_template',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type Suggested_services_configScalarFieldEnum = (typeof Suggested_services_configScalarFieldEnum)[keyof typeof Suggested_services_configScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -50051,6 +51347,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     staffId?: IntNullableFilter<"Booking"> | number | null
     serviceRequestId?: IntNullableFilter<"Booking"> | number | null
+    completedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
     CustomerProfile?: XOR<CustomerProfileScalarRelationFilter, CustomerProfileWhereInput>
     ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
     ServiceRequest?: XOR<ServiceRequestNullableScalarRelationFilter, ServiceRequestWhereInput> | null
@@ -50072,6 +51369,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     staffId?: SortOrderInput | SortOrder
     serviceRequestId?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
     CustomerProfile?: CustomerProfileOrderByWithRelationInput
     ServiceProvider?: ServiceProviderOrderByWithRelationInput
     ServiceRequest?: ServiceRequestOrderByWithRelationInput
@@ -50096,6 +51394,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     staffId?: IntNullableFilter<"Booking"> | number | null
+    completedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
     CustomerProfile?: XOR<CustomerProfileScalarRelationFilter, CustomerProfileWhereInput>
     ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
     ServiceRequest?: XOR<ServiceRequestNullableScalarRelationFilter, ServiceRequestWhereInput> | null
@@ -50117,6 +51416,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     staffId?: SortOrderInput | SortOrder
     serviceRequestId?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
     _count?: BookingCountOrderByAggregateInput
     _avg?: BookingAvgOrderByAggregateInput
     _max?: BookingMaxOrderByAggregateInput
@@ -50137,6 +51437,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
     staffId?: IntNullableWithAggregatesFilter<"Booking"> | number | null
     serviceRequestId?: IntNullableWithAggregatesFilter<"Booking"> | number | null
+    completedAt?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
   }
 
   export type CategoryWhereInput = {
@@ -50162,6 +51463,7 @@ export namespace Prisma {
     Service?: ServiceListRelationFilter
     ServiceRequest?: ServiceRequestListRelationFilter
     StaffCategory?: StaffCategoryListRelationFilter
+    suggested_services_config?: Suggested_services_configListRelationFilter
   }
 
   export type CategoryOrderByWithRelationInput = {
@@ -50184,6 +51486,7 @@ export namespace Prisma {
     Service?: ServiceOrderByRelationAggregateInput
     ServiceRequest?: ServiceRequestOrderByRelationAggregateInput
     StaffCategory?: StaffCategoryOrderByRelationAggregateInput
+    suggested_services_config?: suggested_services_configOrderByRelationAggregateInput
   }
 
   export type CategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -50209,6 +51512,7 @@ export namespace Prisma {
     Service?: ServiceListRelationFilter
     ServiceRequest?: ServiceRequestListRelationFilter
     StaffCategory?: StaffCategoryListRelationFilter
+    suggested_services_config?: Suggested_services_configListRelationFilter
   }, "id">
 
   export type CategoryOrderByWithAggregationInput = {
@@ -53039,11 +54343,84 @@ export namespace Prisma {
     note?: StringNullableWithAggregatesFilter<"ProviderReport"> | string | null
   }
 
+  export type suggested_services_configWhereInput = {
+    AND?: suggested_services_configWhereInput | suggested_services_configWhereInput[]
+    OR?: suggested_services_configWhereInput[]
+    NOT?: suggested_services_configWhereInput | suggested_services_configWhereInput[]
+    id?: IntFilter<"suggested_services_config"> | number
+    category_id?: IntFilter<"suggested_services_config"> | number
+    display_name?: StringFilter<"suggested_services_config"> | string
+    suggested_interval_months?: IntFilter<"suggested_services_config"> | number
+    notification_template?: StringFilter<"suggested_services_config"> | string
+    is_active?: BoolNullableFilter<"suggested_services_config"> | boolean | null
+    created_at?: DateTimeNullableFilter<"suggested_services_config"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"suggested_services_config"> | Date | string | null
+    Category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+  }
+
+  export type suggested_services_configOrderByWithRelationInput = {
+    id?: SortOrder
+    category_id?: SortOrder
+    display_name?: SortOrder
+    suggested_interval_months?: SortOrder
+    notification_template?: SortOrder
+    is_active?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    Category?: CategoryOrderByWithRelationInput
+  }
+
+  export type suggested_services_configWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: suggested_services_configWhereInput | suggested_services_configWhereInput[]
+    OR?: suggested_services_configWhereInput[]
+    NOT?: suggested_services_configWhereInput | suggested_services_configWhereInput[]
+    category_id?: IntFilter<"suggested_services_config"> | number
+    display_name?: StringFilter<"suggested_services_config"> | string
+    suggested_interval_months?: IntFilter<"suggested_services_config"> | number
+    notification_template?: StringFilter<"suggested_services_config"> | string
+    is_active?: BoolNullableFilter<"suggested_services_config"> | boolean | null
+    created_at?: DateTimeNullableFilter<"suggested_services_config"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"suggested_services_config"> | Date | string | null
+    Category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+  }, "id">
+
+  export type suggested_services_configOrderByWithAggregationInput = {
+    id?: SortOrder
+    category_id?: SortOrder
+    display_name?: SortOrder
+    suggested_interval_months?: SortOrder
+    notification_template?: SortOrder
+    is_active?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    _count?: suggested_services_configCountOrderByAggregateInput
+    _avg?: suggested_services_configAvgOrderByAggregateInput
+    _max?: suggested_services_configMaxOrderByAggregateInput
+    _min?: suggested_services_configMinOrderByAggregateInput
+    _sum?: suggested_services_configSumOrderByAggregateInput
+  }
+
+  export type suggested_services_configScalarWhereWithAggregatesInput = {
+    AND?: suggested_services_configScalarWhereWithAggregatesInput | suggested_services_configScalarWhereWithAggregatesInput[]
+    OR?: suggested_services_configScalarWhereWithAggregatesInput[]
+    NOT?: suggested_services_configScalarWhereWithAggregatesInput | suggested_services_configScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"suggested_services_config"> | number
+    category_id?: IntWithAggregatesFilter<"suggested_services_config"> | number
+    display_name?: StringWithAggregatesFilter<"suggested_services_config"> | string
+    suggested_interval_months?: IntWithAggregatesFilter<"suggested_services_config"> | number
+    notification_template?: StringWithAggregatesFilter<"suggested_services_config"> | string
+    is_active?: BoolNullableWithAggregatesFilter<"suggested_services_config"> | boolean | null
+    created_at?: DateTimeNullableWithAggregatesFilter<"suggested_services_config"> | Date | string | null
+    updated_at?: DateTimeNullableWithAggregatesFilter<"suggested_services_config"> | Date | string | null
+  }
+
   export type BookingCreateInput = {
     status: $Enums.BookingStatus
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
@@ -53065,6 +54442,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     Proposal?: ProposalUncheckedCreateNestedOneWithoutBookingInput
     ProviderReport?: ProviderReportUncheckedCreateNestedManyWithoutBookingInput
@@ -53077,6 +54455,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
@@ -53098,6 +54477,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     Proposal?: ProposalUncheckedUpdateOneWithoutBookingNestedInput
     ProviderReport?: ProviderReportUncheckedUpdateManyWithoutBookingNestedInput
@@ -53115,6 +54495,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
   }
 
   export type BookingUpdateManyMutationInput = {
@@ -53122,6 +54503,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type BookingUncheckedUpdateManyInput = {
@@ -53134,6 +54516,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CategoryCreateInput = {
@@ -53151,6 +54534,7 @@ export namespace Prisma {
     Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateInput = {
@@ -53169,6 +54553,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUpdateInput = {
@@ -53186,6 +54571,7 @@ export namespace Prisma {
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateInput = {
@@ -53204,6 +54590,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryCreateManyInput = {
@@ -56049,6 +57436,79 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type suggested_services_configCreateInput = {
+    display_name: string
+    suggested_interval_months: number
+    notification_template: string
+    is_active?: boolean | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    Category: CategoryCreateNestedOneWithoutSuggested_services_configInput
+  }
+
+  export type suggested_services_configUncheckedCreateInput = {
+    id?: number
+    category_id: number
+    display_name: string
+    suggested_interval_months: number
+    notification_template: string
+    is_active?: boolean | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type suggested_services_configUpdateInput = {
+    display_name?: StringFieldUpdateOperationsInput | string
+    suggested_interval_months?: IntFieldUpdateOperationsInput | number
+    notification_template?: StringFieldUpdateOperationsInput | string
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    Category?: CategoryUpdateOneRequiredWithoutSuggested_services_configNestedInput
+  }
+
+  export type suggested_services_configUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    category_id?: IntFieldUpdateOperationsInput | number
+    display_name?: StringFieldUpdateOperationsInput | string
+    suggested_interval_months?: IntFieldUpdateOperationsInput | number
+    notification_template?: StringFieldUpdateOperationsInput | string
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type suggested_services_configCreateManyInput = {
+    id?: number
+    category_id: number
+    display_name: string
+    suggested_interval_months: number
+    notification_template: string
+    is_active?: boolean | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type suggested_services_configUpdateManyMutationInput = {
+    display_name?: StringFieldUpdateOperationsInput | string
+    suggested_interval_months?: IntFieldUpdateOperationsInput | number
+    notification_template?: StringFieldUpdateOperationsInput | string
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type suggested_services_configUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    category_id?: IntFieldUpdateOperationsInput | number
+    display_name?: StringFieldUpdateOperationsInput | string
+    suggested_interval_months?: IntFieldUpdateOperationsInput | number
+    notification_template?: StringFieldUpdateOperationsInput | string
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -56170,6 +57630,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     staffId?: SortOrder
     serviceRequestId?: SortOrder
+    completedAt?: SortOrder
   }
 
   export type BookingAvgOrderByAggregateInput = {
@@ -56190,6 +57651,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     staffId?: SortOrder
     serviceRequestId?: SortOrder
+    completedAt?: SortOrder
   }
 
   export type BookingMinOrderByAggregateInput = {
@@ -56202,6 +57664,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     staffId?: SortOrder
     serviceRequestId?: SortOrder
+    completedAt?: SortOrder
   }
 
   export type BookingSumOrderByAggregateInput = {
@@ -56352,6 +57815,12 @@ export namespace Prisma {
     none?: StaffCategoryWhereInput
   }
 
+  export type Suggested_services_configListRelationFilter = {
+    every?: suggested_services_configWhereInput
+    some?: suggested_services_configWhereInput
+    none?: suggested_services_configWhereInput
+  }
+
   export type CategoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -56369,6 +57838,10 @@ export namespace Prisma {
   }
 
   export type StaffCategoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type suggested_services_configOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -58700,6 +60173,64 @@ export namespace Prisma {
     _max?: NestedEnumReportStatusFilter<$PrismaModel>
   }
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type suggested_services_configCountOrderByAggregateInput = {
+    id?: SortOrder
+    category_id?: SortOrder
+    display_name?: SortOrder
+    suggested_interval_months?: SortOrder
+    notification_template?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type suggested_services_configAvgOrderByAggregateInput = {
+    id?: SortOrder
+    category_id?: SortOrder
+    suggested_interval_months?: SortOrder
+  }
+
+  export type suggested_services_configMaxOrderByAggregateInput = {
+    id?: SortOrder
+    category_id?: SortOrder
+    display_name?: SortOrder
+    suggested_interval_months?: SortOrder
+    notification_template?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type suggested_services_configMinOrderByAggregateInput = {
+    id?: SortOrder
+    category_id?: SortOrder
+    display_name?: SortOrder
+    suggested_interval_months?: SortOrder
+    notification_template?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type suggested_services_configSumOrderByAggregateInput = {
+    id?: SortOrder
+    category_id?: SortOrder
+    suggested_interval_months?: SortOrder
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
   export type CustomerProfileCreateNestedOneWithoutBookingInput = {
     create?: XOR<CustomerProfileCreateWithoutBookingInput, CustomerProfileUncheckedCreateWithoutBookingInput>
     connectOrCreate?: CustomerProfileCreateOrConnectWithoutBookingInput
@@ -59027,6 +60558,13 @@ export namespace Prisma {
     connect?: StaffCategoryWhereUniqueInput | StaffCategoryWhereUniqueInput[]
   }
 
+  export type suggested_services_configCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<suggested_services_configCreateWithoutCategoryInput, suggested_services_configUncheckedCreateWithoutCategoryInput> | suggested_services_configCreateWithoutCategoryInput[] | suggested_services_configUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: suggested_services_configCreateOrConnectWithoutCategoryInput | suggested_services_configCreateOrConnectWithoutCategoryInput[]
+    createMany?: suggested_services_configCreateManyCategoryInputEnvelope
+    connect?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
+  }
+
   export type CategoryUncheckedCreateNestedManyWithoutCategoryInput = {
     create?: XOR<CategoryCreateWithoutCategoryInput, CategoryUncheckedCreateWithoutCategoryInput> | CategoryCreateWithoutCategoryInput[] | CategoryUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: CategoryCreateOrConnectWithoutCategoryInput | CategoryCreateOrConnectWithoutCategoryInput[]
@@ -59060,6 +60598,13 @@ export namespace Prisma {
     connectOrCreate?: StaffCategoryCreateOrConnectWithoutCategoryInput | StaffCategoryCreateOrConnectWithoutCategoryInput[]
     createMany?: StaffCategoryCreateManyCategoryInputEnvelope
     connect?: StaffCategoryWhereUniqueInput | StaffCategoryWhereUniqueInput[]
+  }
+
+  export type suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<suggested_services_configCreateWithoutCategoryInput, suggested_services_configUncheckedCreateWithoutCategoryInput> | suggested_services_configCreateWithoutCategoryInput[] | suggested_services_configUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: suggested_services_configCreateOrConnectWithoutCategoryInput | suggested_services_configCreateOrConnectWithoutCategoryInput[]
+    createMany?: suggested_services_configCreateManyCategoryInputEnvelope
+    connect?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -59180,6 +60725,20 @@ export namespace Prisma {
     deleteMany?: StaffCategoryScalarWhereInput | StaffCategoryScalarWhereInput[]
   }
 
+  export type suggested_services_configUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<suggested_services_configCreateWithoutCategoryInput, suggested_services_configUncheckedCreateWithoutCategoryInput> | suggested_services_configCreateWithoutCategoryInput[] | suggested_services_configUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: suggested_services_configCreateOrConnectWithoutCategoryInput | suggested_services_configCreateOrConnectWithoutCategoryInput[]
+    upsert?: suggested_services_configUpsertWithWhereUniqueWithoutCategoryInput | suggested_services_configUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: suggested_services_configCreateManyCategoryInputEnvelope
+    set?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
+    disconnect?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
+    delete?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
+    connect?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
+    update?: suggested_services_configUpdateWithWhereUniqueWithoutCategoryInput | suggested_services_configUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: suggested_services_configUpdateManyWithWhereWithoutCategoryInput | suggested_services_configUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: suggested_services_configScalarWhereInput | suggested_services_configScalarWhereInput[]
+  }
+
   export type CategoryUncheckedUpdateManyWithoutCategoryNestedInput = {
     create?: XOR<CategoryCreateWithoutCategoryInput, CategoryUncheckedCreateWithoutCategoryInput> | CategoryCreateWithoutCategoryInput[] | CategoryUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: CategoryCreateOrConnectWithoutCategoryInput | CategoryCreateOrConnectWithoutCategoryInput[]
@@ -59248,6 +60807,20 @@ export namespace Prisma {
     update?: StaffCategoryUpdateWithWhereUniqueWithoutCategoryInput | StaffCategoryUpdateWithWhereUniqueWithoutCategoryInput[]
     updateMany?: StaffCategoryUpdateManyWithWhereWithoutCategoryInput | StaffCategoryUpdateManyWithWhereWithoutCategoryInput[]
     deleteMany?: StaffCategoryScalarWhereInput | StaffCategoryScalarWhereInput[]
+  }
+
+  export type suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<suggested_services_configCreateWithoutCategoryInput, suggested_services_configUncheckedCreateWithoutCategoryInput> | suggested_services_configCreateWithoutCategoryInput[] | suggested_services_configUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: suggested_services_configCreateOrConnectWithoutCategoryInput | suggested_services_configCreateOrConnectWithoutCategoryInput[]
+    upsert?: suggested_services_configUpsertWithWhereUniqueWithoutCategoryInput | suggested_services_configUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: suggested_services_configCreateManyCategoryInputEnvelope
+    set?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
+    disconnect?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
+    delete?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
+    connect?: suggested_services_configWhereUniqueInput | suggested_services_configWhereUniqueInput[]
+    update?: suggested_services_configUpdateWithWhereUniqueWithoutCategoryInput | suggested_services_configUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: suggested_services_configUpdateManyWithWhereWithoutCategoryInput | suggested_services_configUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: suggested_services_configScalarWhereInput | suggested_services_configScalarWhereInput[]
   }
 
   export type CategoryCreateNestedOneWithoutCategoryTranslationInput = {
@@ -62883,6 +64456,24 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProviderReportInput, UserUpdateWithoutProviderReportInput>, UserUncheckedUpdateWithoutProviderReportInput>
   }
 
+  export type CategoryCreateNestedOneWithoutSuggested_services_configInput = {
+    create?: XOR<CategoryCreateWithoutSuggested_services_configInput, CategoryUncheckedCreateWithoutSuggested_services_configInput>
+    connectOrCreate?: CategoryCreateOrConnectWithoutSuggested_services_configInput
+    connect?: CategoryWhereUniqueInput
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
+  export type CategoryUpdateOneRequiredWithoutSuggested_services_configNestedInput = {
+    create?: XOR<CategoryCreateWithoutSuggested_services_configInput, CategoryUncheckedCreateWithoutSuggested_services_configInput>
+    connectOrCreate?: CategoryCreateOrConnectWithoutSuggested_services_configInput
+    upsert?: CategoryUpsertWithoutSuggested_services_configInput
+    connect?: CategoryWhereUniqueInput
+    update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutSuggested_services_configInput, CategoryUpdateWithoutSuggested_services_configInput>, CategoryUncheckedUpdateWithoutSuggested_services_configInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -63387,6 +64978,19 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumReportStatusFilter<$PrismaModel>
     _max?: NestedEnumReportStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type CustomerProfileCreateWithoutBookingInput = {
@@ -64225,6 +65829,7 @@ export namespace Prisma {
     Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutOther_CategoryInput = {
@@ -64242,6 +65847,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutOther_CategoryInput = {
@@ -64263,6 +65869,7 @@ export namespace Prisma {
     Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutCategoryInput = {
@@ -64280,6 +65887,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutCategoryInput = {
@@ -64525,6 +66133,35 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type suggested_services_configCreateWithoutCategoryInput = {
+    display_name: string
+    suggested_interval_months: number
+    notification_template: string
+    is_active?: boolean | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type suggested_services_configUncheckedCreateWithoutCategoryInput = {
+    id?: number
+    display_name: string
+    suggested_interval_months: number
+    notification_template: string
+    is_active?: boolean | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type suggested_services_configCreateOrConnectWithoutCategoryInput = {
+    where: suggested_services_configWhereUniqueInput
+    create: XOR<suggested_services_configCreateWithoutCategoryInput, suggested_services_configUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type suggested_services_configCreateManyCategoryInputEnvelope = {
+    data: suggested_services_configCreateManyCategoryInput | suggested_services_configCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCategory_Category_createdByIdToUserInput = {
     update: XOR<UserUpdateWithoutCategory_Category_createdByIdToUserInput, UserUncheckedUpdateWithoutCategory_Category_createdByIdToUserInput>
     create: XOR<UserCreateWithoutCategory_Category_createdByIdToUserInput, UserUncheckedCreateWithoutCategory_Category_createdByIdToUserInput>
@@ -64738,6 +66375,7 @@ export namespace Prisma {
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutOther_CategoryInput = {
@@ -64755,6 +66393,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -65010,6 +66649,36 @@ export namespace Prisma {
     categoryId?: IntFilter<"StaffCategory"> | number
   }
 
+  export type suggested_services_configUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: suggested_services_configWhereUniqueInput
+    update: XOR<suggested_services_configUpdateWithoutCategoryInput, suggested_services_configUncheckedUpdateWithoutCategoryInput>
+    create: XOR<suggested_services_configCreateWithoutCategoryInput, suggested_services_configUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type suggested_services_configUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: suggested_services_configWhereUniqueInput
+    data: XOR<suggested_services_configUpdateWithoutCategoryInput, suggested_services_configUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type suggested_services_configUpdateManyWithWhereWithoutCategoryInput = {
+    where: suggested_services_configScalarWhereInput
+    data: XOR<suggested_services_configUpdateManyMutationInput, suggested_services_configUncheckedUpdateManyWithoutCategoryInput>
+  }
+
+  export type suggested_services_configScalarWhereInput = {
+    AND?: suggested_services_configScalarWhereInput | suggested_services_configScalarWhereInput[]
+    OR?: suggested_services_configScalarWhereInput[]
+    NOT?: suggested_services_configScalarWhereInput | suggested_services_configScalarWhereInput[]
+    id?: IntFilter<"suggested_services_config"> | number
+    category_id?: IntFilter<"suggested_services_config"> | number
+    display_name?: StringFilter<"suggested_services_config"> | string
+    suggested_interval_months?: IntFilter<"suggested_services_config"> | number
+    notification_template?: StringFilter<"suggested_services_config"> | string
+    is_active?: BoolNullableFilter<"suggested_services_config"> | boolean | null
+    created_at?: DateTimeNullableFilter<"suggested_services_config"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"suggested_services_config"> | Date | string | null
+  }
+
   export type CategoryCreateWithoutCategoryTranslationInput = {
     name: string
     logo?: string | null
@@ -65024,6 +66693,7 @@ export namespace Prisma {
     Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutCategoryTranslationInput = {
@@ -65041,6 +66711,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutCategoryTranslationInput = {
@@ -65073,6 +66744,7 @@ export namespace Prisma {
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutCategoryTranslationInput = {
@@ -65090,6 +66762,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CustomerProfileCreateWithoutChatMessageInput = {
@@ -65187,6 +66860,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
@@ -65206,6 +66880,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     Proposal?: ProposalUncheckedCreateNestedOneWithoutBookingInput
     ProviderReport?: ProviderReportUncheckedCreateNestedManyWithoutBookingInput
@@ -65601,6 +67276,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     staffId?: IntNullableFilter<"Booking"> | number | null
     serviceRequestId?: IntNullableFilter<"Booking"> | number | null
+    completedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
   }
 
   export type ChatMessageUpsertWithWhereUniqueWithoutCustomerProfileInput = {
@@ -68770,6 +70446,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutServiceInput = {
@@ -68787,6 +70464,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutServiceInput = {
@@ -69230,6 +70908,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutServiceInput = {
@@ -69247,6 +70926,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type UserUpsertWithoutService_Service_createdByIdToUserInput = {
@@ -69620,6 +71300,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
@@ -69639,6 +71320,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     Proposal?: ProposalUncheckedCreateNestedOneWithoutBookingInput
     ProviderReport?: ProviderReportUncheckedCreateNestedManyWithoutBookingInput
@@ -70647,6 +72329,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
@@ -70666,6 +72349,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     Proposal?: ProposalUncheckedCreateNestedOneWithoutBookingInput
     ProviderReport?: ProviderReportUncheckedCreateNestedManyWithoutBookingInput
@@ -71191,6 +72875,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
     Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutStaffCategoryInput = {
@@ -71208,6 +72893,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutStaffCategoryInput = {
@@ -71270,6 +72956,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutStaffCategoryInput = {
@@ -71287,6 +72974,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type StaffUpsertWithoutStaffCategoryInput = {
@@ -71330,6 +73018,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
@@ -71350,6 +73039,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     Proposal?: ProposalUncheckedCreateNestedOneWithoutBookingInput
     ProviderReport?: ProviderReportUncheckedCreateNestedManyWithoutBookingInput
@@ -71377,6 +73067,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
@@ -71397,6 +73088,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     Proposal?: ProposalUncheckedUpdateOneWithoutBookingNestedInput
     ProviderReport?: ProviderReportUncheckedUpdateManyWithoutBookingNestedInput
@@ -71417,6 +73109,7 @@ export namespace Prisma {
     Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutUser_Category_createdByIdToUserInput = {
@@ -71434,6 +73127,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutUser_Category_createdByIdToUserInput = {
@@ -71460,6 +73154,7 @@ export namespace Prisma {
     Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutUser_Category_deletedByIdToUserInput = {
@@ -71477,6 +73172,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutUser_Category_deletedByIdToUserInput = {
@@ -71503,6 +73199,7 @@ export namespace Prisma {
     Service?: ServiceCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutUser_Category_updatedByIdToUserInput = {
@@ -71520,6 +73217,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutUser_Category_updatedByIdToUserInput = {
@@ -73708,6 +75406,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
@@ -73728,6 +75427,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     Proposal?: ProposalUncheckedCreateNestedOneWithoutBookingInput
     ProviderReport?: ProviderReportUncheckedCreateNestedManyWithoutBookingInput
@@ -73785,6 +75485,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
@@ -73805,6 +75506,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     Proposal?: ProposalUncheckedUpdateOneWithoutBookingNestedInput
     ProviderReport?: ProviderReportUncheckedUpdateManyWithoutBookingNestedInput
@@ -73852,6 +75554,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
@@ -73872,6 +75575,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
     Proposal?: ProposalUncheckedCreateNestedOneWithoutBookingInput
     ProviderReport?: ProviderReportUncheckedCreateNestedManyWithoutBookingInput
     Transaction?: TransactionUncheckedCreateNestedOneWithoutBookingInput
@@ -73929,6 +75633,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
@@ -73949,6 +75654,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Proposal?: ProposalUncheckedUpdateOneWithoutBookingNestedInput
     ProviderReport?: ProviderReportUncheckedUpdateManyWithoutBookingNestedInput
     Transaction?: TransactionUncheckedUpdateOneWithoutBookingNestedInput
@@ -74144,6 +75850,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     Staff_Booking_staffIdToStaff?: StaffCreateNestedOneWithoutBooking_Booking_staffIdToStaffInput
@@ -74163,6 +75870,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     staffId?: number | null
+    completedAt?: Date | string | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     Proposal?: ProposalUncheckedCreateNestedOneWithoutBookingInput
     ProviderReport?: ProviderReportUncheckedCreateNestedManyWithoutBookingInput
@@ -74227,6 +75935,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
     Service?: ServiceCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutServiceRequestInput = {
@@ -74244,6 +75953,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
     Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+    suggested_services_config?: suggested_services_configUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutServiceRequestInput = {
@@ -74363,6 +76073,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
@@ -74382,6 +76093,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     Proposal?: ProposalUncheckedUpdateOneWithoutBookingNestedInput
     ProviderReport?: ProviderReportUncheckedUpdateManyWithoutBookingNestedInput
@@ -74458,6 +76170,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutServiceRequestInput = {
@@ -74475,6 +76188,7 @@ export namespace Prisma {
     CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CustomerProfileUpsertWithoutServiceRequestInput = {
@@ -74786,6 +76500,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
@@ -74806,6 +76521,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     ProviderReport?: ProviderReportUncheckedCreateNestedManyWithoutBookingInput
     Transaction?: TransactionUncheckedCreateNestedOneWithoutBookingInput
@@ -74856,6 +76572,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
@@ -74876,6 +76593,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     ProviderReport?: ProviderReportUncheckedUpdateManyWithoutBookingNestedInput
     Transaction?: TransactionUncheckedUpdateOneWithoutBookingNestedInput
@@ -76070,6 +77788,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    completedAt?: Date | string | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutBookingInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutBookingInput
     ServiceRequest?: ServiceRequestCreateNestedOneWithoutBookingInput
@@ -76090,6 +77809,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
     InspectionReport?: InspectionReportUncheckedCreateNestedOneWithoutBookingInput
     Proposal?: ProposalUncheckedCreateNestedOneWithoutBookingInput
     Transaction?: TransactionUncheckedCreateNestedOneWithoutBookingInput
@@ -76301,6 +78021,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
@@ -76321,6 +78042,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     Proposal?: ProposalUncheckedUpdateOneWithoutBookingNestedInput
     Transaction?: TransactionUncheckedUpdateOneWithoutBookingNestedInput
@@ -76529,6 +78251,92 @@ export namespace Prisma {
     Role_UserRoles?: RoleUncheckedUpdateManyWithoutUser_UserRolesNestedInput
   }
 
+  export type CategoryCreateWithoutSuggested_services_configInput = {
+    name: string
+    logo?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    User_Category_createdByIdToUser?: UserCreateNestedOneWithoutCategory_Category_createdByIdToUserInput
+    User_Category_deletedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_deletedByIdToUserInput
+    Category?: CategoryCreateNestedOneWithoutOther_CategoryInput
+    other_Category?: CategoryCreateNestedManyWithoutCategoryInput
+    User_Category_updatedByIdToUser?: UserCreateNestedOneWithoutCategory_Category_updatedByIdToUserInput
+    CategoryTranslation?: CategoryTranslationCreateNestedManyWithoutCategoryInput
+    Service?: ServiceCreateNestedManyWithoutCategoryInput
+    ServiceRequest?: ServiceRequestCreateNestedManyWithoutCategoryInput
+    StaffCategory?: StaffCategoryCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryUncheckedCreateWithoutSuggested_services_configInput = {
+    id?: number
+    name: string
+    logo?: string | null
+    parentCategoryId?: number | null
+    createdById?: number | null
+    updatedById?: number | null
+    deletedById?: number | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    other_Category?: CategoryUncheckedCreateNestedManyWithoutCategoryInput
+    CategoryTranslation?: CategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    Service?: ServiceUncheckedCreateNestedManyWithoutCategoryInput
+    ServiceRequest?: ServiceRequestUncheckedCreateNestedManyWithoutCategoryInput
+    StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryCreateOrConnectWithoutSuggested_services_configInput = {
+    where: CategoryWhereUniqueInput
+    create: XOR<CategoryCreateWithoutSuggested_services_configInput, CategoryUncheckedCreateWithoutSuggested_services_configInput>
+  }
+
+  export type CategoryUpsertWithoutSuggested_services_configInput = {
+    update: XOR<CategoryUpdateWithoutSuggested_services_configInput, CategoryUncheckedUpdateWithoutSuggested_services_configInput>
+    create: XOR<CategoryCreateWithoutSuggested_services_configInput, CategoryUncheckedCreateWithoutSuggested_services_configInput>
+    where?: CategoryWhereInput
+  }
+
+  export type CategoryUpdateToOneWithWhereWithoutSuggested_services_configInput = {
+    where?: CategoryWhereInput
+    data: XOR<CategoryUpdateWithoutSuggested_services_configInput, CategoryUncheckedUpdateWithoutSuggested_services_configInput>
+  }
+
+  export type CategoryUpdateWithoutSuggested_services_configInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    User_Category_createdByIdToUser?: UserUpdateOneWithoutCategory_Category_createdByIdToUserNestedInput
+    User_Category_deletedByIdToUser?: UserUpdateOneWithoutCategory_Category_deletedByIdToUserNestedInput
+    Category?: CategoryUpdateOneWithoutOther_CategoryNestedInput
+    other_Category?: CategoryUpdateManyWithoutCategoryNestedInput
+    User_Category_updatedByIdToUser?: UserUpdateOneWithoutCategory_Category_updatedByIdToUserNestedInput
+    CategoryTranslation?: CategoryTranslationUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUpdateManyWithoutCategoryNestedInput
+    ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
+    StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type CategoryUncheckedUpdateWithoutSuggested_services_configInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    parentCategoryId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    other_Category?: CategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    CategoryTranslation?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
+    ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
+    StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
   export type ProviderReportCreateManyBookingInput = {
     id?: number
     customerId: number
@@ -76690,6 +78498,16 @@ export namespace Prisma {
     staffId: number
   }
 
+  export type suggested_services_configCreateManyCategoryInput = {
+    id?: number
+    display_name: string
+    suggested_interval_months: number
+    notification_template: string
+    is_active?: boolean | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
   export type CategoryUpdateWithoutCategoryInput = {
     name?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76704,6 +78522,7 @@ export namespace Prisma {
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutCategoryInput = {
@@ -76721,6 +78540,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateManyWithoutCategoryInput = {
@@ -76887,6 +78707,35 @@ export namespace Prisma {
     staffId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type suggested_services_configUpdateWithoutCategoryInput = {
+    display_name?: StringFieldUpdateOperationsInput | string
+    suggested_interval_months?: IntFieldUpdateOperationsInput | number
+    notification_template?: StringFieldUpdateOperationsInput | string
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type suggested_services_configUncheckedUpdateWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    display_name?: StringFieldUpdateOperationsInput | string
+    suggested_interval_months?: IntFieldUpdateOperationsInput | number
+    notification_template?: StringFieldUpdateOperationsInput | string
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type suggested_services_configUncheckedUpdateManyWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    display_name?: StringFieldUpdateOperationsInput | string
+    suggested_interval_months?: IntFieldUpdateOperationsInput | number
+    notification_template?: StringFieldUpdateOperationsInput | string
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type BookingCreateManyCustomerProfileInput = {
     id?: number
     providerId: number
@@ -76896,6 +78745,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
   }
 
   export type ChatMessageCreateManyCustomerProfileInput = {
@@ -76990,6 +78840,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
@@ -77009,6 +78860,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     Proposal?: ProposalUncheckedUpdateOneWithoutBookingNestedInput
     ProviderReport?: ProviderReportUncheckedUpdateManyWithoutBookingNestedInput
@@ -77025,6 +78877,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ChatMessageUpdateWithoutCustomerProfileInput = {
@@ -77643,6 +79496,7 @@ export namespace Prisma {
     updatedAt: Date | string
     staffId?: number | null
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
   }
 
   export type ConversationCreateManyServiceProviderInput = {
@@ -77752,6 +79606,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
     Staff_Booking_staffIdToStaff?: StaffUpdateOneWithoutBooking_Booking_staffIdToStaffNestedInput
@@ -77771,6 +79626,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     Proposal?: ProposalUncheckedUpdateOneWithoutBookingNestedInput
     ProviderReport?: ProviderReportUncheckedUpdateManyWithoutBookingNestedInput
@@ -77787,6 +79643,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     staffId?: NullableIntFieldUpdateOperationsInput | number | null
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ConversationUpdateWithoutServiceProviderInput = {
@@ -78124,6 +79981,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     serviceRequestId?: number | null
+    completedAt?: Date | string | null
   }
 
   export type InspectionReportCreateManyStaffInput = {
@@ -78165,6 +80023,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutBookingNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutBookingNestedInput
     ServiceRequest?: ServiceRequestUpdateOneWithoutBookingNestedInput
@@ -78184,6 +80043,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InspectionReport?: InspectionReportUncheckedUpdateOneWithoutBookingNestedInput
     Proposal?: ProposalUncheckedUpdateOneWithoutBookingNestedInput
     ProviderReport?: ProviderReportUncheckedUpdateManyWithoutBookingNestedInput
@@ -78200,6 +80060,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     serviceRequestId?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type InspectionReportUpdateWithoutStaffInput = {
@@ -78596,6 +80457,7 @@ export namespace Prisma {
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutUser_Category_createdByIdToUserInput = {
@@ -78613,6 +80475,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateManyWithoutUser_Category_createdByIdToUserInput = {
@@ -78641,6 +80504,7 @@ export namespace Prisma {
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutUser_Category_deletedByIdToUserInput = {
@@ -78658,6 +80522,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateManyWithoutUser_Category_deletedByIdToUserInput = {
@@ -78686,6 +80551,7 @@ export namespace Prisma {
     Service?: ServiceUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutUser_Category_updatedByIdToUserInput = {
@@ -78703,6 +80569,7 @@ export namespace Prisma {
     Service?: ServiceUncheckedUpdateManyWithoutCategoryNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCategoryNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    suggested_services_config?: suggested_services_configUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateManyWithoutUser_Category_updatedByIdToUserInput = {
