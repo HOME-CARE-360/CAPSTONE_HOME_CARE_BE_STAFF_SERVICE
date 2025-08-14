@@ -122,30 +122,6 @@ export const StaffService = {
   },
 
   /**
-   * Retrieves paginated reviews for staff
-   * @param staffId - Staff identifier
-   * @param options - Query options for filtering and pagination
-   * @returns Paginated reviews
-   */
-  async getReviews(
-    staffId: number,
-    options: PaginationQuery & {
-      rating?: number;
-      fromDate?: string;
-      toDate?: string;
-    } = {},
-  ) {
-    const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT, ...filters } = options;
-    const sanitizedOptions = {
-      page: Math.max(page, DEFAULT_PAGE),
-      limit: Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT),
-      ...filters,
-    };
-
-    return StaffRepository.getReviews(staffId, sanitizedOptions);
-  },
-
-  /**
    * Retrieves inspection report by ID with error handling
    * @param inspectionId - Inspection report identifier
    * @returns Inspection report details
@@ -240,32 +216,8 @@ export const StaffService = {
     return StaffRepository.getRecentWorkLogs(staffId, sanitizedOptions);
   },
 
-  /**
-   * Retrieves staff performance metrics
-   * @param staffId - Staff identifier
-   * @returns Performance metrics
-   */
-  async getStaffPerformanceById(staffId: number) {
-    if (!staffId || staffId <= 0) {
-      throw new AppError(
-        "Invalid staff ID",
-        [{ message: "Error.InvalidStaffId", path: ["staffId"] }],
-        { staffId },
-        400,
-      );
-    }
 
-    return StaffRepository.getStaffPerformanceById(staffId);
-  },
 
-  /**
-   * Retrieves aggregated review summary by rating
-   * @param staffId - Staff identifier
-   * @returns Review summary statistics
-   */
-  async getReviewSummary(staffId: number) {
-    return StaffRepository.getReviewSummary(staffId);
-  },
 
   /**
    * Creates work log and updates booking status atomically

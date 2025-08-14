@@ -32,13 +32,10 @@ const HANDLER_MAP = new Map<string, (data: any) => Promise<HandlerResult>>([
   ["STAFF_GET_BOOKINGS", handleGetBookings],
   ["STAFF_GET_BOOKING_DETAIL", handleGetBookingDetail],
   ["STAFF_CREATE_INSPECTION_REPORT", handleCreateInspectionReport],
-  ["STAFF_GET_REVIEWS", handleGetReviews],
   ["STAFF_GET_INSPECTION_REPORTS", handleGetInspectionReports],
   ["STAFF_GET_INSPECTION_DETAIL", handleGetInspectionDetail],
   ["UPDATE_INSPECTION_REPORT", handleUpdateInspectionReport],
   ["STAFF_GET_WORK_LOGS", handleGetWorkLogs],
-  ["STAFF_GET_PERFORMANCE", handleGetPerformance],
-  ["STAFF_GET_REVIEW_SUMMARY", handleGetReviewSummary],
   ["STAFF_CREATE_WORK_LOG", handleCreateWorkLog],
   ["STAFF_CHECK_OUT", handleCheckOut],
   ["STAFF_GET_BOOKINGS_BY_DATE", handleGetBookingsByDate],
@@ -140,11 +137,6 @@ async function handleCreateInspectionReport(data: any): Promise<HandlerResult> {
   return { message: "Inspection report created successfully", data: result };
 }
 
-async function handleGetReviews(data: any): Promise<HandlerResult> {
-  const parsed = parseWithSchema(GetReviewsSchema, data);
-  const result = await StaffService.getReviews(parsed.staffId, parsed);
-  return { message: "Staff reviews retrieved successfully", data: result };
-}
 
 async function handleGetInspectionReports(data: any): Promise<HandlerResult> {
   const parsed = parseWithSchema(GetInspectionReportsSchema, data);
@@ -180,17 +172,6 @@ async function handleGetWorkLogs(data: any): Promise<HandlerResult> {
   return { message: "Recent work logs retrieved successfully", data: result };
 }
 
-async function handleGetPerformance(data: any): Promise<HandlerResult> {
-  validateId(data?.staffId, "staffId");
-  const result = await StaffService.getStaffPerformanceById(data.staffId);
-  return { message: "Staff performance retrieved successfully", data: result };
-}
-
-async function handleGetReviewSummary(data: any): Promise<HandlerResult> {
-  validateId(data?.staffId, "staffId");
-  const result = await StaffService.getReviewSummary(data.staffId);
-  return { message: "Review summary retrieved successfully", data: result };
-}
 
 async function handleCreateWorkLog(data: any): Promise<HandlerResult> {
   validateId(data?.staffId, "staffId");

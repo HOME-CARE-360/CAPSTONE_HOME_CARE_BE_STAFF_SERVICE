@@ -390,73 +390,6 @@ export const StaffRepository = {
     }
   },
 
-  async getReviews(
-    staffId: number,
-    options?: {
-      page?: number;
-      limit?: number;
-      rating?: number;
-      fromDate?: string;
-      toDate?: string;
-    },
-  ) {
-    try {
-      const { page, limit, skip } = calculatePagination(
-        options?.page,
-        options?.limit,
-      );
-
-      const where: Prisma.ReviewWhereInput = {
-        staffId,
-        ...(options?.rating && { rating: options.rating }),
-        ...buildDateFilter(options?.fromDate, options?.toDate),
-      };
-
-      const [total, reviews] = await Promise.all([
-        prisma.review.count({ where }),
-        prisma.review.findMany({
-          where,
-          orderBy: { createdAt: "desc" },
-          skip,
-          take: limit,
-          select: {
-            id: true,
-            rating: true,
-            comment: true,
-            createdAt: true,
-            CustomerProfile: {
-              select: { User: { select: { name: true } } },
-            },
-            Service: { select: SERVICE_SELECT },
-          },
-        }),
-      ]);
-
-      const totalPages = Math.ceil(total / limit);
-
-      return {
-        reviews: reviews.map((review) => ({
-          id: review.id,
-          rating: review.rating,
-          comment: review.comment,
-          createdAt: review.createdAt,
-          customerName: review.CustomerProfile?.User?.name ?? null,
-          serviceName: review.Service?.name ?? null,
-        })),
-        total,
-        page,
-        limit,
-        totalPages,
-      };
-    } catch (error) {
-      throw new AppError(
-        "Failed to get staff reviews",
-        [{ message: "Error.GetReviewsError", path: ["staffId"] }],
-        { staffId, error },
-        500,
-      );
-    }
-  },
 
   async countBookings(
     staffId: number,
@@ -678,52 +611,7 @@ export const StaffRepository = {
     }
   },
 
-  async getStaffPerformanceById(staffId: number) {
-    try {
-      const [bookingsCount, workLogs, reviewsData] = await Promise.all([
-        prisma.booking.count({ where: { staffId } }),
-        prisma.workLog.findMany({
-          where: { staffId },
-          select: { checkIn: true, checkOut: true },
-        }),
-        prisma.review.aggregate({
-          where: { staffId },
-          _count: { rating: true },
-          _avg: { rating: true },
-        }),
-      ]);
 
-      const totalHoursWorked = workLogs.reduce((sum, log) => {
-        if (log.checkIn && log.checkOut) {
-          return (
-            sum +
-            calculateHoursDifference(
-              new Date(log.checkIn),
-              new Date(log.checkOut),
-            )
-          );
-        }
-        return sum;
-      }, 0);
-
-      return {
-        staffId,
-        totalBookings: bookingsCount,
-        totalHoursWorked: Number(totalHoursWorked.toFixed(2)),
-        totalReviews: reviewsData._count.rating,
-        averageRating: reviewsData._avg.rating
-          ? Number(reviewsData._avg.rating.toFixed(2))
-          : null,
-      };
-    } catch (error) {
-      throw new AppError(
-        "Failed to get staff performance",
-        [{ message: "Error.GetStaffPerformanceError", path: ["staffId"] }],
-        { staffId, error },
-        500,
-      );
-    }
-  },
 
   async getRecentWorkLogs(
     staffId: number,
@@ -791,33 +679,6 @@ export const StaffRepository = {
     }
   },
 
-  async getReviewSummary(staffId: number) {
-    try {
-      const reviewCounts = await prisma.review.groupBy({
-        by: ["rating"],
-        where: { staffId },
-        _count: { rating: true },
-      });
-
-      const summary = [1, 2, 3, 4, 5].reduce(
-        (acc, star) => {
-          const found = reviewCounts.find((r) => r.rating === star);
-          acc[star] = found?._count.rating ?? 0;
-          return acc;
-        },
-        {} as Record<number, number>,
-      );
-
-      return summary;
-    } catch (error) {
-      throw new AppError(
-        "Failed to summarize reviews",
-        [{ message: "Error.GetReviewSummaryError", path: ["staffId"] }],
-        { staffId, error },
-        500,
-      );
-    }
-  },
 
 async createWorkLogWithStatusUpdate(
   staffId: number,
@@ -1034,10 +895,6 @@ async checkOutWorkLogByBookingId(bookingId: number, imageUrls: string[] = []) {
           updatedAt: now,
           checkOutImages: imageUrls,
         },
-      }),
-      tx.booking.update({
-        where: { id: bookingId },
-        data: { status: BookingStatus.COMPLETED },
       }),
     ]);
 
