@@ -201,14 +201,11 @@ model RefreshToken {
 model Review {
   id              Int             @id @default(autoincrement())
   customerId      Int
-  staffId         Int
-  serviceId       Int
   rating          Int
   comment         String
   createdAt       DateTime        @default(now())
+  bookingId       Int?
   CustomerProfile CustomerProfile @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  Service         Service         @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  Staff           Staff           @relation(fields: [staffId], references: [id], onDelete: Cascade)
 }
 
 model RewardPoint {
@@ -260,7 +257,6 @@ model Service {
   FavoriteService                FavoriteService[]
   ProposalItem                   ProposalItem[]
   RecurringBooking               RecurringBooking[]
-  Review                         Review[]
   Category                       Category               @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   User_Service_createdByIdToUser User?                  @relation("Service_createdByIdToUser", fields: [createdById], references: [id])
   User_Service_deletedByIdToUser User?                  @relation("Service_deletedByIdToUser", fields: [deletedById], references: [id])
@@ -320,7 +316,6 @@ model Staff {
   isActive                       Boolean            @default(true)
   Booking_Booking_staffIdToStaff Booking[]          @relation("Booking_staffIdToStaff")
   InspectionReport               InspectionReport[]
-  Review                         Review[]
   ServiceProvider                ServiceProvider    @relation(fields: [providerId], references: [id], onDelete: Cascade)
   User                           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   StaffCategory                  StaffCategory[]
@@ -337,8 +332,8 @@ model StaffCategory {
 }
 
 model Transaction {
-  id          Int           @id @default(autoincrement())
-  bookingId   Int           @unique
+  id          Int               @id @default(autoincrement())
+  bookingId   Int               @unique
   amount      Float
   status      PaymentStatus
   method      PaymentMethod
@@ -347,9 +342,10 @@ model Transaction {
   updatedById Int?
   deletedById Int?
   deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  orderCode   String?       @unique @db.VarChar(255)
-  Booking     Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime          @default(now())
+  orderCode   String?           @unique @db.VarChar(255)
+  type        transaction_type?
+  Booking     Booking           @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -621,6 +617,7 @@ enum BookingStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
+  WAIT_FOR_PAYMENT
 }
 
 enum Gender {
@@ -643,6 +640,7 @@ enum PaymentMethod {
   CASH
   CREDIT_CARD
   BANK_TRANSFER
+  WALLET
   MOMO
   ZALOPAY
 }
@@ -704,6 +702,7 @@ enum InspectionStatus {
 enum RequestStatus {
   PENDING
   IN_PROGRESS
+  WAIT_FOR_PAYMENT
   ESTIMATED
   CANCELLED
 }
@@ -756,4 +755,9 @@ enum ReportStatus {
   UNDER_REVIEW
   RESOLVED
   REJECTED
+}
+
+enum transaction_type {
+  BOOKING_DEPOSIT
+  PROPOSAL_PAYMENT
 }

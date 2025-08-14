@@ -261,11 +261,10 @@ exports.Prisma.RefreshTokenScalarFieldEnum = {
 exports.Prisma.ReviewScalarFieldEnum = {
   id: 'id',
   customerId: 'customerId',
-  staffId: 'staffId',
-  serviceId: 'serviceId',
   rating: 'rating',
   comment: 'comment',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  bookingId: 'bookingId'
 };
 
 exports.Prisma.RewardPointScalarFieldEnum = {
@@ -362,7 +361,8 @@ exports.Prisma.TransactionScalarFieldEnum = {
   deletedById: 'deletedById',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
-  orderCode: 'orderCode'
+  orderCode: 'orderCode',
+  type: 'type'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -563,7 +563,8 @@ exports.BookingStatus = exports.$Enums.BookingStatus = {
   CONFIRMED: 'CONFIRMED',
   IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED'
+  CANCELLED: 'CANCELLED',
+  WAIT_FOR_PAYMENT: 'WAIT_FOR_PAYMENT'
 };
 
 exports.Gender = exports.$Enums.Gender = {
@@ -630,8 +631,14 @@ exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   CASH: 'CASH',
   CREDIT_CARD: 'CREDIT_CARD',
   BANK_TRANSFER: 'BANK_TRANSFER',
+  WALLET: 'WALLET',
   MOMO: 'MOMO',
   ZALOPAY: 'ZALOPAY'
+};
+
+exports.transaction_type = exports.$Enums.transaction_type = {
+  BOOKING_DEPOSIT: 'BOOKING_DEPOSIT',
+  PROPOSAL_PAYMENT: 'PROPOSAL_PAYMENT'
 };
 
 exports.UserStatus = exports.$Enums.UserStatus = {
@@ -650,6 +657,7 @@ exports.VerificationCodeType = exports.$Enums.VerificationCodeType = {
 exports.RequestStatus = exports.$Enums.RequestStatus = {
   PENDING: 'PENDING',
   IN_PROGRESS: 'IN_PROGRESS',
+  WAIT_FOR_PAYMENT: 'WAIT_FOR_PAYMENT',
   ESTIMATED: 'ESTIMATED',
   CANCELLED: 'CANCELLED'
 };

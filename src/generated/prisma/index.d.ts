@@ -208,7 +208,8 @@ export namespace $Enums {
   CONFIRMED: 'CONFIRMED',
   IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED'
+  CANCELLED: 'CANCELLED',
+  WAIT_FOR_PAYMENT: 'WAIT_FOR_PAYMENT'
 };
 
 export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus]
@@ -240,6 +241,7 @@ export const PaymentMethod: {
   CASH: 'CASH',
   CREDIT_CARD: 'CREDIT_CARD',
   BANK_TRANSFER: 'BANK_TRANSFER',
+  WALLET: 'WALLET',
   MOMO: 'MOMO',
   ZALOPAY: 'ZALOPAY'
 };
@@ -328,6 +330,7 @@ export type InspectionStatus = (typeof InspectionStatus)[keyof typeof Inspection
 export const RequestStatus: {
   PENDING: 'PENDING',
   IN_PROGRESS: 'IN_PROGRESS',
+  WAIT_FOR_PAYMENT: 'WAIT_FOR_PAYMENT',
   ESTIMATED: 'ESTIMATED',
   CANCELLED: 'CANCELLED'
 };
@@ -404,6 +407,14 @@ export const ReportStatus: {
 };
 
 export type ReportStatus = (typeof ReportStatus)[keyof typeof ReportStatus]
+
+
+export const transaction_type: {
+  BOOKING_DEPOSIT: 'BOOKING_DEPOSIT',
+  PROPOSAL_PAYMENT: 'PROPOSAL_PAYMENT'
+};
+
+export type transaction_type = (typeof transaction_type)[keyof typeof transaction_type]
 
 }
 
@@ -486,6 +497,10 @@ export const ChatSenderType: typeof $Enums.ChatSenderType
 export type ReportStatus = $Enums.ReportStatus
 
 export const ReportStatus: typeof $Enums.ReportStatus
+
+export type transaction_type = $Enums.transaction_type
+
+export const transaction_type: typeof $Enums.transaction_type
 
 /**
  * ##  Prisma Client ʲˢ
@@ -4766,7 +4781,6 @@ export namespace Prisma {
     FavoriteService: number
     ProposalItem: number
     RecurringBooking: number
-    Review: number
     Service_ServiceItems: number
   }
 
@@ -4774,7 +4788,6 @@ export namespace Prisma {
     FavoriteService?: boolean | ServiceCountOutputTypeCountFavoriteServiceArgs
     ProposalItem?: boolean | ServiceCountOutputTypeCountProposalItemArgs
     RecurringBooking?: boolean | ServiceCountOutputTypeCountRecurringBookingArgs
-    Review?: boolean | ServiceCountOutputTypeCountReviewArgs
     Service_ServiceItems?: boolean | ServiceCountOutputTypeCountService_ServiceItemsArgs
   }
 
@@ -4808,13 +4821,6 @@ export namespace Prisma {
    */
   export type ServiceCountOutputTypeCountRecurringBookingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RecurringBookingWhereInput
-  }
-
-  /**
-   * ServiceCountOutputType without action
-   */
-  export type ServiceCountOutputTypeCountReviewArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ReviewWhereInput
   }
 
   /**
@@ -4935,7 +4941,6 @@ export namespace Prisma {
   export type StaffCountOutputType = {
     Booking_Booking_staffIdToStaff: number
     InspectionReport: number
-    Review: number
     StaffCategory: number
     WorkLog: number
   }
@@ -4943,7 +4948,6 @@ export namespace Prisma {
   export type StaffCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Booking_Booking_staffIdToStaff?: boolean | StaffCountOutputTypeCountBooking_Booking_staffIdToStaffArgs
     InspectionReport?: boolean | StaffCountOutputTypeCountInspectionReportArgs
-    Review?: boolean | StaffCountOutputTypeCountReviewArgs
     StaffCategory?: boolean | StaffCountOutputTypeCountStaffCategoryArgs
     WorkLog?: boolean | StaffCountOutputTypeCountWorkLogArgs
   }
@@ -4971,13 +4975,6 @@ export namespace Prisma {
    */
   export type StaffCountOutputTypeCountInspectionReportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InspectionReportWhereInput
-  }
-
-  /**
-   * StaffCountOutputType without action
-   */
-  export type StaffCountOutputTypeCountReviewArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ReviewWhereInput
   }
 
   /**
@@ -19994,47 +19991,42 @@ export namespace Prisma {
   export type ReviewAvgAggregateOutputType = {
     id: number | null
     customerId: number | null
-    staffId: number | null
-    serviceId: number | null
     rating: number | null
+    bookingId: number | null
   }
 
   export type ReviewSumAggregateOutputType = {
     id: number | null
     customerId: number | null
-    staffId: number | null
-    serviceId: number | null
     rating: number | null
+    bookingId: number | null
   }
 
   export type ReviewMinAggregateOutputType = {
     id: number | null
     customerId: number | null
-    staffId: number | null
-    serviceId: number | null
     rating: number | null
     comment: string | null
     createdAt: Date | null
+    bookingId: number | null
   }
 
   export type ReviewMaxAggregateOutputType = {
     id: number | null
     customerId: number | null
-    staffId: number | null
-    serviceId: number | null
     rating: number | null
     comment: string | null
     createdAt: Date | null
+    bookingId: number | null
   }
 
   export type ReviewCountAggregateOutputType = {
     id: number
     customerId: number
-    staffId: number
-    serviceId: number
     rating: number
     comment: number
     createdAt: number
+    bookingId: number
     _all: number
   }
 
@@ -20042,47 +20034,42 @@ export namespace Prisma {
   export type ReviewAvgAggregateInputType = {
     id?: true
     customerId?: true
-    staffId?: true
-    serviceId?: true
     rating?: true
+    bookingId?: true
   }
 
   export type ReviewSumAggregateInputType = {
     id?: true
     customerId?: true
-    staffId?: true
-    serviceId?: true
     rating?: true
+    bookingId?: true
   }
 
   export type ReviewMinAggregateInputType = {
     id?: true
     customerId?: true
-    staffId?: true
-    serviceId?: true
     rating?: true
     comment?: true
     createdAt?: true
+    bookingId?: true
   }
 
   export type ReviewMaxAggregateInputType = {
     id?: true
     customerId?: true
-    staffId?: true
-    serviceId?: true
     rating?: true
     comment?: true
     createdAt?: true
+    bookingId?: true
   }
 
   export type ReviewCountAggregateInputType = {
     id?: true
     customerId?: true
-    staffId?: true
-    serviceId?: true
     rating?: true
     comment?: true
     createdAt?: true
+    bookingId?: true
     _all?: true
   }
 
@@ -20175,11 +20162,10 @@ export namespace Prisma {
   export type ReviewGroupByOutputType = {
     id: number
     customerId: number
-    staffId: number
-    serviceId: number
     rating: number
     comment: string
     createdAt: Date
+    bookingId: number | null
     _count: ReviewCountAggregateOutputType | null
     _avg: ReviewAvgAggregateOutputType | null
     _sum: ReviewSumAggregateOutputType | null
@@ -20204,84 +20190,65 @@ export namespace Prisma {
   export type ReviewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     customerId?: boolean
-    staffId?: boolean
-    serviceId?: boolean
     rating?: boolean
     comment?: boolean
     createdAt?: boolean
+    bookingId?: boolean
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
-    Staff?: boolean | StaffDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     customerId?: boolean
-    staffId?: boolean
-    serviceId?: boolean
     rating?: boolean
     comment?: boolean
     createdAt?: boolean
+    bookingId?: boolean
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
-    Staff?: boolean | StaffDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     customerId?: boolean
-    staffId?: boolean
-    serviceId?: boolean
     rating?: boolean
     comment?: boolean
     createdAt?: boolean
+    bookingId?: boolean
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
-    Staff?: boolean | StaffDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectScalar = {
     id?: boolean
     customerId?: boolean
-    staffId?: boolean
-    serviceId?: boolean
     rating?: boolean
     comment?: boolean
     createdAt?: boolean
+    bookingId?: boolean
   }
 
-  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "customerId" | "staffId" | "serviceId" | "rating" | "comment" | "createdAt", ExtArgs["result"]["review"]>
+  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "customerId" | "rating" | "comment" | "createdAt" | "bookingId", ExtArgs["result"]["review"]>
   export type ReviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
-    Staff?: boolean | StaffDefaultArgs<ExtArgs>
   }
   export type ReviewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
-    Staff?: boolean | StaffDefaultArgs<ExtArgs>
   }
   export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     CustomerProfile?: boolean | CustomerProfileDefaultArgs<ExtArgs>
-    Service?: boolean | ServiceDefaultArgs<ExtArgs>
-    Staff?: boolean | StaffDefaultArgs<ExtArgs>
   }
 
   export type $ReviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Review"
     objects: {
       CustomerProfile: Prisma.$CustomerProfilePayload<ExtArgs>
-      Service: Prisma.$ServicePayload<ExtArgs>
-      Staff: Prisma.$StaffPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       customerId: number
-      staffId: number
-      serviceId: number
       rating: number
       comment: string
       createdAt: Date
+      bookingId: number | null
     }, ExtArgs["result"]["review"]>
     composites: {}
   }
@@ -20677,8 +20644,6 @@ export namespace Prisma {
   export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     CustomerProfile<T extends CustomerProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CustomerProfileDefaultArgs<ExtArgs>>): Prisma__CustomerProfileClient<$Result.GetResult<Prisma.$CustomerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    Service<T extends ServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServiceDefaultArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    Staff<T extends StaffDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StaffDefaultArgs<ExtArgs>>): Prisma__StaffClient<$Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20710,11 +20675,10 @@ export namespace Prisma {
   interface ReviewFieldRefs {
     readonly id: FieldRef<"Review", 'Int'>
     readonly customerId: FieldRef<"Review", 'Int'>
-    readonly staffId: FieldRef<"Review", 'Int'>
-    readonly serviceId: FieldRef<"Review", 'Int'>
     readonly rating: FieldRef<"Review", 'Int'>
     readonly comment: FieldRef<"Review", 'String'>
     readonly createdAt: FieldRef<"Review", 'DateTime'>
+    readonly bookingId: FieldRef<"Review", 'Int'>
   }
     
 
@@ -23836,7 +23800,6 @@ export namespace Prisma {
     FavoriteService?: boolean | Service$FavoriteServiceArgs<ExtArgs>
     ProposalItem?: boolean | Service$ProposalItemArgs<ExtArgs>
     RecurringBooking?: boolean | Service$RecurringBookingArgs<ExtArgs>
-    Review?: boolean | Service$ReviewArgs<ExtArgs>
     Category?: boolean | CategoryDefaultArgs<ExtArgs>
     User_Service_createdByIdToUser?: boolean | Service$User_Service_createdByIdToUserArgs<ExtArgs>
     User_Service_deletedByIdToUser?: boolean | Service$User_Service_deletedByIdToUserArgs<ExtArgs>
@@ -23924,7 +23887,6 @@ export namespace Prisma {
     FavoriteService?: boolean | Service$FavoriteServiceArgs<ExtArgs>
     ProposalItem?: boolean | Service$ProposalItemArgs<ExtArgs>
     RecurringBooking?: boolean | Service$RecurringBookingArgs<ExtArgs>
-    Review?: boolean | Service$ReviewArgs<ExtArgs>
     Category?: boolean | CategoryDefaultArgs<ExtArgs>
     User_Service_createdByIdToUser?: boolean | Service$User_Service_createdByIdToUserArgs<ExtArgs>
     User_Service_deletedByIdToUser?: boolean | Service$User_Service_deletedByIdToUserArgs<ExtArgs>
@@ -23954,7 +23916,6 @@ export namespace Prisma {
       FavoriteService: Prisma.$FavoriteServicePayload<ExtArgs>[]
       ProposalItem: Prisma.$ProposalItemPayload<ExtArgs>[]
       RecurringBooking: Prisma.$RecurringBookingPayload<ExtArgs>[]
-      Review: Prisma.$ReviewPayload<ExtArgs>[]
       Category: Prisma.$CategoryPayload<ExtArgs>
       User_Service_createdByIdToUser: Prisma.$UserPayload<ExtArgs> | null
       User_Service_deletedByIdToUser: Prisma.$UserPayload<ExtArgs> | null
@@ -24378,7 +24339,6 @@ export namespace Prisma {
     FavoriteService<T extends Service$FavoriteServiceArgs<ExtArgs> = {}>(args?: Subset<T, Service$FavoriteServiceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FavoriteServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ProposalItem<T extends Service$ProposalItemArgs<ExtArgs> = {}>(args?: Subset<T, Service$ProposalItemArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     RecurringBooking<T extends Service$RecurringBookingArgs<ExtArgs> = {}>(args?: Subset<T, Service$RecurringBookingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecurringBookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    Review<T extends Service$ReviewArgs<ExtArgs> = {}>(args?: Subset<T, Service$ReviewArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     User_Service_createdByIdToUser<T extends Service$User_Service_createdByIdToUserArgs<ExtArgs> = {}>(args?: Subset<T, Service$User_Service_createdByIdToUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     User_Service_deletedByIdToUser<T extends Service$User_Service_deletedByIdToUserArgs<ExtArgs> = {}>(args?: Subset<T, Service$User_Service_deletedByIdToUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -24897,30 +24857,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RecurringBookingScalarFieldEnum | RecurringBookingScalarFieldEnum[]
-  }
-
-  /**
-   * Service.Review
-   */
-  export type Service$ReviewArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Review
-     */
-    select?: ReviewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Review
-     */
-    omit?: ReviewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReviewInclude<ExtArgs> | null
-    where?: ReviewWhereInput
-    orderBy?: ReviewOrderByWithRelationInput | ReviewOrderByWithRelationInput[]
-    cursor?: ReviewWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
   }
 
   /**
@@ -27872,7 +27808,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: boolean | Staff$Booking_Booking_staffIdToStaffArgs<ExtArgs>
     InspectionReport?: boolean | Staff$InspectionReportArgs<ExtArgs>
-    Review?: boolean | Staff$ReviewArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     User?: boolean | UserDefaultArgs<ExtArgs>
     StaffCategory?: boolean | Staff$StaffCategoryArgs<ExtArgs>
@@ -27915,7 +27850,6 @@ export namespace Prisma {
   export type StaffInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Booking_Booking_staffIdToStaff?: boolean | Staff$Booking_Booking_staffIdToStaffArgs<ExtArgs>
     InspectionReport?: boolean | Staff$InspectionReportArgs<ExtArgs>
-    Review?: boolean | Staff$ReviewArgs<ExtArgs>
     ServiceProvider?: boolean | ServiceProviderDefaultArgs<ExtArgs>
     User?: boolean | UserDefaultArgs<ExtArgs>
     StaffCategory?: boolean | Staff$StaffCategoryArgs<ExtArgs>
@@ -27936,7 +27870,6 @@ export namespace Prisma {
     objects: {
       Booking_Booking_staffIdToStaff: Prisma.$BookingPayload<ExtArgs>[]
       InspectionReport: Prisma.$InspectionReportPayload<ExtArgs>[]
-      Review: Prisma.$ReviewPayload<ExtArgs>[]
       ServiceProvider: Prisma.$ServiceProviderPayload<ExtArgs>
       User: Prisma.$UserPayload<ExtArgs>
       StaffCategory: Prisma.$StaffCategoryPayload<ExtArgs>[]
@@ -28345,7 +28278,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     Booking_Booking_staffIdToStaff<T extends Staff$Booking_Booking_staffIdToStaffArgs<ExtArgs> = {}>(args?: Subset<T, Staff$Booking_Booking_staffIdToStaffArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     InspectionReport<T extends Staff$InspectionReportArgs<ExtArgs> = {}>(args?: Subset<T, Staff$InspectionReportArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InspectionReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    Review<T extends Staff$ReviewArgs<ExtArgs> = {}>(args?: Subset<T, Staff$ReviewArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ServiceProvider<T extends ServiceProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServiceProviderDefaultArgs<ExtArgs>>): Prisma__ServiceProviderClient<$Result.GetResult<Prisma.$ServiceProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     User<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     StaffCategory<T extends Staff$StaffCategoryArgs<ExtArgs> = {}>(args?: Subset<T, Staff$StaffCategoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -28826,30 +28758,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InspectionReportScalarFieldEnum | InspectionReportScalarFieldEnum[]
-  }
-
-  /**
-   * Staff.Review
-   */
-  export type Staff$ReviewArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Review
-     */
-    select?: ReviewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Review
-     */
-    omit?: ReviewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReviewInclude<ExtArgs> | null
-    where?: ReviewWhereInput
-    orderBy?: ReviewOrderByWithRelationInput | ReviewOrderByWithRelationInput[]
-    cursor?: ReviewWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
   }
 
   /**
@@ -30027,6 +29935,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     orderCode: string | null
+    type: $Enums.transaction_type | null
   }
 
   export type TransactionMaxAggregateOutputType = {
@@ -30042,6 +29951,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     orderCode: string | null
+    type: $Enums.transaction_type | null
   }
 
   export type TransactionCountAggregateOutputType = {
@@ -30057,6 +29967,7 @@ export namespace Prisma {
     deletedAt: number
     createdAt: number
     orderCode: number
+    type: number
     _all: number
   }
 
@@ -30092,6 +30003,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     orderCode?: true
+    type?: true
   }
 
   export type TransactionMaxAggregateInputType = {
@@ -30107,6 +30019,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     orderCode?: true
+    type?: true
   }
 
   export type TransactionCountAggregateInputType = {
@@ -30122,6 +30035,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     orderCode?: true
+    type?: true
     _all?: true
   }
 
@@ -30224,6 +30138,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date
     orderCode: string | null
+    type: $Enums.transaction_type | null
     _count: TransactionCountAggregateOutputType | null
     _avg: TransactionAvgAggregateOutputType | null
     _sum: TransactionSumAggregateOutputType | null
@@ -30258,6 +30173,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     orderCode?: boolean
+    type?: boolean
     Booking?: boolean | BookingDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
@@ -30274,6 +30190,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     orderCode?: boolean
+    type?: boolean
     Booking?: boolean | BookingDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
@@ -30290,6 +30207,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     orderCode?: boolean
+    type?: boolean
     Booking?: boolean | BookingDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
@@ -30306,9 +30224,10 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     orderCode?: boolean
+    type?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bookingId" | "amount" | "status" | "method" | "paidAt" | "createdById" | "updatedById" | "deletedById" | "deletedAt" | "createdAt" | "orderCode", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bookingId" | "amount" | "status" | "method" | "paidAt" | "createdById" | "updatedById" | "deletedById" | "deletedAt" | "createdAt" | "orderCode" | "type", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Booking?: boolean | BookingDefaultArgs<ExtArgs>
   }
@@ -30337,6 +30256,7 @@ export namespace Prisma {
       deletedAt: Date | null
       createdAt: Date
       orderCode: string | null
+      type: $Enums.transaction_type | null
     }, ExtArgs["result"]["transaction"]>
     composites: {}
   }
@@ -30773,6 +30693,7 @@ export namespace Prisma {
     readonly deletedAt: FieldRef<"Transaction", 'DateTime'>
     readonly createdAt: FieldRef<"Transaction", 'DateTime'>
     readonly orderCode: FieldRef<"Transaction", 'String'>
+    readonly type: FieldRef<"Transaction", 'transaction_type'>
   }
     
 
@@ -50643,11 +50564,10 @@ export namespace Prisma {
   export const ReviewScalarFieldEnum: {
     id: 'id',
     customerId: 'customerId',
-    staffId: 'staffId',
-    serviceId: 'serviceId',
     rating: 'rating',
     comment: 'comment',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    bookingId: 'bookingId'
   };
 
   export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
@@ -50768,7 +50688,8 @@ export namespace Prisma {
     deletedById: 'deletedById',
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
-    orderCode: 'orderCode'
+    orderCode: 'orderCode',
+    type: 'type'
   };
 
   export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
@@ -51230,6 +51151,20 @@ export namespace Prisma {
    * Reference to a field of type 'PaymentMethod[]'
    */
   export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'transaction_type'
+   */
+  export type Enumtransaction_typeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'transaction_type'>
+    
+
+
+  /**
+   * Reference to a field of type 'transaction_type[]'
+   */
+  export type ListEnumtransaction_typeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'transaction_type[]'>
     
 
 
@@ -52333,27 +52268,21 @@ export namespace Prisma {
     NOT?: ReviewWhereInput | ReviewWhereInput[]
     id?: IntFilter<"Review"> | number
     customerId?: IntFilter<"Review"> | number
-    staffId?: IntFilter<"Review"> | number
-    serviceId?: IntFilter<"Review"> | number
     rating?: IntFilter<"Review"> | number
     comment?: StringFilter<"Review"> | string
     createdAt?: DateTimeFilter<"Review"> | Date | string
+    bookingId?: IntNullableFilter<"Review"> | number | null
     CustomerProfile?: XOR<CustomerProfileScalarRelationFilter, CustomerProfileWhereInput>
-    Service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
-    Staff?: XOR<StaffScalarRelationFilter, StaffWhereInput>
   }
 
   export type ReviewOrderByWithRelationInput = {
     id?: SortOrder
     customerId?: SortOrder
-    staffId?: SortOrder
-    serviceId?: SortOrder
     rating?: SortOrder
     comment?: SortOrder
     createdAt?: SortOrder
+    bookingId?: SortOrderInput | SortOrder
     CustomerProfile?: CustomerProfileOrderByWithRelationInput
-    Service?: ServiceOrderByWithRelationInput
-    Staff?: StaffOrderByWithRelationInput
   }
 
   export type ReviewWhereUniqueInput = Prisma.AtLeast<{
@@ -52362,24 +52291,20 @@ export namespace Prisma {
     OR?: ReviewWhereInput[]
     NOT?: ReviewWhereInput | ReviewWhereInput[]
     customerId?: IntFilter<"Review"> | number
-    staffId?: IntFilter<"Review"> | number
-    serviceId?: IntFilter<"Review"> | number
     rating?: IntFilter<"Review"> | number
     comment?: StringFilter<"Review"> | string
     createdAt?: DateTimeFilter<"Review"> | Date | string
+    bookingId?: IntNullableFilter<"Review"> | number | null
     CustomerProfile?: XOR<CustomerProfileScalarRelationFilter, CustomerProfileWhereInput>
-    Service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
-    Staff?: XOR<StaffScalarRelationFilter, StaffWhereInput>
   }, "id">
 
   export type ReviewOrderByWithAggregationInput = {
     id?: SortOrder
     customerId?: SortOrder
-    staffId?: SortOrder
-    serviceId?: SortOrder
     rating?: SortOrder
     comment?: SortOrder
     createdAt?: SortOrder
+    bookingId?: SortOrderInput | SortOrder
     _count?: ReviewCountOrderByAggregateInput
     _avg?: ReviewAvgOrderByAggregateInput
     _max?: ReviewMaxOrderByAggregateInput
@@ -52393,11 +52318,10 @@ export namespace Prisma {
     NOT?: ReviewScalarWhereWithAggregatesInput | ReviewScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Review"> | number
     customerId?: IntWithAggregatesFilter<"Review"> | number
-    staffId?: IntWithAggregatesFilter<"Review"> | number
-    serviceId?: IntWithAggregatesFilter<"Review"> | number
     rating?: IntWithAggregatesFilter<"Review"> | number
     comment?: StringWithAggregatesFilter<"Review"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
+    bookingId?: IntNullableWithAggregatesFilter<"Review"> | number | null
   }
 
   export type RewardPointWhereInput = {
@@ -52566,7 +52490,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceListRelationFilter
     ProposalItem?: ProposalItemListRelationFilter
     RecurringBooking?: RecurringBookingListRelationFilter
-    Review?: ReviewListRelationFilter
     Category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     User_Service_createdByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     User_Service_deletedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -52597,7 +52520,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceOrderByRelationAggregateInput
     ProposalItem?: ProposalItemOrderByRelationAggregateInput
     RecurringBooking?: RecurringBookingOrderByRelationAggregateInput
-    Review?: ReviewOrderByRelationAggregateInput
     Category?: CategoryOrderByWithRelationInput
     User_Service_createdByIdToUser?: UserOrderByWithRelationInput
     User_Service_deletedByIdToUser?: UserOrderByWithRelationInput
@@ -52631,7 +52553,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceListRelationFilter
     ProposalItem?: ProposalItemListRelationFilter
     RecurringBooking?: RecurringBookingListRelationFilter
-    Review?: ReviewListRelationFilter
     Category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     User_Service_createdByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     User_Service_deletedByIdToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -52906,7 +52827,6 @@ export namespace Prisma {
     isActive?: BoolFilter<"Staff"> | boolean
     Booking_Booking_staffIdToStaff?: BookingListRelationFilter
     InspectionReport?: InspectionReportListRelationFilter
-    Review?: ReviewListRelationFilter
     ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
     User?: XOR<UserScalarRelationFilter, UserWhereInput>
     StaffCategory?: StaffCategoryListRelationFilter
@@ -52922,7 +52842,6 @@ export namespace Prisma {
     isActive?: SortOrder
     Booking_Booking_staffIdToStaff?: BookingOrderByRelationAggregateInput
     InspectionReport?: InspectionReportOrderByRelationAggregateInput
-    Review?: ReviewOrderByRelationAggregateInput
     ServiceProvider?: ServiceProviderOrderByWithRelationInput
     User?: UserOrderByWithRelationInput
     StaffCategory?: StaffCategoryOrderByRelationAggregateInput
@@ -52941,7 +52860,6 @@ export namespace Prisma {
     isActive?: BoolFilter<"Staff"> | boolean
     Booking_Booking_staffIdToStaff?: BookingListRelationFilter
     InspectionReport?: InspectionReportListRelationFilter
-    Review?: ReviewListRelationFilter
     ServiceProvider?: XOR<ServiceProviderScalarRelationFilter, ServiceProviderWhereInput>
     User?: XOR<UserScalarRelationFilter, UserWhereInput>
     StaffCategory?: StaffCategoryListRelationFilter
@@ -53036,6 +52954,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     orderCode?: StringNullableFilter<"Transaction"> | string | null
+    type?: Enumtransaction_typeNullableFilter<"Transaction"> | $Enums.transaction_type | null
     Booking?: XOR<BookingScalarRelationFilter, BookingWhereInput>
   }
 
@@ -53052,6 +52971,7 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     orderCode?: SortOrderInput | SortOrder
+    type?: SortOrderInput | SortOrder
     Booking?: BookingOrderByWithRelationInput
   }
 
@@ -53071,6 +52991,7 @@ export namespace Prisma {
     deletedById?: IntNullableFilter<"Transaction"> | number | null
     deletedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    type?: Enumtransaction_typeNullableFilter<"Transaction"> | $Enums.transaction_type | null
     Booking?: XOR<BookingScalarRelationFilter, BookingWhereInput>
   }, "id" | "bookingId" | "orderCode">
 
@@ -53087,6 +53008,7 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     orderCode?: SortOrderInput | SortOrder
+    type?: SortOrderInput | SortOrder
     _count?: TransactionCountOrderByAggregateInput
     _avg?: TransactionAvgOrderByAggregateInput
     _max?: TransactionMaxOrderByAggregateInput
@@ -53110,6 +53032,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Transaction"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
     orderCode?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    type?: Enumtransaction_typeNullableWithAggregatesFilter<"Transaction"> | $Enums.transaction_type | null
   }
 
   export type UserWhereInput = {
@@ -55419,64 +55342,59 @@ export namespace Prisma {
     rating: number
     comment: string
     createdAt?: Date | string
+    bookingId?: number | null
     CustomerProfile: CustomerProfileCreateNestedOneWithoutReviewInput
-    Service: ServiceCreateNestedOneWithoutReviewInput
-    Staff: StaffCreateNestedOneWithoutReviewInput
   }
 
   export type ReviewUncheckedCreateInput = {
     id?: number
     customerId: number
-    staffId: number
-    serviceId: number
     rating: number
     comment: string
     createdAt?: Date | string
+    bookingId?: number | null
   }
 
   export type ReviewUpdateInput = {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookingId?: NullableIntFieldUpdateOperationsInput | number | null
     CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutReviewNestedInput
-    Service?: ServiceUpdateOneRequiredWithoutReviewNestedInput
-    Staff?: StaffUpdateOneRequiredWithoutReviewNestedInput
   }
 
   export type ReviewUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     customerId?: IntFieldUpdateOperationsInput | number
-    staffId?: IntFieldUpdateOperationsInput | number
-    serviceId?: IntFieldUpdateOperationsInput | number
     rating?: IntFieldUpdateOperationsInput | number
     comment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookingId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ReviewCreateManyInput = {
     id?: number
     customerId: number
-    staffId: number
-    serviceId: number
     rating: number
     comment: string
     createdAt?: Date | string
+    bookingId?: number | null
   }
 
   export type ReviewUpdateManyMutationInput = {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookingId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ReviewUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     customerId?: IntFieldUpdateOperationsInput | number
-    staffId?: IntFieldUpdateOperationsInput | number
-    serviceId?: IntFieldUpdateOperationsInput | number
     rating?: IntFieldUpdateOperationsInput | number
     comment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookingId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type RewardPointCreateInput = {
@@ -55626,7 +55544,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
@@ -55657,7 +55574,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
@@ -55677,7 +55593,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
@@ -55708,7 +55623,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
@@ -55998,7 +55912,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
-    Review?: ReviewCreateNestedManyWithoutStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
     User: UserCreateNestedOneWithoutStaffInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutStaffInput
@@ -56014,7 +55927,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
     WorkLog?: WorkLogUncheckedCreateNestedManyWithoutStaffInput
   }
@@ -56025,7 +55937,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUpdateManyWithoutStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
     User?: UserUpdateOneRequiredWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutStaffNestedInput
@@ -56041,7 +55952,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
     WorkLog?: WorkLogUncheckedUpdateManyWithoutStaffNestedInput
   }
@@ -56115,6 +56025,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     orderCode?: string | null
+    type?: $Enums.transaction_type | null
     Booking: BookingCreateNestedOneWithoutTransactionInput
   }
 
@@ -56131,6 +56042,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     orderCode?: string | null
+    type?: $Enums.transaction_type | null
   }
 
   export type TransactionUpdateInput = {
@@ -56144,6 +56056,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderCode?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableEnumtransaction_typeFieldUpdateOperationsInput | $Enums.transaction_type | null
     Booking?: BookingUpdateOneRequiredWithoutTransactionNestedInput
   }
 
@@ -56160,6 +56073,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderCode?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableEnumtransaction_typeFieldUpdateOperationsInput | $Enums.transaction_type | null
   }
 
   export type TransactionCreateManyInput = {
@@ -56175,6 +56089,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     orderCode?: string | null
+    type?: $Enums.transaction_type | null
   }
 
   export type TransactionUpdateManyMutationInput = {
@@ -56188,6 +56103,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderCode?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableEnumtransaction_typeFieldUpdateOperationsInput | $Enums.transaction_type | null
   }
 
   export type TransactionUncheckedUpdateManyInput = {
@@ -56203,6 +56119,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderCode?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableEnumtransaction_typeFieldUpdateOperationsInput | $Enums.transaction_type | null
   }
 
   export type UserCreateInput = {
@@ -58574,55 +58491,45 @@ export namespace Prisma {
     deviceId?: SortOrder
   }
 
-  export type StaffScalarRelationFilter = {
-    is?: StaffWhereInput
-    isNot?: StaffWhereInput
-  }
-
   export type ReviewCountOrderByAggregateInput = {
     id?: SortOrder
     customerId?: SortOrder
-    staffId?: SortOrder
-    serviceId?: SortOrder
     rating?: SortOrder
     comment?: SortOrder
     createdAt?: SortOrder
+    bookingId?: SortOrder
   }
 
   export type ReviewAvgOrderByAggregateInput = {
     id?: SortOrder
     customerId?: SortOrder
-    staffId?: SortOrder
-    serviceId?: SortOrder
     rating?: SortOrder
+    bookingId?: SortOrder
   }
 
   export type ReviewMaxOrderByAggregateInput = {
     id?: SortOrder
     customerId?: SortOrder
-    staffId?: SortOrder
-    serviceId?: SortOrder
     rating?: SortOrder
     comment?: SortOrder
     createdAt?: SortOrder
+    bookingId?: SortOrder
   }
 
   export type ReviewMinOrderByAggregateInput = {
     id?: SortOrder
     customerId?: SortOrder
-    staffId?: SortOrder
-    serviceId?: SortOrder
     rating?: SortOrder
     comment?: SortOrder
     createdAt?: SortOrder
+    bookingId?: SortOrder
   }
 
   export type ReviewSumOrderByAggregateInput = {
     id?: SortOrder
     customerId?: SortOrder
-    staffId?: SortOrder
-    serviceId?: SortOrder
     rating?: SortOrder
+    bookingId?: SortOrder
   }
 
   export type RewardPointCountOrderByAggregateInput = {
@@ -59131,6 +59038,11 @@ export namespace Prisma {
     providerId?: SortOrder
   }
 
+  export type StaffScalarRelationFilter = {
+    is?: StaffWhereInput
+    isNot?: StaffWhereInput
+  }
+
   export type StaffCategoryStaffIdCategoryIdCompoundUniqueInput = {
     staffId: number
     categoryId: number
@@ -59175,6 +59087,13 @@ export namespace Prisma {
     not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
   }
 
+  export type Enumtransaction_typeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.transaction_type | Enumtransaction_typeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.transaction_type[] | ListEnumtransaction_typeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.transaction_type[] | ListEnumtransaction_typeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumtransaction_typeNullableFilter<$PrismaModel> | $Enums.transaction_type | null
+  }
+
   export type BookingScalarRelationFilter = {
     is?: BookingWhereInput
     isNot?: BookingWhereInput
@@ -59193,6 +59112,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     orderCode?: SortOrder
+    type?: SortOrder
   }
 
   export type TransactionAvgOrderByAggregateInput = {
@@ -59217,6 +59137,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     orderCode?: SortOrder
+    type?: SortOrder
   }
 
   export type TransactionMinOrderByAggregateInput = {
@@ -59232,6 +59153,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     orderCode?: SortOrder
+    type?: SortOrder
   }
 
   export type TransactionSumOrderByAggregateInput = {
@@ -59261,6 +59183,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
     _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
+  }
+
+  export type Enumtransaction_typeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.transaction_type | Enumtransaction_typeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.transaction_type[] | ListEnumtransaction_typeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.transaction_type[] | ListEnumtransaction_typeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumtransaction_typeNullableWithAggregatesFilter<$PrismaModel> | $Enums.transaction_type | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumtransaction_typeNullableFilter<$PrismaModel>
+    _max?: NestedEnumtransaction_typeNullableFilter<$PrismaModel>
   }
 
   export type EnumUserStatusFilter<$PrismaModel = never> = {
@@ -61549,40 +61481,12 @@ export namespace Prisma {
     connect?: CustomerProfileWhereUniqueInput
   }
 
-  export type ServiceCreateNestedOneWithoutReviewInput = {
-    create?: XOR<ServiceCreateWithoutReviewInput, ServiceUncheckedCreateWithoutReviewInput>
-    connectOrCreate?: ServiceCreateOrConnectWithoutReviewInput
-    connect?: ServiceWhereUniqueInput
-  }
-
-  export type StaffCreateNestedOneWithoutReviewInput = {
-    create?: XOR<StaffCreateWithoutReviewInput, StaffUncheckedCreateWithoutReviewInput>
-    connectOrCreate?: StaffCreateOrConnectWithoutReviewInput
-    connect?: StaffWhereUniqueInput
-  }
-
   export type CustomerProfileUpdateOneRequiredWithoutReviewNestedInput = {
     create?: XOR<CustomerProfileCreateWithoutReviewInput, CustomerProfileUncheckedCreateWithoutReviewInput>
     connectOrCreate?: CustomerProfileCreateOrConnectWithoutReviewInput
     upsert?: CustomerProfileUpsertWithoutReviewInput
     connect?: CustomerProfileWhereUniqueInput
     update?: XOR<XOR<CustomerProfileUpdateToOneWithWhereWithoutReviewInput, CustomerProfileUpdateWithoutReviewInput>, CustomerProfileUncheckedUpdateWithoutReviewInput>
-  }
-
-  export type ServiceUpdateOneRequiredWithoutReviewNestedInput = {
-    create?: XOR<ServiceCreateWithoutReviewInput, ServiceUncheckedCreateWithoutReviewInput>
-    connectOrCreate?: ServiceCreateOrConnectWithoutReviewInput
-    upsert?: ServiceUpsertWithoutReviewInput
-    connect?: ServiceWhereUniqueInput
-    update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutReviewInput, ServiceUpdateWithoutReviewInput>, ServiceUncheckedUpdateWithoutReviewInput>
-  }
-
-  export type StaffUpdateOneRequiredWithoutReviewNestedInput = {
-    create?: XOR<StaffCreateWithoutReviewInput, StaffUncheckedCreateWithoutReviewInput>
-    connectOrCreate?: StaffCreateOrConnectWithoutReviewInput
-    upsert?: StaffUpsertWithoutReviewInput
-    connect?: StaffWhereUniqueInput
-    update?: XOR<XOR<StaffUpdateToOneWithWhereWithoutReviewInput, StaffUpdateWithoutReviewInput>, StaffUncheckedUpdateWithoutReviewInput>
   }
 
   export type CustomerProfileCreateNestedOneWithoutRewardPointInput = {
@@ -61748,13 +61652,6 @@ export namespace Prisma {
     connect?: RecurringBookingWhereUniqueInput | RecurringBookingWhereUniqueInput[]
   }
 
-  export type ReviewCreateNestedManyWithoutServiceInput = {
-    create?: XOR<ReviewCreateWithoutServiceInput, ReviewUncheckedCreateWithoutServiceInput> | ReviewCreateWithoutServiceInput[] | ReviewUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutServiceInput | ReviewCreateOrConnectWithoutServiceInput[]
-    createMany?: ReviewCreateManyServiceInputEnvelope
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-  }
-
   export type CategoryCreateNestedOneWithoutServiceInput = {
     create?: XOR<CategoryCreateWithoutServiceInput, CategoryUncheckedCreateWithoutServiceInput>
     connectOrCreate?: CategoryCreateOrConnectWithoutServiceInput
@@ -61811,13 +61708,6 @@ export namespace Prisma {
     connectOrCreate?: RecurringBookingCreateOrConnectWithoutServiceInput | RecurringBookingCreateOrConnectWithoutServiceInput[]
     createMany?: RecurringBookingCreateManyServiceInputEnvelope
     connect?: RecurringBookingWhereUniqueInput | RecurringBookingWhereUniqueInput[]
-  }
-
-  export type ReviewUncheckedCreateNestedManyWithoutServiceInput = {
-    create?: XOR<ReviewCreateWithoutServiceInput, ReviewUncheckedCreateWithoutServiceInput> | ReviewCreateWithoutServiceInput[] | ReviewUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutServiceInput | ReviewCreateOrConnectWithoutServiceInput[]
-    createMany?: ReviewCreateManyServiceInputEnvelope
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
   export type Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput = {
@@ -61888,20 +61778,6 @@ export namespace Prisma {
     update?: RecurringBookingUpdateWithWhereUniqueWithoutServiceInput | RecurringBookingUpdateWithWhereUniqueWithoutServiceInput[]
     updateMany?: RecurringBookingUpdateManyWithWhereWithoutServiceInput | RecurringBookingUpdateManyWithWhereWithoutServiceInput[]
     deleteMany?: RecurringBookingScalarWhereInput | RecurringBookingScalarWhereInput[]
-  }
-
-  export type ReviewUpdateManyWithoutServiceNestedInput = {
-    create?: XOR<ReviewCreateWithoutServiceInput, ReviewUncheckedCreateWithoutServiceInput> | ReviewCreateWithoutServiceInput[] | ReviewUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutServiceInput | ReviewCreateOrConnectWithoutServiceInput[]
-    upsert?: ReviewUpsertWithWhereUniqueWithoutServiceInput | ReviewUpsertWithWhereUniqueWithoutServiceInput[]
-    createMany?: ReviewCreateManyServiceInputEnvelope
-    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    update?: ReviewUpdateWithWhereUniqueWithoutServiceInput | ReviewUpdateWithWhereUniqueWithoutServiceInput[]
-    updateMany?: ReviewUpdateManyWithWhereWithoutServiceInput | ReviewUpdateManyWithWhereWithoutServiceInput[]
-    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
   export type CategoryUpdateOneRequiredWithoutServiceNestedInput = {
@@ -62004,20 +61880,6 @@ export namespace Prisma {
     update?: RecurringBookingUpdateWithWhereUniqueWithoutServiceInput | RecurringBookingUpdateWithWhereUniqueWithoutServiceInput[]
     updateMany?: RecurringBookingUpdateManyWithWhereWithoutServiceInput | RecurringBookingUpdateManyWithWhereWithoutServiceInput[]
     deleteMany?: RecurringBookingScalarWhereInput | RecurringBookingScalarWhereInput[]
-  }
-
-  export type ReviewUncheckedUpdateManyWithoutServiceNestedInput = {
-    create?: XOR<ReviewCreateWithoutServiceInput, ReviewUncheckedCreateWithoutServiceInput> | ReviewCreateWithoutServiceInput[] | ReviewUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutServiceInput | ReviewCreateOrConnectWithoutServiceInput[]
-    upsert?: ReviewUpsertWithWhereUniqueWithoutServiceInput | ReviewUpsertWithWhereUniqueWithoutServiceInput[]
-    createMany?: ReviewCreateManyServiceInputEnvelope
-    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    update?: ReviewUpdateWithWhereUniqueWithoutServiceInput | ReviewUpdateWithWhereUniqueWithoutServiceInput[]
-    updateMany?: ReviewUpdateManyWithWhereWithoutServiceInput | ReviewUpdateManyWithWhereWithoutServiceInput[]
-    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
   export type Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput = {
@@ -62478,13 +62340,6 @@ export namespace Prisma {
     connect?: InspectionReportWhereUniqueInput | InspectionReportWhereUniqueInput[]
   }
 
-  export type ReviewCreateNestedManyWithoutStaffInput = {
-    create?: XOR<ReviewCreateWithoutStaffInput, ReviewUncheckedCreateWithoutStaffInput> | ReviewCreateWithoutStaffInput[] | ReviewUncheckedCreateWithoutStaffInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutStaffInput | ReviewCreateOrConnectWithoutStaffInput[]
-    createMany?: ReviewCreateManyStaffInputEnvelope
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-  }
-
   export type ServiceProviderCreateNestedOneWithoutStaffInput = {
     create?: XOR<ServiceProviderCreateWithoutStaffInput, ServiceProviderUncheckedCreateWithoutStaffInput>
     connectOrCreate?: ServiceProviderCreateOrConnectWithoutStaffInput
@@ -62523,13 +62378,6 @@ export namespace Prisma {
     connectOrCreate?: InspectionReportCreateOrConnectWithoutStaffInput | InspectionReportCreateOrConnectWithoutStaffInput[]
     createMany?: InspectionReportCreateManyStaffInputEnvelope
     connect?: InspectionReportWhereUniqueInput | InspectionReportWhereUniqueInput[]
-  }
-
-  export type ReviewUncheckedCreateNestedManyWithoutStaffInput = {
-    create?: XOR<ReviewCreateWithoutStaffInput, ReviewUncheckedCreateWithoutStaffInput> | ReviewCreateWithoutStaffInput[] | ReviewUncheckedCreateWithoutStaffInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutStaffInput | ReviewCreateOrConnectWithoutStaffInput[]
-    createMany?: ReviewCreateManyStaffInputEnvelope
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
   export type StaffCategoryUncheckedCreateNestedManyWithoutStaffInput = {
@@ -62572,20 +62420,6 @@ export namespace Prisma {
     update?: InspectionReportUpdateWithWhereUniqueWithoutStaffInput | InspectionReportUpdateWithWhereUniqueWithoutStaffInput[]
     updateMany?: InspectionReportUpdateManyWithWhereWithoutStaffInput | InspectionReportUpdateManyWithWhereWithoutStaffInput[]
     deleteMany?: InspectionReportScalarWhereInput | InspectionReportScalarWhereInput[]
-  }
-
-  export type ReviewUpdateManyWithoutStaffNestedInput = {
-    create?: XOR<ReviewCreateWithoutStaffInput, ReviewUncheckedCreateWithoutStaffInput> | ReviewCreateWithoutStaffInput[] | ReviewUncheckedCreateWithoutStaffInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutStaffInput | ReviewCreateOrConnectWithoutStaffInput[]
-    upsert?: ReviewUpsertWithWhereUniqueWithoutStaffInput | ReviewUpsertWithWhereUniqueWithoutStaffInput[]
-    createMany?: ReviewCreateManyStaffInputEnvelope
-    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    update?: ReviewUpdateWithWhereUniqueWithoutStaffInput | ReviewUpdateWithWhereUniqueWithoutStaffInput[]
-    updateMany?: ReviewUpdateManyWithWhereWithoutStaffInput | ReviewUpdateManyWithWhereWithoutStaffInput[]
-    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
   export type ServiceProviderUpdateOneRequiredWithoutStaffNestedInput = {
@@ -62660,20 +62494,6 @@ export namespace Prisma {
     deleteMany?: InspectionReportScalarWhereInput | InspectionReportScalarWhereInput[]
   }
 
-  export type ReviewUncheckedUpdateManyWithoutStaffNestedInput = {
-    create?: XOR<ReviewCreateWithoutStaffInput, ReviewUncheckedCreateWithoutStaffInput> | ReviewCreateWithoutStaffInput[] | ReviewUncheckedCreateWithoutStaffInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutStaffInput | ReviewCreateOrConnectWithoutStaffInput[]
-    upsert?: ReviewUpsertWithWhereUniqueWithoutStaffInput | ReviewUpsertWithWhereUniqueWithoutStaffInput[]
-    createMany?: ReviewCreateManyStaffInputEnvelope
-    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    update?: ReviewUpdateWithWhereUniqueWithoutStaffInput | ReviewUpdateWithWhereUniqueWithoutStaffInput[]
-    updateMany?: ReviewUpdateManyWithWhereWithoutStaffInput | ReviewUpdateManyWithWhereWithoutStaffInput[]
-    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-  }
-
   export type StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput = {
     create?: XOR<StaffCategoryCreateWithoutStaffInput, StaffCategoryUncheckedCreateWithoutStaffInput> | StaffCategoryCreateWithoutStaffInput[] | StaffCategoryUncheckedCreateWithoutStaffInput[]
     connectOrCreate?: StaffCategoryCreateOrConnectWithoutStaffInput | StaffCategoryCreateOrConnectWithoutStaffInput[]
@@ -62742,6 +62562,10 @@ export namespace Prisma {
 
   export type EnumPaymentMethodFieldUpdateOperationsInput = {
     set?: $Enums.PaymentMethod
+  }
+
+  export type NullableEnumtransaction_typeFieldUpdateOperationsInput = {
+    set?: $Enums.transaction_type | null
   }
 
   export type BookingUpdateOneRequiredWithoutTransactionNestedInput = {
@@ -64841,6 +64665,13 @@ export namespace Prisma {
     not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
   }
 
+  export type NestedEnumtransaction_typeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.transaction_type | Enumtransaction_typeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.transaction_type[] | ListEnumtransaction_typeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.transaction_type[] | ListEnumtransaction_typeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumtransaction_typeNullableFilter<$PrismaModel> | $Enums.transaction_type | null
+  }
+
   export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -64859,6 +64690,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
     _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
+  }
+
+  export type NestedEnumtransaction_typeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.transaction_type | Enumtransaction_typeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.transaction_type[] | ListEnumtransaction_typeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.transaction_type[] | ListEnumtransaction_typeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumtransaction_typeNullableWithAggregatesFilter<$PrismaModel> | $Enums.transaction_type | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumtransaction_typeNullableFilter<$PrismaModel>
+    _max?: NestedEnumtransaction_typeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumUserStatusFilter<$PrismaModel = never> = {
@@ -65128,7 +64969,6 @@ export namespace Prisma {
     updatedAt: Date | string
     isActive?: boolean
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
-    Review?: ReviewCreateNestedManyWithoutStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
     User: UserCreateNestedOneWithoutStaffInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutStaffInput
@@ -65143,7 +64983,6 @@ export namespace Prisma {
     updatedAt: Date | string
     isActive?: boolean
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
     WorkLog?: WorkLogUncheckedCreateNestedManyWithoutStaffInput
   }
@@ -65243,6 +65082,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     orderCode?: string | null
+    type?: $Enums.transaction_type | null
   }
 
   export type TransactionUncheckedCreateWithoutBookingInput = {
@@ -65257,6 +65097,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     orderCode?: string | null
+    type?: $Enums.transaction_type | null
   }
 
   export type TransactionCreateOrConnectWithoutBookingInput = {
@@ -65461,7 +65302,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUpdateManyWithoutStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
     User?: UserUpdateOneRequiredWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutStaffNestedInput
@@ -65476,7 +65316,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
     WorkLog?: WorkLogUncheckedUpdateManyWithoutStaffNestedInput
   }
@@ -65591,6 +65430,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderCode?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableEnumtransaction_typeFieldUpdateOperationsInput | $Enums.transaction_type | null
   }
 
   export type TransactionUncheckedUpdateWithoutBookingInput = {
@@ -65605,6 +65445,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderCode?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableEnumtransaction_typeFieldUpdateOperationsInput | $Enums.transaction_type | null
   }
 
   export type WorkLogUpsertWithWhereUniqueWithoutBookingInput = {
@@ -66033,7 +65874,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
@@ -66062,7 +65902,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
@@ -67162,17 +67001,15 @@ export namespace Prisma {
     rating: number
     comment: string
     createdAt?: Date | string
-    Service: ServiceCreateNestedOneWithoutReviewInput
-    Staff: StaffCreateNestedOneWithoutReviewInput
+    bookingId?: number | null
   }
 
   export type ReviewUncheckedCreateWithoutCustomerProfileInput = {
     id?: number
-    staffId: number
-    serviceId: number
     rating: number
     comment: string
     createdAt?: Date | string
+    bookingId?: number | null
   }
 
   export type ReviewCreateOrConnectWithoutCustomerProfileInput = {
@@ -67555,11 +67392,10 @@ export namespace Prisma {
     NOT?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
     id?: IntFilter<"Review"> | number
     customerId?: IntFilter<"Review"> | number
-    staffId?: IntFilter<"Review"> | number
-    serviceId?: IntFilter<"Review"> | number
     rating?: IntFilter<"Review"> | number
     comment?: StringFilter<"Review"> | string
     createdAt?: DateTimeFilter<"Review"> | Date | string
+    bookingId?: IntNullableFilter<"Review"> | number | null
   }
 
   export type RewardPointUpsertWithWhereUniqueWithoutCustomerProfileInput = {
@@ -68847,7 +68683,6 @@ export namespace Prisma {
     status?: $Enums.ServiceStatus
     FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
@@ -68877,7 +68712,6 @@ export namespace Prisma {
     status?: $Enums.ServiceStatus
     FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
@@ -68960,7 +68794,6 @@ export namespace Prisma {
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
@@ -68990,7 +68823,6 @@ export namespace Prisma {
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
@@ -69276,90 +69108,6 @@ export namespace Prisma {
     create: XOR<CustomerProfileCreateWithoutReviewInput, CustomerProfileUncheckedCreateWithoutReviewInput>
   }
 
-  export type ServiceCreateWithoutReviewInput = {
-    basePrice: number
-    virtualPrice: number
-    images?: ServiceCreateimagesInput | string[]
-    durationMinutes: number
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    name?: string
-    publishedAt?: Date | string | null
-    description?: string
-    unit?: $Enums.Unit
-    status?: $Enums.ServiceStatus
-    FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
-    ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
-    RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Category: CategoryCreateNestedOneWithoutServiceInput
-    User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
-    User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
-    ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
-    User_Service_updatedByIdToUser?: UserCreateNestedOneWithoutService_Service_updatedByIdToUserInput
-    Service_ServiceItems?: Service_ServiceItemsCreateNestedManyWithoutServiceInput
-  }
-
-  export type ServiceUncheckedCreateWithoutReviewInput = {
-    id?: number
-    basePrice: number
-    virtualPrice: number
-    images?: ServiceCreateimagesInput | string[]
-    durationMinutes: number
-    providerId: number
-    createdById?: number | null
-    updatedById?: number | null
-    deletedById?: number | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    name?: string
-    publishedAt?: Date | string | null
-    description?: string
-    categoryId: number
-    unit?: $Enums.Unit
-    status?: $Enums.ServiceStatus
-    FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
-    ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
-    RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
-  }
-
-  export type ServiceCreateOrConnectWithoutReviewInput = {
-    where: ServiceWhereUniqueInput
-    create: XOR<ServiceCreateWithoutReviewInput, ServiceUncheckedCreateWithoutReviewInput>
-  }
-
-  export type StaffCreateWithoutReviewInput = {
-    createdAt?: Date | string
-    updatedAt: Date | string
-    isActive?: boolean
-    Booking_Booking_staffIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
-    InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
-    ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
-    User: UserCreateNestedOneWithoutStaffInput
-    StaffCategory?: StaffCategoryCreateNestedManyWithoutStaffInput
-    WorkLog?: WorkLogCreateNestedManyWithoutStaffInput
-  }
-
-  export type StaffUncheckedCreateWithoutReviewInput = {
-    id?: number
-    userId: number
-    providerId: number
-    createdAt?: Date | string
-    updatedAt: Date | string
-    isActive?: boolean
-    Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
-    InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
-    StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
-    WorkLog?: WorkLogUncheckedCreateNestedManyWithoutStaffInput
-  }
-
-  export type StaffCreateOrConnectWithoutReviewInput = {
-    where: StaffWhereUniqueInput
-    create: XOR<StaffCreateWithoutReviewInput, StaffUncheckedCreateWithoutReviewInput>
-  }
-
   export type CustomerProfileUpsertWithoutReviewInput = {
     update: XOR<CustomerProfileUpdateWithoutReviewInput, CustomerProfileUncheckedUpdateWithoutReviewInput>
     create: XOR<CustomerProfileCreateWithoutReviewInput, CustomerProfileUncheckedCreateWithoutReviewInput>
@@ -69406,102 +69154,6 @@ export namespace Prisma {
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutCustomerProfileNestedInput
     RewardPoint?: RewardPointUncheckedUpdateManyWithoutCustomerProfileNestedInput
     ServiceRequest?: ServiceRequestUncheckedUpdateManyWithoutCustomerProfileNestedInput
-  }
-
-  export type ServiceUpsertWithoutReviewInput = {
-    update: XOR<ServiceUpdateWithoutReviewInput, ServiceUncheckedUpdateWithoutReviewInput>
-    create: XOR<ServiceCreateWithoutReviewInput, ServiceUncheckedCreateWithoutReviewInput>
-    where?: ServiceWhereInput
-  }
-
-  export type ServiceUpdateToOneWithWhereWithoutReviewInput = {
-    where?: ServiceWhereInput
-    data: XOR<ServiceUpdateWithoutReviewInput, ServiceUncheckedUpdateWithoutReviewInput>
-  }
-
-  export type ServiceUpdateWithoutReviewInput = {
-    basePrice?: FloatFieldUpdateOperationsInput | number
-    virtualPrice?: FloatFieldUpdateOperationsInput | number
-    images?: ServiceUpdateimagesInput | string[]
-    durationMinutes?: IntFieldUpdateOperationsInput | number
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    description?: StringFieldUpdateOperationsInput | string
-    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
-    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
-    FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
-    ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
-    RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
-    User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
-    User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
-    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
-    User_Service_updatedByIdToUser?: UserUpdateOneWithoutService_Service_updatedByIdToUserNestedInput
-    Service_ServiceItems?: Service_ServiceItemsUpdateManyWithoutServiceNestedInput
-  }
-
-  export type ServiceUncheckedUpdateWithoutReviewInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
-    virtualPrice?: FloatFieldUpdateOperationsInput | number
-    images?: ServiceUpdateimagesInput | string[]
-    durationMinutes?: IntFieldUpdateOperationsInput | number
-    providerId?: IntFieldUpdateOperationsInput | number
-    createdById?: NullableIntFieldUpdateOperationsInput | number | null
-    updatedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedById?: NullableIntFieldUpdateOperationsInput | number | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    description?: StringFieldUpdateOperationsInput | string
-    categoryId?: IntFieldUpdateOperationsInput | number
-    unit?: EnumUnitFieldUpdateOperationsInput | $Enums.Unit
-    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
-    FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
-    ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
-    RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
-  }
-
-  export type StaffUpsertWithoutReviewInput = {
-    update: XOR<StaffUpdateWithoutReviewInput, StaffUncheckedUpdateWithoutReviewInput>
-    create: XOR<StaffCreateWithoutReviewInput, StaffUncheckedCreateWithoutReviewInput>
-    where?: StaffWhereInput
-  }
-
-  export type StaffUpdateToOneWithWhereWithoutReviewInput = {
-    where?: StaffWhereInput
-    data: XOR<StaffUpdateWithoutReviewInput, StaffUncheckedUpdateWithoutReviewInput>
-  }
-
-  export type StaffUpdateWithoutReviewInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_staffIdToStaff?: BookingUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
-    InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
-    ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
-    User?: UserUpdateOneRequiredWithoutStaffNestedInput
-    StaffCategory?: StaffCategoryUpdateManyWithoutStaffNestedInput
-    WorkLog?: WorkLogUpdateManyWithoutStaffNestedInput
-  }
-
-  export type StaffUncheckedUpdateWithoutReviewInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    providerId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
-    InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
-    StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
-    WorkLog?: WorkLogUncheckedUpdateManyWithoutStaffNestedInput
   }
 
   export type CustomerProfileCreateWithoutRewardPointInput = {
@@ -70405,33 +70057,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ReviewCreateWithoutServiceInput = {
-    rating: number
-    comment: string
-    createdAt?: Date | string
-    CustomerProfile: CustomerProfileCreateNestedOneWithoutReviewInput
-    Staff: StaffCreateNestedOneWithoutReviewInput
-  }
-
-  export type ReviewUncheckedCreateWithoutServiceInput = {
-    id?: number
-    customerId: number
-    staffId: number
-    rating: number
-    comment: string
-    createdAt?: Date | string
-  }
-
-  export type ReviewCreateOrConnectWithoutServiceInput = {
-    where: ReviewWhereUniqueInput
-    create: XOR<ReviewCreateWithoutServiceInput, ReviewUncheckedCreateWithoutServiceInput>
-  }
-
-  export type ReviewCreateManyServiceInputEnvelope = {
-    data: ReviewCreateManyServiceInput | ReviewCreateManyServiceInput[]
-    skipDuplicates?: boolean
-  }
-
   export type CategoryCreateWithoutServiceInput = {
     name: string
     logo?: string | null
@@ -70865,22 +70490,6 @@ export namespace Prisma {
   export type RecurringBookingUpdateManyWithWhereWithoutServiceInput = {
     where: RecurringBookingScalarWhereInput
     data: XOR<RecurringBookingUpdateManyMutationInput, RecurringBookingUncheckedUpdateManyWithoutServiceInput>
-  }
-
-  export type ReviewUpsertWithWhereUniqueWithoutServiceInput = {
-    where: ReviewWhereUniqueInput
-    update: XOR<ReviewUpdateWithoutServiceInput, ReviewUncheckedUpdateWithoutServiceInput>
-    create: XOR<ReviewCreateWithoutServiceInput, ReviewUncheckedCreateWithoutServiceInput>
-  }
-
-  export type ReviewUpdateWithWhereUniqueWithoutServiceInput = {
-    where: ReviewWhereUniqueInput
-    data: XOR<ReviewUpdateWithoutServiceInput, ReviewUncheckedUpdateWithoutServiceInput>
-  }
-
-  export type ReviewUpdateManyWithWhereWithoutServiceInput = {
-    where: ReviewScalarWhereInput
-    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutServiceInput>
   }
 
   export type CategoryUpsertWithoutServiceInput = {
@@ -71424,7 +71033,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
@@ -71453,7 +71061,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
@@ -71760,7 +71367,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
-    Review?: ReviewCreateNestedManyWithoutStaffInput
     User: UserCreateNestedOneWithoutStaffInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutStaffInput
     WorkLog?: WorkLogCreateNestedManyWithoutStaffInput
@@ -71774,7 +71380,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
     WorkLog?: WorkLogUncheckedCreateNestedManyWithoutStaffInput
   }
@@ -72394,33 +71999,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ReviewCreateWithoutStaffInput = {
-    rating: number
-    comment: string
-    createdAt?: Date | string
-    CustomerProfile: CustomerProfileCreateNestedOneWithoutReviewInput
-    Service: ServiceCreateNestedOneWithoutReviewInput
-  }
-
-  export type ReviewUncheckedCreateWithoutStaffInput = {
-    id?: number
-    customerId: number
-    serviceId: number
-    rating: number
-    comment: string
-    createdAt?: Date | string
-  }
-
-  export type ReviewCreateOrConnectWithoutStaffInput = {
-    where: ReviewWhereUniqueInput
-    create: XOR<ReviewCreateWithoutStaffInput, ReviewUncheckedCreateWithoutStaffInput>
-  }
-
-  export type ReviewCreateManyStaffInputEnvelope = {
-    data: ReviewCreateManyStaffInput | ReviewCreateManyStaffInput[]
-    skipDuplicates?: boolean
-  }
-
   export type ServiceProviderCreateWithoutStaffInput = {
     description?: string | null
     address: string
@@ -72659,22 +72237,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"InspectionReport"> | Date | string
   }
 
-  export type ReviewUpsertWithWhereUniqueWithoutStaffInput = {
-    where: ReviewWhereUniqueInput
-    update: XOR<ReviewUpdateWithoutStaffInput, ReviewUncheckedUpdateWithoutStaffInput>
-    create: XOR<ReviewCreateWithoutStaffInput, ReviewUncheckedCreateWithoutStaffInput>
-  }
-
-  export type ReviewUpdateWithWhereUniqueWithoutStaffInput = {
-    where: ReviewWhereUniqueInput
-    data: XOR<ReviewUpdateWithoutStaffInput, ReviewUncheckedUpdateWithoutStaffInput>
-  }
-
-  export type ReviewUpdateManyWithWhereWithoutStaffInput = {
-    where: ReviewScalarWhereInput
-    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutStaffInput>
-  }
-
   export type ServiceProviderUpsertWithoutStaffInput = {
     update: XOR<ServiceProviderUpdateWithoutStaffInput, ServiceProviderUncheckedUpdateWithoutStaffInput>
     create: XOR<ServiceProviderCreateWithoutStaffInput, ServiceProviderUncheckedCreateWithoutStaffInput>
@@ -72907,7 +72469,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
-    Review?: ReviewCreateNestedManyWithoutStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
     User: UserCreateNestedOneWithoutStaffInput
     WorkLog?: WorkLogCreateNestedManyWithoutStaffInput
@@ -72922,7 +72483,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
     WorkLog?: WorkLogUncheckedCreateNestedManyWithoutStaffInput
   }
 
@@ -72994,7 +72554,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUpdateManyWithoutStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
     User?: UserUpdateOneRequiredWithoutStaffNestedInput
     WorkLog?: WorkLogUpdateManyWithoutStaffNestedInput
@@ -73009,7 +72568,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
     WorkLog?: WorkLogUncheckedUpdateManyWithoutStaffNestedInput
   }
 
@@ -73620,7 +73178,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
@@ -73649,7 +73206,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
@@ -73679,7 +73235,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutServiceInput
@@ -73708,7 +73263,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
@@ -73738,7 +73292,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
@@ -73767,7 +73320,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
@@ -73900,7 +73452,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
-    Review?: ReviewCreateNestedManyWithoutStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutStaffInput
     WorkLog?: WorkLogCreateNestedManyWithoutStaffInput
@@ -73914,7 +73465,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
     WorkLog?: WorkLogUncheckedCreateNestedManyWithoutStaffInput
   }
@@ -74990,7 +74540,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUpdateManyWithoutStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutStaffNestedInput
     WorkLog?: WorkLogUpdateManyWithoutStaffNestedInput
@@ -75004,7 +74553,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
     WorkLog?: WorkLogUncheckedUpdateManyWithoutStaffNestedInput
   }
@@ -75445,7 +74993,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportCreateNestedManyWithoutStaffInput
-    Review?: ReviewCreateNestedManyWithoutStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
     User: UserCreateNestedOneWithoutStaffInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutStaffInput
@@ -75460,7 +75007,6 @@ export namespace Prisma {
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
     InspectionReport?: InspectionReportUncheckedCreateNestedManyWithoutStaffInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
   }
 
@@ -75530,7 +75076,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUpdateManyWithoutStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
     User?: UserUpdateOneRequiredWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutStaffNestedInput
@@ -75545,7 +75090,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
   }
 
@@ -75592,7 +75136,6 @@ export namespace Prisma {
     updatedAt: Date | string
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
-    Review?: ReviewCreateNestedManyWithoutStaffInput
     ServiceProvider: ServiceProviderCreateNestedOneWithoutStaffInput
     User: UserCreateNestedOneWithoutStaffInput
     StaffCategory?: StaffCategoryCreateNestedManyWithoutStaffInput
@@ -75607,7 +75150,6 @@ export namespace Prisma {
     updatedAt: Date | string
     isActive?: boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedCreateNestedManyWithoutStaff_Booking_staffIdToStaffInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutStaffInput
     StaffCategory?: StaffCategoryUncheckedCreateNestedManyWithoutStaffInput
     WorkLog?: WorkLogUncheckedCreateNestedManyWithoutStaffInput
   }
@@ -75677,7 +75219,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
-    Review?: ReviewUpdateManyWithoutStaffNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutStaffNestedInput
     User?: UserUpdateOneRequiredWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutStaffNestedInput
@@ -75692,7 +75233,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
     WorkLog?: WorkLogUncheckedUpdateManyWithoutStaffNestedInput
   }
@@ -76315,7 +75855,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
@@ -76345,7 +75884,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
     ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutService_ServiceItemsInput = {
@@ -76418,7 +75956,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
@@ -76448,7 +75985,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
   }
 
   export type ServiceItemUpsertWithoutService_ServiceItemsInput = {
@@ -76651,7 +76187,6 @@ export namespace Prisma {
     status?: $Enums.ServiceStatus
     FavoriteService?: FavoriteServiceCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
@@ -76681,7 +76216,6 @@ export namespace Prisma {
     status?: $Enums.ServiceStatus
     FavoriteService?: FavoriteServiceUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
@@ -76742,7 +76276,6 @@ export namespace Prisma {
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
@@ -76772,7 +76305,6 @@ export namespace Prisma {
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
@@ -77574,7 +77106,6 @@ export namespace Prisma {
     status?: $Enums.ServiceStatus
     ProposalItem?: ProposalItemCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingCreateNestedManyWithoutServiceInput
-    Review?: ReviewCreateNestedManyWithoutServiceInput
     Category: CategoryCreateNestedOneWithoutServiceInput
     User_Service_createdByIdToUser?: UserCreateNestedOneWithoutService_Service_createdByIdToUserInput
     User_Service_deletedByIdToUser?: UserCreateNestedOneWithoutService_Service_deletedByIdToUserInput
@@ -77604,7 +77135,6 @@ export namespace Prisma {
     status?: $Enums.ServiceStatus
     ProposalItem?: ProposalItemUncheckedCreateNestedManyWithoutServiceInput
     RecurringBooking?: RecurringBookingUncheckedCreateNestedManyWithoutServiceInput
-    Review?: ReviewUncheckedCreateNestedManyWithoutServiceInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedCreateNestedManyWithoutServiceInput
   }
 
@@ -77687,7 +77217,6 @@ export namespace Prisma {
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
@@ -77717,7 +77246,6 @@ export namespace Prisma {
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
@@ -78600,7 +78128,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
@@ -78629,7 +78156,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
@@ -78808,11 +78334,10 @@ export namespace Prisma {
 
   export type ReviewCreateManyCustomerProfileInput = {
     id?: number
-    staffId: number
-    serviceId: number
     rating: number
     comment: string
     createdAt?: Date | string
+    bookingId?: number | null
   }
 
   export type RewardPointCreateManyCustomerProfileInput = {
@@ -79054,26 +78579,23 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Service?: ServiceUpdateOneRequiredWithoutReviewNestedInput
-    Staff?: StaffUpdateOneRequiredWithoutReviewNestedInput
+    bookingId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ReviewUncheckedUpdateWithoutCustomerProfileInput = {
     id?: IntFieldUpdateOperationsInput | number
-    staffId?: IntFieldUpdateOperationsInput | number
-    serviceId?: IntFieldUpdateOperationsInput | number
     rating?: IntFieldUpdateOperationsInput | number
     comment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookingId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ReviewUncheckedUpdateManyWithoutCustomerProfileInput = {
     id?: IntFieldUpdateOperationsInput | number
-    staffId?: IntFieldUpdateOperationsInput | number
-    serviceId?: IntFieldUpdateOperationsInput | number
     rating?: IntFieldUpdateOperationsInput | number
     comment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookingId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type RewardPointUpdateWithoutCustomerProfileInput = {
@@ -79370,15 +78892,6 @@ export namespace Prisma {
     updatedAt: Date | string
   }
 
-  export type ReviewCreateManyServiceInput = {
-    id?: number
-    customerId: number
-    staffId: number
-    rating: number
-    comment: string
-    createdAt?: Date | string
-  }
-
   export type Service_ServiceItemsCreateManyServiceInput = {
     serviceItemId: number
   }
@@ -79447,32 +78960,6 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReviewUpdateWithoutServiceInput = {
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutReviewNestedInput
-    Staff?: StaffUpdateOneRequiredWithoutReviewNestedInput
-  }
-
-  export type ReviewUncheckedUpdateWithoutServiceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    customerId?: IntFieldUpdateOperationsInput | number
-    staffId?: IntFieldUpdateOperationsInput | number
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReviewUncheckedUpdateManyWithoutServiceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    customerId?: IntFieldUpdateOperationsInput | number
-    staffId?: IntFieldUpdateOperationsInput | number
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type Service_ServiceItemsUpdateWithoutServiceInput = {
@@ -79737,7 +79224,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
@@ -79766,7 +79252,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
@@ -79916,7 +79401,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUpdateManyWithoutStaffNestedInput
     User?: UserUpdateOneRequiredWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUpdateManyWithoutStaffNestedInput
     WorkLog?: WorkLogUpdateManyWithoutStaffNestedInput
@@ -79930,7 +79414,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     Booking_Booking_staffIdToStaff?: BookingUncheckedUpdateManyWithoutStaff_Booking_staffIdToStaffNestedInput
     InspectionReport?: InspectionReportUncheckedUpdateManyWithoutStaffNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutStaffNestedInput
     StaffCategory?: StaffCategoryUncheckedUpdateManyWithoutStaffNestedInput
     WorkLog?: WorkLogUncheckedUpdateManyWithoutStaffNestedInput
   }
@@ -79990,15 +79473,6 @@ export namespace Prisma {
     estimatedTime?: number | null
     note?: string | null
     images?: InspectionReportCreateimagesInput | string[]
-    createdAt?: Date | string
-  }
-
-  export type ReviewCreateManyStaffInput = {
-    id?: number
-    customerId: number
-    serviceId: number
-    rating: number
-    comment: string
     createdAt?: Date | string
   }
 
@@ -80086,32 +79560,6 @@ export namespace Prisma {
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     images?: InspectionReportUpdateimagesInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReviewUpdateWithoutStaffInput = {
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    CustomerProfile?: CustomerProfileUpdateOneRequiredWithoutReviewNestedInput
-    Service?: ServiceUpdateOneRequiredWithoutReviewNestedInput
-  }
-
-  export type ReviewUncheckedUpdateWithoutStaffInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    customerId?: IntFieldUpdateOperationsInput | number
-    serviceId?: IntFieldUpdateOperationsInput | number
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReviewUncheckedUpdateManyWithoutStaffInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    customerId?: IntFieldUpdateOperationsInput | number
-    serviceId?: IntFieldUpdateOperationsInput | number
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -80943,7 +80391,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
@@ -80972,7 +80419,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
@@ -81012,7 +80458,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     ServiceProvider?: ServiceProviderUpdateOneRequiredWithoutServiceNestedInput
@@ -81041,7 +80486,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 
@@ -81081,7 +80525,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUpdateManyWithoutServiceNestedInput
     Category?: CategoryUpdateOneRequiredWithoutServiceNestedInput
     User_Service_createdByIdToUser?: UserUpdateOneWithoutService_Service_createdByIdToUserNestedInput
     User_Service_deletedByIdToUser?: UserUpdateOneWithoutService_Service_deletedByIdToUserNestedInput
@@ -81110,7 +80553,6 @@ export namespace Prisma {
     FavoriteService?: FavoriteServiceUncheckedUpdateManyWithoutServiceNestedInput
     ProposalItem?: ProposalItemUncheckedUpdateManyWithoutServiceNestedInput
     RecurringBooking?: RecurringBookingUncheckedUpdateManyWithoutServiceNestedInput
-    Review?: ReviewUncheckedUpdateManyWithoutServiceNestedInput
     Service_ServiceItems?: Service_ServiceItemsUncheckedUpdateManyWithoutServiceNestedInput
   }
 

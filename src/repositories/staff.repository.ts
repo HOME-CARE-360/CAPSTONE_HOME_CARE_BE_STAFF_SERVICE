@@ -1244,23 +1244,26 @@ async checkOutWorkLogByBookingId(bookingId: number, imageUrls: string[] = []) {
     }
   },
 
-  async getProposalByBookingId(staffId: number, bookingId: number) {
-    try {
-      const booking = await prisma.booking.findUnique({
-        where: { id: bookingId },
-        select: {
-          id: true,
-          staffId: true,
-          Proposal: {
-            include: {
-              ProposalItem: {
-                include: {
-                  Service: {
-                    select: {
-                      id: true,
-                      name: true,
-                      basePrice: true,
-                      durationMinutes: true,
+async getProposalByBookingId(staffId: number, bookingId: number) {
+  try {
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      select: {
+        id: true,
+        staffId: true,
+        Proposal: {
+          include: {
+            ProposalItem: {
+              include: {
+                Service: {
+                  select: {
+                    id: true,
+                    name: true,
+                    basePrice: true,
+                    virtualPrice: true,          
+                    durationMinutes: true,
+                    Service_ServiceItems: {
+                      include: { ServiceItem: true },
                     },
                   },
                 },
@@ -1268,55 +1271,70 @@ async checkOutWorkLogByBookingId(bookingId: number, imageUrls: string[] = []) {
             },
           },
         },
-      });
+      },
+    });
 
-      if (!booking) {
-        throw new AppError(
-          "Booking not found",
-          [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
-          { bookingId },
-          404,
-        );
-      }
-
-      if (booking.staffId !== staffId) {
-        throw new AppError(
-          "Access denied: Staff does not own this booking",
-          [{ message: "Error.UnauthorizedAccess", path: ["staffId"] }],
-          { staffId, bookingStaffId: booking.staffId },
-          403,
-        );
-      }
-
-      if (!booking.Proposal) {
-        throw new AppError(
-          "No proposal found for this booking",
-          [{ message: "Error.NoProposalFound", path: ["bookingId"] }],
-          { bookingId },
-          404,
-        );
-      }
-
-      return {
-        id: booking.Proposal.id,
-        status: booking.Proposal.status,
-        notes: booking.Proposal.notes ?? "",
-        createdAt: booking.Proposal.createdAt,
-        items: booking.Proposal.ProposalItem.map((item) => ({
-          id: item.id,
-          quantity: item.quantity,
-          service: item.Service,
-        })),
-      };
-    } catch (error) {
-      if (error instanceof AppError) throw error;
-
+    if (!booking) {
       throw new AppError(
-        "Failed to fetch proposal by booking ID",
-        [{ message: "Error.GetProposalByBookingError", path: ["bookingId"] }],
-        { staffId, bookingId, error },
-        500,
+        "Booking not found",
+        [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
+        { bookingId },
+        404
       );
     }
-  },
+
+    if (booking.staffId !== staffId) {
+      throw new AppError(
+        "Access denied: Staff does not own this booking",
+        [{ message: "Error.UnauthorizedAccess", path: ["staffId"] }],
+        { staffId, bookingStaffId: booking.staffId },
+        403
+      );
+    }
+
+    if (!booking.Proposal) {
+      throw new AppError(
+        "No proposal found for this booking",
+        [{ message: "Error.NoProposalFound", path: ["bookingId"] }],
+        { bookingId },
+        404
+      );
+    }
+
+    // Làm phẳng serviceItems và loại bỏ trường trung gian
+    const items = booking.Proposal.ProposalItem.map((item) => {
+      const s = item.Service as any;
+      const serviceItems =
+        s?.Service_ServiceItems?.map((ssi: any) => ssi.ServiceItem) ?? [];
+
+      const { Service_ServiceItems, ...serviceRest } = s || {};
+
+      return {
+        id: item.id,
+        quantity: item.quantity,
+        service: {
+          ...serviceRest,
+          serviceItems,
+        },
+      };
+    });
+
+    return {
+      id: booking.Proposal.id,
+      status: booking.Proposal.status,
+      notes: booking.Proposal.notes ?? "",
+      createdAt: booking.Proposal.createdAt,
+      items,
+    };
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+
+    throw new AppError(
+      "Failed to fetch proposal by booking ID",
+      [{ message: "Error.GetProposalByBookingError", path: ["bookingId"] }],
+      { staffId, bookingId, error: (error as any)?.message ?? error },
+      500
+    );
+  }
+}
 };
