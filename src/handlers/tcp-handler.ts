@@ -137,7 +137,6 @@ async function handleCreateInspectionReport(data: any): Promise<HandlerResult> {
   return { message: "Inspection report created successfully", data: result };
 }
 
-
 async function handleGetInspectionReports(data: any): Promise<HandlerResult> {
   const parsed = parseWithSchema(GetInspectionReportsSchema, data);
   const result = await StaffService.getInspectionReportsByStaff(
@@ -172,7 +171,6 @@ async function handleGetWorkLogs(data: any): Promise<HandlerResult> {
   return { message: "Recent work logs retrieved successfully", data: result };
 }
 
-
 async function handleCreateWorkLog(data: any): Promise<HandlerResult> {
   validateId(data?.staffId, "staffId");
   validateId(data?.bookingId, "bookingId");
@@ -180,7 +178,8 @@ async function handleCreateWorkLog(data: any): Promise<HandlerResult> {
   // Validate optional check-in images
   if (
     data?.imageUrls &&
-    (!Array.isArray(data.imageUrls) || !data.imageUrls.every((url: string) => typeof url === "string"))
+    (!Array.isArray(data.imageUrls) ||
+      !data.imageUrls.every((url: string) => typeof url === "string"))
   ) {
     throw new AppError(
       "Invalid check-in image URLs",
@@ -202,14 +201,14 @@ async function handleCreateWorkLog(data: any): Promise<HandlerResult> {
   };
 }
 
-
 async function handleCheckOut(data: any): Promise<HandlerResult> {
   validateId(data?.bookingId, "bookingId");
 
   // Validate optional check-out images
   if (
     data?.imageUrls &&
-    (!Array.isArray(data.imageUrls) || !data.imageUrls.every((url: string) => typeof url === "string"))
+    (!Array.isArray(data.imageUrls) ||
+      !data.imageUrls.every((url: string) => typeof url === "string"))
   ) {
     throw new AppError(
       "Invalid check-out image URLs",
@@ -229,7 +228,6 @@ async function handleCheckOut(data: any): Promise<HandlerResult> {
     data: result,
   };
 }
-
 
 async function handleGetBookingsByDate(data: any): Promise<HandlerResult> {
   const parsed = parseWithSchema(GetBookingsByDateSchema, data);

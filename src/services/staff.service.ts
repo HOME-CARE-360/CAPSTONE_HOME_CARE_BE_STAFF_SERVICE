@@ -93,12 +93,19 @@ export const StaffService = {
    * @returns Created inspection report
    */
   async createInspectionReport(dto: CreateInspectionReportDto) {
-    const { staffId, bookingId, images = [], estimatedTime, note } = dto;
+    const {
+      staffId,
+      bookingId,
+      images = [],
+      estimatedTime,
+      note,
+      assetIds,
+    } = dto;
 
-    // Validate required fields
-    if (!staffId || !bookingId) {
+    // Validate cơ bản
+    if (!Number.isInteger(staffId) || !Number.isInteger(bookingId)) {
       throw new AppError(
-        "Missing required fields",
+        "Missing or invalid required fields",
         [
           {
             message: "Error.MissingRequiredFields",
@@ -109,16 +116,29 @@ export const StaffService = {
         400,
       );
     }
+    if (!Array.isArray(images)) {
+      throw new AppError(
+        "Images must be an array of strings",
+        [{ message: "Error.InvalidImages", path: ["images"] }],
+        { images },
+        400,
+      );
+    }
+    if (
+      estimatedTime != null &&
+      (!Number.isInteger(estimatedTime) ||
+        estimatedTime < 1 ||
+        estimatedTime > 600)
+    ) {
+      throw new AppError(
+        "estimatedTime must be an integer between 1 and 600",
+        [{ message: "Error.InvalidEstimatedTime", path: ["estimatedTime"] }],
+        { estimatedTime },
+        400,
+      );
+    }
 
-    const inspectionData = {
-      images,
-      estimatedTime,
-      note,
-      Booking: { connect: { id: bookingId } },
-      Staff: { connect: { id: staffId } },
-    };
-
-    return StaffRepository.createInspectionReport(inspectionData);
+    return StaffRepository.createInspectionReport(dto, assetIds);
   },
 
   /**
@@ -216,76 +236,85 @@ export const StaffService = {
     return StaffRepository.getRecentWorkLogs(staffId, sanitizedOptions);
   },
 
-
-
-
   /**
    * Creates work log and updates booking status atomically
    * @param staffId - Staff identifier
    * @param bookingId - Booking identifier
    * @returns Work log creation result
    */
-async createWorkLogWithStatusUpdate(
-  staffId: number,
-  bookingId: number,
-  imageUrls: string[] = [],
-) {
-  if (
-    typeof staffId !== 'number' || staffId <= 0 ||
-    typeof bookingId !== 'number' || bookingId <= 0
+  async createWorkLogWithStatusUpdate(
+    staffId: number,
+    bookingId: number,
+    imageUrls: string[] = [],
   ) {
-    throw new AppError(
-      "Invalid or missing required parameters",
-      [
-        {
-          message: "Error.InvalidParameters",
-          path: ["staffId", "bookingId"],
-        },
-      ],
-      { staffId, bookingId },
-      400,
-    );
-  }
+    if (
+      typeof staffId !== "number" ||
+      staffId <= 0 ||
+      typeof bookingId !== "number" ||
+      bookingId <= 0
+    ) {
+      throw new AppError(
+        "Invalid or missing required parameters",
+        [
+          {
+            message: "Error.InvalidParameters",
+            path: ["staffId", "bookingId"],
+          },
+        ],
+        { staffId, bookingId },
+        400,
+      );
+    }
 
-  // Optionally validate imageUrls here
-  if (!Array.isArray(imageUrls) || !imageUrls.every(url => typeof url === 'string')) {
-    throw new AppError(
-      "Invalid imageUrls",
-      [{ message: "Error.InvalidImageUrls", path: ["imageUrls"] }],
-      { imageUrls },
-      400,
-    );
-  }
+    // Optionally validate imageUrls here
+    if (
+      !Array.isArray(imageUrls) ||
+      !imageUrls.every((url) => typeof url === "string")
+    ) {
+      throw new AppError(
+        "Invalid imageUrls",
+        [{ message: "Error.InvalidImageUrls", path: ["imageUrls"] }],
+        { imageUrls },
+        400,
+      );
+    }
 
-  return StaffRepository.createWorkLogWithStatusUpdate(staffId, bookingId, imageUrls);
-},
+    return StaffRepository.createWorkLogWithStatusUpdate(
+      staffId,
+      bookingId,
+      imageUrls,
+    );
+  },
 
   /**
    * Checks out work log for a booking
    * @param bookingId - Booking identifier
    * @returns Check-out result
    */
- async checkOutWorkLog(bookingId: number, imageUrls: string[] = []) {
-  if (typeof bookingId !== 'number' || bookingId <= 0) {
-    throw new AppError(
-      "Invalid booking ID",
-      [{ message: "Error.InvalidBookingId", path: ["bookingId"] }],
-      { bookingId },
-      400,
-    );
-  }
+  async checkOutWorkLog(bookingId: number, imageUrls: string[] = []) {
+    if (typeof bookingId !== "number" || bookingId <= 0) {
+      throw new AppError(
+        "Invalid booking ID",
+        [{ message: "Error.InvalidBookingId", path: ["bookingId"] }],
+        { bookingId },
+        400,
+      );
+    }
 
-  if (!Array.isArray(imageUrls) || !imageUrls.every(url => typeof url === 'string')) {
-    throw new AppError(
-      "Invalid check-out images",
-      [{ message: "Error.InvalidImageUrls", path: ["imageUrls"] }],
-      { imageUrls },
-      400,
-    );
-  }
+    if (
+      !Array.isArray(imageUrls) ||
+      !imageUrls.every((url) => typeof url === "string")
+    ) {
+      throw new AppError(
+        "Invalid check-out images",
+        [{ message: "Error.InvalidImageUrls", path: ["imageUrls"] }],
+        { imageUrls },
+        400,
+      );
+    }
 
-  return StaffRepository.checkOutWorkLogByBookingId(bookingId, imageUrls);
-},
+    return StaffRepository.checkOutWorkLogByBookingId(bookingId, imageUrls);
+  },
 
   /**
    * Retrieves bookings for a specific date with pagination

@@ -334,15 +334,15 @@ export const StaffRepository = {
     }
   },
 
-  async createInspectionReport(data: Prisma.InspectionReportCreateInput) {
+  async createInspectionReport(data: any, assetIds?: number[]) {
     try {
       return await prisma.$transaction(async (tx) => {
         const bookingId = validateBookingConnection(data);
 
+        // 1) Chặn trùng report theo bookingId (unique trong schema)
         const existingReport = await tx.inspectionReport.findUnique({
           where: { bookingId },
         });
-
         if (existingReport) {
           throw new AppError(
             "Inspection report already exists for this booking",
@@ -352,9 +352,13 @@ export const StaffRepository = {
           );
         }
 
+        // 2) Lấy booking + serviceRequest + customer
         const booking = await tx.booking.findUnique({
           where: { id: bookingId },
-          include: { ServiceRequest: { select: { id: true } } },
+          include: {
+            ServiceRequest: { select: { id: true } },
+            CustomerProfile: { select: { id: true } },
+          },
         });
 
         if (!booking?.ServiceRequest?.id) {
@@ -366,8 +370,55 @@ export const StaffRepository = {
           );
         }
 
+        // 3) Nếu truyền assetIds: kiểm tra quyền sở hữu (asset.customerId == booking.customerId)
+        if (assetIds && assetIds.length > 0) {
+          const assets = await tx.customerAsset.findMany({
+            where: { id: { in: assetIds } },
+            select: { id: true, customerId: true },
+          });
+
+          // Thiếu asset hoặc asset không thuộc customer
+          const foundIds = new Set(assets.map((a) => a.id));
+          const notFound = assetIds.filter((id) => !foundIds.has(id));
+          if (notFound.length > 0) {
+            throw new AppError(
+              "Some assets were not found",
+              [{ message: "Error.AssetNotFound", path: ["assetIds"] }],
+              { notFound, assetIds },
+              400,
+            );
+          }
+
+          const invalid = assets.filter(
+            (a) => a.customerId !== booking.customerId,
+          );
+          if (invalid.length > 0) {
+            throw new AppError(
+              "Some assets do not belong to the booking's customer",
+              [{ message: "Error.AssetOwnershipInvalid", path: ["assetIds"] }],
+              {
+                invalid: invalid.map((x) => x.id),
+                bookingCustomerId: booking.customerId,
+              },
+              400,
+            );
+          }
+        }
+
+        // 4) Tạo report + cập nhật trạng thái ServiceRequest trong cùng transaction
         const [report] = await Promise.all([
-          tx.inspectionReport.create({ data }),
+          tx.inspectionReport.create({
+            data: {
+              ...data,
+              ...(assetIds && assetIds.length > 0
+                ? {
+                    CustomerAsset: {
+                      connect: assetIds.map((id) => ({ id })),
+                    },
+                  }
+                : {}),
+            },
+          }),
           tx.serviceRequest.update({
             where: { id: booking.ServiceRequest.id },
             data: { status: RequestStatus.ESTIMATED },
@@ -377,8 +428,7 @@ export const StaffRepository = {
         return report;
       });
     } catch (error) {
-      console.log(error);
-
+      console.error(error);
       if (error instanceof AppError) throw error;
 
       throw new AppError(
@@ -389,8 +439,6 @@ export const StaffRepository = {
       );
     }
   },
-
-
   async countBookings(
     staffId: number,
     status?: BookingStatus,
@@ -611,8 +659,6 @@ export const StaffRepository = {
     }
   },
 
-
-
   async getRecentWorkLogs(
     staffId: number,
     options?: { page?: number; limit?: number },
@@ -679,19 +725,155 @@ export const StaffRepository = {
     }
   },
 
+  async createWorkLogWithStatusUpdate(
+    staffId: number,
+    bookingId: number,
+    imageUrls: string[] = [],
+  ) {
+    try {
+      return await prisma.$transaction(async (tx) => {
+        const booking = await tx.booking.findUnique({
+          where: { id: bookingId },
+          include: {
+            ServiceRequest: {
+              select: { id: true, preferredDate: true, status: true },
+            },
+          },
+        });
 
-async createWorkLogWithStatusUpdate(
-  staffId: number,
-  bookingId: number,
-  imageUrls: string[] = [],
-) {
-  try {
+        if (!booking) {
+          throw new AppError(
+            "Booking not found",
+            [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
+            { bookingId },
+            404,
+          );
+        }
+
+        const serviceRequest = booking.ServiceRequest;
+
+        if (
+          serviceRequest?.status &&
+          [RequestStatus.ESTIMATED, RequestStatus.CANCELLED].includes(
+            serviceRequest.status as "CANCELLED" | "ESTIMATED",
+          )
+        ) {
+          throw new AppError(
+            "Cannot check in to a completed or canceled booking",
+            [
+              {
+                message: "Error.InvalidBookingStatusForCheckIn",
+                path: ["bookingId"],
+              },
+            ],
+            { bookingId, status: serviceRequest.status },
+            400,
+          );
+        }
+
+        const existingLog = await tx.workLog.findFirst({
+          where: { bookingId, staffId },
+          select: { id: true },
+        });
+
+        if (existingLog) {
+          throw new AppError(
+            "Staff already checked in for this booking",
+            [{ message: "Error.AlreadyCheckedIn", path: ["bookingId"] }],
+            { bookingId, staffId },
+            400,
+          );
+        }
+
+        const now = new Date();
+        const preferredDate = serviceRequest?.preferredDate;
+
+        if (preferredDate) {
+          const daysDiff = calculateDaysDifference(
+            now,
+            new Date(preferredDate),
+          );
+          if (daysDiff > MAX_DATE_DIFF_DAYS) {
+            throw new AppError(
+              "Cannot check in far from preferred date",
+              [
+                {
+                  message: "Error.DateMismatchPreferredDate",
+                  path: ["bookingId"],
+                },
+              ],
+              { bookingId, preferredDate, today: now },
+              400,
+            );
+          }
+        }
+
+        if (!serviceRequest?.id) {
+          throw new AppError(
+            "Missing ServiceRequest ID",
+            [{ message: "Error.MissingServiceRequestId", path: ["bookingId"] }],
+            { bookingId },
+            500,
+          );
+        }
+
+        const [workLog] = await Promise.all([
+          tx.workLog.create({
+            data: {
+              staffId,
+              bookingId,
+              checkIn: now,
+              checkInImages: imageUrls,
+              updatedAt: now,
+            },
+          }),
+          tx.serviceRequest.update({
+            where: { id: serviceRequest.id },
+            data: { status: RequestStatus.IN_PROGRESS },
+          }),
+        ]);
+
+        return {
+          message: "Check-in successful",
+          workLogId: workLog.id,
+          bookingId,
+          checkInTime: now,
+          imageCount: imageUrls.length,
+        };
+      });
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+
+      throw new AppError(
+        "Failed to create work log and update service request status",
+        [{ message: "Error.CreateWorkLogError", path: ["bookingId"] }],
+        { bookingId, staffId, error },
+        500,
+      );
+    }
+  },
+
+  async checkOutWorkLogByBookingId(
+    bookingId: number,
+    imageUrls: string[] = [],
+  ) {
     return await prisma.$transaction(async (tx) => {
       const booking = await tx.booking.findUnique({
         where: { id: bookingId },
-        include: {
-          ServiceRequest: {
-            select: { id: true, preferredDate: true, status: true },
+        select: {
+          id: true,
+          status: true,
+          WorkLog: {
+            select: {
+              id: true,
+              checkIn: true,
+              checkOut: true,
+            },
+          },
+          Proposal: {
+            select: {
+              status: true,
+            },
           },
         },
       });
@@ -699,213 +881,82 @@ async createWorkLogWithStatusUpdate(
       if (!booking) {
         throw new AppError(
           "Booking not found",
-          [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
+          [{ message: "NotFound", path: ["bookingId"] }],
           { bookingId },
           404,
         );
       }
 
-      const serviceRequest = booking.ServiceRequest;
+      const log = booking.WorkLog[0];
+      const proposal = booking.Proposal;
 
-      if (
-        serviceRequest?.status &&
-        [RequestStatus.ESTIMATED, RequestStatus.CANCELLED].includes(
-          serviceRequest.status as "CANCELLED" | "ESTIMATED",
-        )
-      ) {
+      if (!log) {
         throw new AppError(
-          "Cannot check in to a completed or canceled booking",
-          [
-            {
-              message: "Error.InvalidBookingStatusForCheckIn",
-              path: ["bookingId"],
-            },
-          ],
-          { bookingId, status: serviceRequest.status },
+          "Work log not found",
+          [{ message: "NotFound", path: ["bookingId"] }],
+          { bookingId },
+          404,
+        );
+      }
+
+      if (!proposal || proposal.status !== ProposalStatus.ACCEPTED) {
+        throw new AppError(
+          "Proposal must be accepted before checking out",
+          [{ message: "Error.ProposalNotAccepted", path: ["bookingId"] }],
+          { bookingId, proposalStatus: proposal?.status },
           400,
         );
       }
 
-      const existingLog = await tx.workLog.findFirst({
-        where: { bookingId, staffId },
-        select: { id: true },
-      });
-
-      if (existingLog) {
+      if (log.checkOut) {
         throw new AppError(
-          "Staff already checked in for this booking",
-          [{ message: "Error.AlreadyCheckedIn", path: ["bookingId"] }],
-          { bookingId, staffId },
+          "Already checked out",
+          [{ message: "Error.AlreadyCheckedOut", path: ["bookingId"] }],
+          { bookingId },
+          400,
+        );
+      }
+
+      if (!log.checkIn) {
+        throw new AppError(
+          "Check-in time is missing",
+          [{ message: "Error.MissingCheckIn", path: ["bookingId"] }],
+          { bookingId },
           400,
         );
       }
 
       const now = new Date();
-      const preferredDate = serviceRequest?.preferredDate;
+      const hoursPassed = calculateHoursDifference(new Date(log.checkIn), now);
 
-      if (preferredDate) {
-        const daysDiff = calculateDaysDifference(now, new Date(preferredDate));
-        if (daysDiff > MAX_DATE_DIFF_DAYS) {
-          throw new AppError(
-            "Cannot check in far from preferred date",
-            [
-              {
-                message: "Error.DateMismatchPreferredDate",
-                path: ["bookingId"],
-              },
-            ],
-            { bookingId, preferredDate, today: now },
-            400,
-          );
-        }
-      }
-
-      if (!serviceRequest?.id) {
+      if (hoursPassed > MAX_CHECKOUT_HOURS) {
         throw new AppError(
-          "Missing ServiceRequest ID",
-          [{ message: "Error.MissingServiceRequestId", path: ["bookingId"] }],
-          { bookingId },
-          500,
+          "Check-out expired",
+          [{ message: "Error.CheckOutTooLate", path: ["bookingId"] }],
+          { bookingId, hoursPassed },
+          400,
         );
       }
 
-      const [workLog] = await Promise.all([
-        tx.workLog.create({
+      await Promise.all([
+        tx.workLog.update({
+          where: { id: log.id },
           data: {
-            staffId,
-            bookingId,
-            checkIn: now,
-            checkInImages: imageUrls,
+            checkOut: now,
             updatedAt: now,
+            checkOutImages: imageUrls,
           },
-        }),
-        tx.serviceRequest.update({
-          where: { id: serviceRequest.id },
-          data: { status: RequestStatus.IN_PROGRESS },
         }),
       ]);
 
       return {
-        message: "Check-in successful",
-        workLogId: workLog.id,
+        message: "Check-out successful",
         bookingId,
-        checkInTime: now,
+        checkOutTime: now,
         imageCount: imageUrls.length,
       };
     });
-  } catch (error) {
-    if (error instanceof AppError) throw error;
-
-    throw new AppError(
-      "Failed to create work log and update service request status",
-      [{ message: "Error.CreateWorkLogError", path: ["bookingId"] }],
-      { bookingId, staffId, error },
-      500,
-    );
-  }
-},
-
-async checkOutWorkLogByBookingId(bookingId: number, imageUrls: string[] = []) {
-  return await prisma.$transaction(async (tx) => {
-    const booking = await tx.booking.findUnique({
-      where: { id: bookingId },
-      select: {
-        id: true,
-        status: true,
-        WorkLog: {
-          select: {
-            id: true,
-            checkIn: true,
-            checkOut: true,
-          },
-        },
-        Proposal: {
-          select: {
-            status: true,
-          },
-        },
-      },
-    });
-
-    if (!booking) {
-      throw new AppError(
-        "Booking not found",
-        [{ message: "NotFound", path: ["bookingId"] }],
-        { bookingId },
-        404,
-      );
-    }
-
-    const log = booking.WorkLog[0];
-    const proposal = booking.Proposal;
-
-    if (!log) {
-      throw new AppError(
-        "Work log not found",
-        [{ message: "NotFound", path: ["bookingId"] }],
-        { bookingId },
-        404,
-      );
-    }
-
-    if (!proposal || proposal.status !== ProposalStatus.ACCEPTED) {
-      throw new AppError(
-        "Proposal must be accepted before checking out",
-        [{ message: "Error.ProposalNotAccepted", path: ["bookingId"] }],
-        { bookingId, proposalStatus: proposal?.status },
-        400,
-      );
-    }
-
-    if (log.checkOut) {
-      throw new AppError(
-        "Already checked out",
-        [{ message: "Error.AlreadyCheckedOut", path: ["bookingId"] }],
-        { bookingId },
-        400,
-      );
-    }
-
-    if (!log.checkIn) {
-      throw new AppError(
-        "Check-in time is missing",
-        [{ message: "Error.MissingCheckIn", path: ["bookingId"] }],
-        { bookingId },
-        400,
-      );
-    }
-
-    const now = new Date();
-    const hoursPassed = calculateHoursDifference(new Date(log.checkIn), now);
-
-    if (hoursPassed > MAX_CHECKOUT_HOURS) {
-      throw new AppError(
-        "Check-out expired",
-        [{ message: "Error.CheckOutTooLate", path: ["bookingId"] }],
-        { bookingId, hoursPassed },
-        400,
-      );
-    }
-
-    await Promise.all([
-      tx.workLog.update({
-        where: { id: log.id },
-        data: {
-          checkOut: now,
-          updatedAt: now,
-          checkOutImages: imageUrls,
-        },
-      }),
-    ]);
-
-    return {
-      message: "Check-out successful",
-      bookingId,
-      checkOutTime: now,
-      imageCount: imageUrls.length,
-    };
-  });
-},
+  },
 
   async getBookingsByDate(staffId: number, date: string, page = 1, limit = 10) {
     const targetDate = new Date(date);
@@ -1046,6 +1097,11 @@ async checkOutWorkLogByBookingId(bookingId: number, imageUrls: string[] = []) {
                 },
               },
             },
+            CustomerAsset: {
+              include: {
+                Category: { select: { id: true, name: true } },
+              },
+            },
           },
         }),
       ]);
@@ -1101,26 +1157,27 @@ async checkOutWorkLogByBookingId(bookingId: number, imageUrls: string[] = []) {
     }
   },
 
-async getProposalByBookingId(staffId: number, bookingId: number) {
-  try {
-    const booking = await prisma.booking.findUnique({
-      where: { id: bookingId },
-      select: {
-        id: true,
-        staffId: true,
-        Proposal: {
-          include: {
-            ProposalItem: {
-              include: {
-                Service: {
-                  select: {
-                    id: true,
-                    name: true,
-                    basePrice: true,
-                    virtualPrice: true,          
-                    durationMinutes: true,
-                    Service_ServiceItems: {
-                      include: { ServiceItem: true },
+  async getProposalByBookingId(staffId: number, bookingId: number) {
+    try {
+      const booking = await prisma.booking.findUnique({
+        where: { id: bookingId },
+        select: {
+          id: true,
+          staffId: true,
+          Proposal: {
+            include: {
+              ProposalItem: {
+                include: {
+                  Service: {
+                    select: {
+                      id: true,
+                      name: true,
+                      basePrice: true,
+                      virtualPrice: true,
+                      durationMinutes: true,
+                      Service_ServiceItems: {
+                        include: { ServiceItem: true },
+                      },
                     },
                   },
                 },
@@ -1128,70 +1185,69 @@ async getProposalByBookingId(staffId: number, bookingId: number) {
             },
           },
         },
-      },
-    });
+      });
 
-    if (!booking) {
-      throw new AppError(
-        "Booking not found",
-        [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
-        { bookingId },
-        404
-      );
-    }
+      if (!booking) {
+        throw new AppError(
+          "Booking not found",
+          [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
+          { bookingId },
+          404,
+        );
+      }
 
-    if (booking.staffId !== staffId) {
-      throw new AppError(
-        "Access denied: Staff does not own this booking",
-        [{ message: "Error.UnauthorizedAccess", path: ["staffId"] }],
-        { staffId, bookingStaffId: booking.staffId },
-        403
-      );
-    }
+      if (booking.staffId !== staffId) {
+        throw new AppError(
+          "Access denied: Staff does not own this booking",
+          [{ message: "Error.UnauthorizedAccess", path: ["staffId"] }],
+          { staffId, bookingStaffId: booking.staffId },
+          403,
+        );
+      }
 
-    if (!booking.Proposal) {
-      throw new AppError(
-        "No proposal found for this booking",
-        [{ message: "Error.NoProposalFound", path: ["bookingId"] }],
-        { bookingId },
-        404
-      );
-    }
+      if (!booking.Proposal) {
+        throw new AppError(
+          "No proposal found for this booking",
+          [{ message: "Error.NoProposalFound", path: ["bookingId"] }],
+          { bookingId },
+          404,
+        );
+      }
 
-    // Làm phẳng serviceItems và loại bỏ trường trung gian
-    const items = booking.Proposal.ProposalItem.map((item) => {
-      const s = item.Service as any;
-      const serviceItems =
-        s?.Service_ServiceItems?.map((ssi: any) => ssi.ServiceItem) ?? [];
+      // Làm phẳng serviceItems và loại bỏ trường trung gian
+      const items = booking.Proposal.ProposalItem.map((item) => {
+        const s = item.Service as any;
+        const serviceItems =
+          s?.Service_ServiceItems?.map((ssi: any) => ssi.ServiceItem) ?? [];
 
-      const { Service_ServiceItems, ...serviceRest } = s || {};
+        const { Service_ServiceItems, ...serviceRest } = s || {};
+
+        return {
+          id: item.id,
+          quantity: item.quantity,
+          service: {
+            ...serviceRest,
+            serviceItems,
+          },
+        };
+      });
 
       return {
-        id: item.id,
-        quantity: item.quantity,
-        service: {
-          ...serviceRest,
-          serviceItems,
-        },
+        id: booking.Proposal.id,
+        status: booking.Proposal.status,
+        notes: booking.Proposal.notes ?? "",
+        createdAt: booking.Proposal.createdAt,
+        items,
       };
-    });
+    } catch (error) {
+      if (error instanceof AppError) throw error;
 
-    return {
-      id: booking.Proposal.id,
-      status: booking.Proposal.status,
-      notes: booking.Proposal.notes ?? "",
-      createdAt: booking.Proposal.createdAt,
-      items,
-    };
-  } catch (error) {
-    if (error instanceof AppError) throw error;
-
-    throw new AppError(
-      "Failed to fetch proposal by booking ID",
-      [{ message: "Error.GetProposalByBookingError", path: ["bookingId"] }],
-      { staffId, bookingId, error: (error as any)?.message ?? error },
-      500
-    );
-  }
-}
+      throw new AppError(
+        "Failed to fetch proposal by booking ID",
+        [{ message: "Error.GetProposalByBookingError", path: ["bookingId"] }],
+        { staffId, bookingId, error: (error as any)?.message ?? error },
+        500,
+      );
+    }
+  },
 };

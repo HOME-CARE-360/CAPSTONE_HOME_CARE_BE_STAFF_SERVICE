@@ -12,11 +12,29 @@ export const GetStaffBookingsQuerySchema = z.object({
 // 2. Create Inspection Report
 // ─────────────────────────────
 export const CreateInspectionReportSchema = z.object({
-  bookingId: z.number().int().positive(),
-  staffId: z.number().int().positive(),
-  estimatedTime: z.number().int().min(1).max(600).optional(),
-  note: z.string().optional(),
-  images: z.array(z.string().url()).default([]),
+  bookingId: z.number().int().positive({
+    message: "bookingId must be a positive integer",
+  }),
+  staffId: z.number().int().positive({
+    message: "staffId must be a positive integer",
+  }),
+  estimatedTime: z
+    .number()
+    .int()
+    .min(1, { message: "estimatedTime must be at least 1 minute" })
+    .max(600, { message: "estimatedTime must not exceed 600 minutes" })
+    .optional(),
+  note: z
+    .string()
+    .max(1000, { message: "note must not exceed 1000 characters" })
+    .optional(),
+  images: z
+    .array(z.string().url({ message: "each image must be a valid URL" }))
+    .default([]),
+  assetIds: z
+    .array(z.number().int().positive())
+    .nonempty({ message: "assetIds cannot be empty if provided" })
+    .optional(),
 });
 
 // ─────────────────────────────
