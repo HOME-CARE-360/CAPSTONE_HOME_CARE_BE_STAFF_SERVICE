@@ -853,110 +853,121 @@ export const StaffRepository = {
     }
   },
 
-  async checkOutWorkLogByBookingId(
-    bookingId: number,
-    imageUrls: string[] = [],
-  ) {
-    return await prisma.$transaction(async (tx) => {
-      const booking = await tx.booking.findUnique({
-        where: { id: bookingId },
-        select: {
-          id: true,
-          status: true,
-          WorkLog: {
-            select: {
-              id: true,
-              checkIn: true,
-              checkOut: true,
-            },
-          },
-          Proposal: {
-            select: {
-              status: true,
-            },
-          },
+async checkOutWorkLogByBookingId(
+  bookingId: number,
+  imageUrls: string[] = [],
+) {
+  return await prisma.$transaction(async (tx) => {
+    const booking = await tx.booking.findUnique({
+      where: { id: bookingId },
+      select: {
+        id: true,
+        status: true,
+        WorkLog: {
+          select: { id: true, checkIn: true, checkOut: true },
         },
-      });
-
-      if (!booking) {
-        throw new AppError(
-          "Booking not found",
-          [{ message: "NotFound", path: ["bookingId"] }],
-          { bookingId },
-          404,
-        );
-      }
-
-      const log = booking.WorkLog[0];
-      const proposal = booking.Proposal;
-
-      if (!log) {
-        throw new AppError(
-          "Work log not found",
-          [{ message: "NotFound", path: ["bookingId"] }],
-          { bookingId },
-          404,
-        );
-      }
-
-      if (!proposal || proposal.status !== ProposalStatus.ACCEPTED) {
-        throw new AppError(
-          "Proposal must be accepted before checking out",
-          [{ message: "Error.ProposalNotAccepted", path: ["bookingId"] }],
-          { bookingId, proposalStatus: proposal?.status },
-          400,
-        );
-      }
-
-      if (log.checkOut) {
-        throw new AppError(
-          "Already checked out",
-          [{ message: "Error.AlreadyCheckedOut", path: ["bookingId"] }],
-          { bookingId },
-          400,
-        );
-      }
-
-      if (!log.checkIn) {
-        throw new AppError(
-          "Check-in time is missing",
-          [{ message: "Error.MissingCheckIn", path: ["bookingId"] }],
-          { bookingId },
-          400,
-        );
-      }
-
-      const now = new Date();
-      const hoursPassed = calculateHoursDifference(new Date(log.checkIn), now);
-
-      if (hoursPassed > MAX_CHECKOUT_HOURS) {
-        throw new AppError(
-          "Check-out expired",
-          [{ message: "Error.CheckOutTooLate", path: ["bookingId"] }],
-          { bookingId, hoursPassed },
-          400,
-        );
-      }
-
-      await Promise.all([
-        tx.workLog.update({
-          where: { id: log.id },
-          data: {
-            checkOut: now,
-            updatedAt: now,
-            checkOutImages: imageUrls,
-          },
-        }),
-      ]);
-
-      return {
-        message: "Check-out successful",
-        bookingId,
-        checkOutTime: now,
-        imageCount: imageUrls.length,
-      };
+        Proposal: { select: { status: true } },
+      },
     });
-  },
+
+    if (!booking) {
+      throw new AppError(
+        "Booking not found",
+        [{ message: "NotFound", path: ["bookingId"] }],
+        { bookingId },
+        404,
+      );
+    }
+
+    const log = booking.WorkLog[0];
+    const proposal = booking.Proposal;
+
+    if (!log) {
+      throw new AppError(
+        "Work log not found",
+        [{ message: "NotFound", path: ["bookingId"] }],
+        { bookingId },
+        404,
+      );
+    }
+
+    if (!proposal || proposal.status !== ProposalStatus.ACCEPTED) {
+      throw new AppError(
+        "Proposal must be accepted before checking out",
+        [{ message: "Error.ProposalNotAccepted", path: ["bookingId"] }],
+        { bookingId, proposalStatus: proposal?.status },
+        400,
+      );
+    }
+
+    if (log.checkOut) {
+      throw new AppError(
+        "Already checked out",
+        [{ message: "Error.AlreadyCheckedOut", path: ["bookingId"] }],
+        { bookingId },
+        400,
+      );
+    }
+
+    if (!log.checkIn) {
+      throw new AppError(
+        "Check-in time is missing",
+        [{ message: "Error.MissingCheckIn", path: ["bookingId"] }],
+        { bookingId },
+        400,
+      );
+    }
+
+    const now = new Date();
+    const hoursPassed = calculateHoursDifference(new Date(log.checkIn), now);
+
+    if (hoursPassed > MAX_CHECKOUT_HOURS) {
+      throw new AppError(
+        "Check-out expired",
+        [{ message: "Error.CheckOutTooLate", path: ["bookingId"] }],
+        { bookingId, hoursPassed },
+        400,
+      );
+    }
+
+    // Lấy asset liên quan tới booking qua InspectionReport
+    const report = await tx.inspectionReport.findUnique({
+      where: { bookingId },
+      select: { CustomerAsset: { select: { id: true } } },
+    });
+
+    const assetIds = (report?.CustomerAsset ?? []).map(a => a.id);
+
+    const [_, assetUpdateResult] = await Promise.all([
+      tx.workLog.update({
+        where: { id: log.id },
+        data: {
+          checkOut: now,
+          updatedAt: now,
+          checkOutImages: imageUrls,
+        },
+      }),
+      assetIds.length > 0
+        ? tx.customerAsset.updateMany({
+            where: { id: { in: assetIds } },
+            data: {
+              lastMaintenanceDate: now,
+              totalMaintenanceCount: { increment: 1 },
+              updatedAt: now, // nếu field này tồn tại, bạn đã có trong schema
+            },
+          })
+        : Promise.resolve({ count: 0 } as { count: number }),
+    ]);
+
+    return {
+      message: "Check-out successful",
+      bookingId,
+      checkOutTime: now,
+      imageCount: imageUrls.length,
+      updatedAssets: assetUpdateResult?.count ?? 0,
+    };
+  });
+},
 
   async getBookingsByDate(staffId: number, date: string, page = 1, limit = 10) {
     const targetDate = new Date(date);
