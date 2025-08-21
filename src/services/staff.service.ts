@@ -92,55 +92,63 @@ export const StaffService = {
    * @param dto - Inspection report creation data
    * @returns Created inspection report
    */
-  async createInspectionReport(dto: CreateInspectionReportDto) {
-    const {
-      staffId,
-      bookingId,
-      images = [],
-      estimatedTime,
-      note,
-      assetIds,
-    } = dto;
+async createInspectionReport(dto: CreateInspectionReportDto) {
+  const {
+    staffId,
+    bookingId,
+    images = [],
+    estimatedTime,
+    note,
+    assetIds,
+  } = dto;
 
-    // Validate cơ bản
-    if (!Number.isInteger(staffId) || !Number.isInteger(bookingId)) {
-      throw new AppError(
-        "Missing or invalid required fields",
-        [
-          {
-            message: "Error.MissingRequiredFields",
-            path: ["staffId", "bookingId"],
-          },
-        ],
-        { dto },
-        400,
-      );
-    }
-    if (!Array.isArray(images)) {
-      throw new AppError(
-        "Images must be an array of strings",
-        [{ message: "Error.InvalidImages", path: ["images"] }],
-        { images },
-        400,
-      );
-    }
-    if (
-      estimatedTime != null &&
-      (!Number.isInteger(estimatedTime) ||
-        estimatedTime < 1 ||
-        estimatedTime > 600)
-    ) {
-      throw new AppError(
-        "estimatedTime must be an integer between 1 and 600",
-        [{ message: "Error.InvalidEstimatedTime", path: ["estimatedTime"] }],
-        { estimatedTime },
-        400,
-      );
-    }
+  // Validate cơ bản
+  if (!Number.isInteger(staffId) || !Number.isInteger(bookingId)) {
+    throw new AppError(
+      "Missing or invalid required fields",
+      [
+        {
+          message: "Error.MissingRequiredFields",
+          path: ["staffId", "bookingId"],
+        },
+      ],
+      { dto },
+      400,
+    );
+  }
+  if (!Array.isArray(images)) {
+    throw new AppError(
+      "Images must be an array of strings",
+      [{ message: "Error.InvalidImages", path: ["images"] }],
+      { images },
+      400,
+    );
+  }
+  if (
+    estimatedTime != null &&
+    (!Number.isInteger(estimatedTime) ||
+      estimatedTime < 1 ||
+      estimatedTime > 600)
+  ) {
+    throw new AppError(
+      "estimatedTime must be an integer between 1 and 600",
+      [{ message: "Error.InvalidEstimatedTime", path: ["estimatedTime"] }],
+      { estimatedTime },
+      400,
+    );
+  }
 
-    return StaffRepository.createInspectionReport(dto, assetIds);
-  },
+  // Transform DTO to Prisma format
+  const prismaData = {
+    images,
+    estimatedTime,
+    note,
+    Booking: { connect: { id: bookingId } },
+    Staff: { connect: { id: staffId } },
+  };
 
+  return StaffRepository.createInspectionReport(prismaData, assetIds);
+},
   /**
    * Retrieves inspection report by ID with error handling
    * @param inspectionId - Inspection report identifier

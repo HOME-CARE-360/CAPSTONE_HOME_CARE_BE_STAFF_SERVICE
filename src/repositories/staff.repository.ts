@@ -113,24 +113,6 @@ const calculateDaysDifference = (date1: Date, date2: Date): number => {
   );
 };
 
-const validateBookingConnection = (
-  data: Prisma.InspectionReportCreateInput,
-) => {
-  if (!data.Booking?.connect || typeof data.Booking.connect.id !== "number") {
-    throw new AppError(
-      "Booking connection is missing or invalid in inspection report data",
-      [
-        {
-          message: "Error.CreateInspectionReportBookingConnectError",
-          path: ["Booking.connect.id"],
-        },
-      ],
-      { data },
-      400,
-    );
-  }
-  return data.Booking.connect.id;
-};
 
 export const StaffRepository = {
   async getBookingsList(
@@ -334,111 +316,142 @@ export const StaffRepository = {
     }
   },
 
-  async createInspectionReport(data: any, assetIds?: number[]) {
-    try {
-      return await prisma.$transaction(async (tx) => {
-        const bookingId = validateBookingConnection(data);
+async createInspectionReport(data: any, assetIds?: number[]) {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      // Extract bookingId from the Prisma connect format
+      const bookingId = data.Booking?.connect?.id;
+      
+      if (!bookingId) {
+        throw new AppError(
+          "Booking connection is missing or invalid in inspection report data",
+          [{ message: "Error.CreateInspectionReportBookingConnectError", path: ["Booking.connect.id"] }],
+          { data },
+          400,
+        );
+      }
 
-        // 1) Chặn trùng report theo bookingId (unique trong schema)
-        const existingReport = await tx.inspectionReport.findUnique({
-          where: { bookingId },
-        });
-        if (existingReport) {
+      // 1) Chặn trùng report theo bookingId (unique trong schema)
+      const existingReport = await tx.inspectionReport.findUnique({
+        where: { bookingId },
+      });
+      if (existingReport) {
+        throw new AppError(
+          "Inspection report already exists for this booking",
+          [{ message: "Error.InspectionReportExists", path: ["bookingId"] }],
+          { bookingId },
+          400,
+        );
+      }
+
+      // 2) Lấy booking + serviceRequest + customer
+      const booking = await tx.booking.findUnique({
+        where: { id: bookingId },
+        include: {
+          ServiceRequest: { select: { id: true } },
+          CustomerProfile: { select: { id: true } },
+        },
+      });
+
+      if (!booking) {
+        throw new AppError(
+          "Booking not found",
+          [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
+          { bookingId },
+          404,
+        );
+      }
+
+      if (!booking.ServiceRequest?.id) {
+        throw new AppError(
+          "Missing ServiceRequest ID for this booking",
+          [{ message: "Error.MissingServiceRequestId", path: ["bookingId"] }],
+          { bookingId },
+          500,
+        );
+      }
+
+      // 3) Nếu truyền assetIds: kiểm tra quyền sở hữu
+      if (assetIds && assetIds.length > 0) {
+        // Only validate CustomerProfile when assets are provided
+        if (!booking.CustomerProfile?.id) {
           throw new AppError(
-            "Inspection report already exists for this booking",
-            [{ message: "Error.InspectionReportExists", path: ["bookingId"] }],
-            { bookingId },
-            400,
-          );
-        }
-
-        // 2) Lấy booking + serviceRequest + customer
-        const booking = await tx.booking.findUnique({
-          where: { id: bookingId },
-          include: {
-            ServiceRequest: { select: { id: true } },
-            CustomerProfile: { select: { id: true } },
-          },
-        });
-
-        if (!booking?.ServiceRequest?.id) {
-          throw new AppError(
-            "Missing ServiceRequest ID for this booking",
-            [{ message: "Error.MissingServiceRequestId", path: ["bookingId"] }],
+            "Missing Customer Profile for this booking",
+            [{ message: "Error.MissingCustomerProfile", path: ["bookingId"] }],
             { bookingId },
             500,
           );
         }
 
-        // 3) Nếu truyền assetIds: kiểm tra quyền sở hữu (asset.customerId == booking.customerId)
-        if (assetIds && assetIds.length > 0) {
-          const assets = await tx.customerAsset.findMany({
-            where: { id: { in: assetIds } },
-            select: { id: true, customerId: true },
-          });
+        const customerId = booking.CustomerProfile.id;
+        const assets = await tx.customerAsset.findMany({
+          where: { id: { in: assetIds } },
+          select: { id: true, CustomerProfile: { select: { id: true } } },
+        });
 
-          // Thiếu asset hoặc asset không thuộc customer
-          const foundIds = new Set(assets.map((a) => a.id));
-          const notFound = assetIds.filter((id) => !foundIds.has(id));
-          if (notFound.length > 0) {
-            throw new AppError(
-              "Some assets were not found",
-              [{ message: "Error.AssetNotFound", path: ["assetIds"] }],
-              { notFound, assetIds },
-              400,
-            );
-          }
-
-          const invalid = assets.filter(
-            (a) => a.customerId !== booking.customerId,
+        // Thiếu asset
+        const foundIds = new Set(assets.map((a) => a.id));
+        const notFound = assetIds.filter((id) => !foundIds.has(id));
+        if (notFound.length > 0) {
+          throw new AppError(
+            "Some assets were not found",
+            [{ message: "Error.AssetNotFound", path: ["assetIds"] }],
+            { notFound, assetIds },
+            400,
           );
-          if (invalid.length > 0) {
-            throw new AppError(
-              "Some assets do not belong to the booking's customer",
-              [{ message: "Error.AssetOwnershipInvalid", path: ["assetIds"] }],
-              {
-                invalid: invalid.map((x) => x.id),
-                bookingCustomerId: booking.customerId,
-              },
-              400,
-            );
-          }
         }
 
-        // 4) Tạo report + cập nhật trạng thái ServiceRequest trong cùng transaction
-        const [report] = await Promise.all([
-          tx.inspectionReport.create({
-            data: {
-              ...data,
-              ...(assetIds && assetIds.length > 0
-                ? {
-                    CustomerAsset: {
-                      connect: assetIds.map((id) => ({ id })),
-                    },
-                  }
-                : {}),
+        // Asset không thuộc customer hoặc CustomerProfile is null
+        const invalid = assets.filter(
+          (a) => !a.CustomerProfile?.id || a.CustomerProfile.id !== customerId,
+        );
+        if (invalid.length > 0) {
+          throw new AppError(
+            "Some assets do not belong to the booking's customer",
+            [{ message: "Error.AssetOwnershipInvalid", path: ["assetIds"] }],
+            {
+              invalid: invalid.map((x) => x.id),
+              bookingCustomerId: customerId,
             },
-          }),
-          tx.serviceRequest.update({
-            where: { id: booking.ServiceRequest.id },
-            data: { status: RequestStatus.ESTIMATED },
-          }),
-        ]);
+            400,
+          );
+        }
+      }
 
-        return report;
-      });
-    } catch (error) {
-      console.error(error);
-      if (error instanceof AppError) throw error;
+      // 4) Tạo report + cập nhật trạng thái ServiceRequest trong cùng transaction
+      const [report] = await Promise.all([
+        tx.inspectionReport.create({
+          data: {
+            ...data, // This now contains properly formatted Prisma relations
+            ...(assetIds && assetIds.length > 0
+              ? {
+                  CustomerAsset: {
+                    connect: assetIds.map((id) => ({ id })),
+                  },
+                }
+              : {}),
+          },
+        }),
+        tx.serviceRequest.update({
+          where: { id: booking.ServiceRequest.id },
+          data: { status: RequestStatus.ESTIMATED },
+        }),
+      ]);
 
-      throw new AppError(
-        "Failed to create inspection report",
-        [{ message: "Error.CreateInspectionReportError", path: ["bookingId"] }],
-        { data, error },
-        500,
-      );
-    }
-  },
+      return report;
+    });
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) throw error;
+
+    throw new AppError(
+      "Failed to create inspection report",
+      [{ message: "Error.CreateInspectionReportError", path: ["bookingId"] }],
+      { data, error },
+      500,
+    );
+  }
+},
   async countBookings(
     staffId: number,
     status?: BookingStatus,
