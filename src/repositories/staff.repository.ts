@@ -943,7 +943,7 @@ async checkOutWorkLogByBookingId(
       );
     }
 
-    // Lấy asset liên quan tới booking qua InspectionReport
+    // Get assets related to booking through InspectionReport
     const report = await tx.inspectionReport.findUnique({
       where: { bookingId },
       select: { CustomerAsset: { select: { id: true } } },
@@ -951,7 +951,8 @@ async checkOutWorkLogByBookingId(
 
     const assetIds = (report?.CustomerAsset ?? []).map(a => a.id);
 
-    const [_, assetUpdateResult] = await Promise.all([
+    const [_, assetUpdateResult, updatedBooking] = await Promise.all([
+      // Update WorkLog with checkout information
       tx.workLog.update({
         where: { id: log.id },
         data: {
@@ -960,16 +961,32 @@ async checkOutWorkLogByBookingId(
           checkOutImages: imageUrls,
         },
       }),
+      
+      // Update customer assets if any exist
       assetIds.length > 0
         ? tx.customerAsset.updateMany({
             where: { id: { in: assetIds } },
             data: {
               lastMaintenanceDate: now,
               totalMaintenanceCount: { increment: 1 },
-              updatedAt: now, // nếu field này tồn tại, bạn đã có trong schema
+              updatedAt: now,
             },
           })
         : Promise.resolve({ count: 0 } as { count: number }),
+      
+      // Update booking status to STAFF_COMPLETED
+      tx.booking.update({
+        where: { id: bookingId },
+        data: {
+          status: BookingStatus.STAFF_COMPLETED,
+          updatedAt: now,
+        },
+        select: {
+          id: true,
+          status: true,
+          updatedAt: true,
+        },
+      }),
     ]);
 
     return {
@@ -978,6 +995,7 @@ async checkOutWorkLogByBookingId(
       checkOutTime: now,
       imageCount: imageUrls.length,
       updatedAssets: assetUpdateResult?.count ?? 0,
+      bookingStatus: updatedBooking.status,
     };
   });
 },
