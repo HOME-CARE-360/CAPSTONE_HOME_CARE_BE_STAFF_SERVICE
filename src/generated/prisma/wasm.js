@@ -199,7 +199,8 @@ exports.Prisma.PaymentTransactionScalarFieldEnum = {
   createdAt: 'createdAt',
   serviceRequestId: 'serviceRequestId',
   status: 'status',
-  userId: 'userId'
+  userId: 'userId',
+  withdrawalRequestId: 'withdrawalRequestId'
 };
 
 exports.Prisma.PermissionScalarFieldEnum = {
@@ -429,7 +430,9 @@ exports.Prisma.ProposalItemScalarFieldEnum = {
   proposalId: 'proposalId',
   serviceId: 'serviceId',
   quantity: 'quantity',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  status: 'status',
+  price: 'price'
 };
 
 exports.Prisma.WalletScalarFieldEnum = {
@@ -570,6 +573,21 @@ exports.Prisma.N8nchathistoryScalarFieldEnum = {
   message: 'message'
 };
 
+exports.Prisma.SystemConfigScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.N8n_chat_historiesScalarFieldEnum = {
+  id: 'id',
+  session_id: 'session_id',
+  message: 'message'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -704,6 +722,12 @@ exports.ProposalStatus = exports.$Enums.ProposalStatus = {
   PENDING: 'PENDING'
 };
 
+exports.ProposalItemStatus = exports.$Enums.ProposalItemStatus = {
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  PENDING: 'PENDING'
+};
+
 exports.WithdrawalStatus = exports.$Enums.WithdrawalStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -774,7 +798,9 @@ exports.Prisma.ModelName = {
   BookingReport: 'BookingReport',
   ExternalProduct: 'ExternalProduct',
   ProductEmbedding: 'ProductEmbedding',
-  n8nchathistory: 'n8nchathistory'
+  n8nchathistory: 'n8nchathistory',
+  SystemConfig: 'SystemConfig',
+  n8n_chat_histories: 'n8n_chat_histories'
 };
 
 /**

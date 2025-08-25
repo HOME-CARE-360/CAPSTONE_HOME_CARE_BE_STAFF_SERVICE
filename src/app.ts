@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 import { handleTCPRequest } from "./handlers/tcp-handler";
 import { RpcException } from "@nestjs/microservices";
 import { AppError } from "./handlers/error";
-
+import { loadConfigFromDb } from "./services/config.service";
 dotenv.config();
-
+loadConfigFromDb();
 const CONFIG = {
   TCP_PORT: parseInt(process.env.STAFF_TCP_PORT || "4002", 10),
   TCP_HOST: process.env.TCP_HOST || "0.0.0.0",
@@ -126,7 +126,7 @@ class TCPMicroservice {
       `🔌 New TCP connection established (${connectionManager.getMetrics().activeConnections} active)`,
     );
 
-    let buffer = Buffer.alloc(0);
+    let buffer: Buffer = Buffer.alloc(0);
 
     socket.on("data", async (data: Buffer) => {
       try {
@@ -179,7 +179,7 @@ class TCPMicroservice {
     remaining: Buffer;
   } {
     const messages: string[] = [];
-    let remaining = buffer;
+    let remaining: Buffer = buffer;
 
     while (true) {
       const newlineIndex = remaining.indexOf("\n");

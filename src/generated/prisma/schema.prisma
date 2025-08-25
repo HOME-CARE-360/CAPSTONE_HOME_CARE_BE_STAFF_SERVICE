@@ -110,22 +110,24 @@ model Notification {
 }
 
 model PaymentTransaction {
-  id                 Int                      @id @default(autoincrement())
-  gateway            String                   @db.VarChar(100)
-  transactionDate    DateTime                 @default(now())
-  accountNumber      String?                  @db.VarChar(100)
-  subAccount         String?                  @db.VarChar(250)
-  amountIn           Int                      @default(0)
-  amountOut          Int                      @default(0)
-  accumulated        Int                      @default(0)
-  referenceNumber    String?                  @db.VarChar(255)
-  transactionContent String?
-  body               String?
-  createdAt          DateTime                 @default(now())
-  serviceRequestId   Int?                     @unique
-  status             PaymentTransactionStatus
-  userId             Int?
-  ServiceRequest     ServiceRequest?          @relation(fields: [serviceRequestId], references: [id])
+  id                  Int                      @id @default(autoincrement())
+  gateway             String                   @db.VarChar(100)
+  transactionDate     DateTime                 @default(now())
+  accountNumber       String?                  @db.VarChar(100)
+  subAccount          String?                  @db.VarChar(250)
+  amountIn            Int                      @default(0)
+  amountOut           Int                      @default(0)
+  accumulated         Int                      @default(0)
+  referenceNumber     String?                  @db.VarChar(255)
+  transactionContent  String?
+  body                String?
+  createdAt           DateTime                 @default(now())
+  serviceRequestId    Int?                     @unique
+  status              PaymentTransactionStatus
+  userId              Int?
+  withdrawalRequestId Int?                     @unique
+  ServiceRequest      ServiceRequest?          @relation(fields: [serviceRequestId], references: [id])
+  WithdrawalRequest   WithdrawalRequest?       @relation(fields: [withdrawalRequestId], references: [id])
 }
 
 model Permission {
@@ -467,13 +469,15 @@ model Proposal {
 }
 
 model ProposalItem {
-  id         Int      @id @default(autoincrement())
+  id         Int                @id @default(autoincrement())
   proposalId Int
   serviceId  Int
-  quantity   Int      @default(1)
-  createdAt  DateTime @default(now())
-  Proposal   Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
-  Service    Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  quantity   Int                @default(1)
+  createdAt  DateTime           @default(now())
+  status     ProposalItemStatus @default(PENDING)
+  price      Float
+  Proposal   Proposal           @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  Service    Service            @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 model Wallet {
@@ -489,16 +493,17 @@ model Wallet {
 }
 
 model WithdrawalRequest {
-  id                                  Int              @id @default(autoincrement())
+  id                                  Int                 @id @default(autoincrement())
   amount                              Float
-  status                              WithdrawalStatus @default(PENDING)
-  createdAt                           DateTime         @default(now())
+  status                              WithdrawalStatus    @default(PENDING)
+  createdAt                           DateTime            @default(now())
   processedAt                         DateTime?
   processedById                       Int?
-  note                                String?          @db.VarChar(1000)
+  note                                String?             @db.VarChar(1000)
   userId                              Int
-  User                                User?            @relation(fields: [processedById], references: [id])
-  User_WithdrawalRequest_userIdToUser User             @relation("WithdrawalRequest_userIdToUser", fields: [userId], references: [id], onDelete: Cascade)
+  PaymentTransaction                  PaymentTransaction?
+  User                                User?               @relation(fields: [processedById], references: [id])
+  User_WithdrawalRequest_userIdToUser User                @relation("WithdrawalRequest_userIdToUser", fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([status])
   @@index([userId])
@@ -666,6 +671,21 @@ model n8nchathistory {
   message    Json
 }
 
+model SystemConfig {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String?
+  type      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model n8n_chat_histories {
+  id         Int    @id @default(autoincrement())
+  session_id String @db.VarChar(255)
+  message    Json
+}
+
 enum BookingStatus {
   PENDING
   CONFIRMED
@@ -827,4 +847,10 @@ enum RecommendationStatus {
 enum ReporterType {
   CUSTOMER
   PROVIDER
+}
+
+enum ProposalItemStatus {
+  ACCEPTED
+  REJECTED
+  PENDING
 }
