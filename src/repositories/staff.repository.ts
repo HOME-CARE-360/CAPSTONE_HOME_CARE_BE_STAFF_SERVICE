@@ -1211,7 +1211,7 @@ async getProposalByBookingId(staffId: number, bookingId: number) {
           include: {
             ProposalItem: {
               where: {
-                status: 'ACCEPTED' // Only get ACCEPTED proposal items
+                status: 'ACCEPTED'
               },
               include: {
                 Service: {
