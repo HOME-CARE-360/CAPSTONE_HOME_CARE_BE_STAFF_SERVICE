@@ -15,7 +15,7 @@ const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
 const MAX_UPDATE_HOURS = getConfig<number>("WORKLOG_MAX_UPDATE_HOURS", 24);
 const MAX_CHECKOUT_HOURS = getConfig<number>("WORKLOG_MAX_CHECKOUT_HOURS", 24);
-const MAX_DATE_DIFF_DAYS = 1;
+const MAX_DATE_DIFF_DAYS = getConfig<number>("WORKLOG_MAX_DATE_DIFF_DAYS", 1);
 
 const USER_SELECT = { name: true, phone: true } as const;
 const STAFF_USER_SELECT = { name: true, avatar: true } as const;
