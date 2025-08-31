@@ -268,54 +268,171 @@ export const StaffRepository = {
     };
   },
 
-  async getBookingDetail(bookingId: number, staffId: number) {
-    try {
-      const booking = await prisma.booking.findFirstOrThrow({
-        where: { id: bookingId, staffId },
-        include: BOOKING_INCLUDE,
-      });
 
-      return {
-        id: booking.id,
-        status: booking.status,
-        createdAt: booking.createdAt,
-        customer: {
-          id: booking.CustomerProfile?.id,
-          name: booking.CustomerProfile?.User?.name,
-          phone: booking.CustomerProfile?.User?.phone,
-          address: booking.CustomerProfile?.address,
-        },
-        serviceRequest: booking.ServiceRequest
-          ? {
-              id: booking.ServiceRequest.id,
-              preferredDate: booking.ServiceRequest.preferredDate,
-              note: booking.ServiceRequest.note,
-              location: booking.ServiceRequest.location,
-              phoneNumber: booking.ServiceRequest.phoneNumber,
-              status: booking.ServiceRequest.status,
-              category: booking.ServiceRequest.Category
-                ? {
-                    id: booking.ServiceRequest.Category.id,
-                    name: booking.ServiceRequest.Category.name,
-                  }
-                : undefined,
-            }
-          : undefined,
-      };
-    } catch (error) {
+async  getBookingDetail(bookingId: number, staffId: number) {
+  try {
+    if (!Number.isInteger(bookingId) || bookingId <= 0) {
       throw new AppError(
-        "Failed to get booking detail",
-        [
-          {
-            message: "Repo.GetBookingDetailError",
-            path: ["bookingId", "staffId"],
-          },
-        ],
-        { bookingId, staffId, error },
-        500,
+        "Invalid bookingId",
+        [{ message: "Error.InvalidBookingId", path: ["bookingId"] }],
+        { bookingId },
+        400
       );
     }
-  },
+    if (!Number.isInteger(staffId) || staffId <= 0) {
+      throw new AppError(
+        "Invalid staffId",
+        [{ message: "Error.InvalidStaffId", path: ["staffId"] }],
+        { staffId },
+        400
+      );
+    }
+
+    const booking = await prisma.booking.findFirst({
+      where: { id: bookingId, staffId },
+      select: {
+        id: true,
+        status: true,
+        createdAt: true,
+        CustomerProfile: {
+          select: {
+            id: true,
+            address: true,
+            User: { select: { name: true, phone: true } },
+          },
+        },
+        ServiceRequest: {
+          select: {
+            id: true,
+            preferredDate: true,
+            note: true,
+            location: true,
+            phoneNumber: true,
+            status: true,
+            Category: { select: { id: true, name: true } },
+          },
+        },
+        // Theo schema: InspectionReport? (1–1), có liên kết CustomerAsset[]
+        InspectionReport: {
+          select: {
+            id: true,
+            staffId: true,
+            estimatedTime: true,
+            note: true,
+            images: true,
+            createdAt: true,
+            // include danh sách tài sản đã gắn với biên bản
+            CustomerAsset: {
+              select: {
+                id: true,
+                brand: true,
+                model: true,
+                serial: true,
+                nickname: true,
+                lastMaintenanceDate: true,
+                categoryId: true,
+                // hữu ích khi hiển thị
+                Category: { select: { id: true, name: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!booking) {
+      throw new AppError(
+        "Booking not found or not accessible by this staff",
+        [{ message: "Error.BookingNotFoundOrForbidden", path: ["bookingId", "staffId"] }],
+        { bookingId, staffId },
+        404
+      );
+    }
+
+    const customer = booking.CustomerProfile
+      ? {
+          id: booking.CustomerProfile.id,
+          name: booking.CustomerProfile.User?.name ?? null,
+          phone: booking.CustomerProfile.User?.phone ?? null,
+          address: booking.CustomerProfile.address ?? null,
+        }
+      : null;
+
+    const serviceRequest = booking.ServiceRequest
+      ? {
+          id: booking.ServiceRequest.id,
+          preferredDate: booking.ServiceRequest.preferredDate,
+          note: booking.ServiceRequest.note ?? null,
+          location: booking.ServiceRequest.location ?? null,
+          phoneNumber: booking.ServiceRequest.phoneNumber ?? null,
+          status: booking.ServiceRequest.status,
+          category: booking.ServiceRequest.Category
+            ? {
+                id: booking.ServiceRequest.Category.id,
+                name: booking.ServiceRequest.Category.name,
+              }
+            : null,
+        }
+      : null;
+
+    // Map InspectionReport theo schema (1–1)
+    const ir = booking.InspectionReport;
+    const inspectionReport = ir
+      ? {
+          id: ir.id,
+          staffId: ir.staffId,
+          estimatedTime: ir.estimatedTime ?? null,
+          note: ir.note ?? null,
+          images: ir.images ?? [],
+          createdAt: ir.createdAt,
+          assets: (ir.CustomerAsset ?? []).map((a) => ({
+            id: a.id,
+            brand: a.brand ?? null,
+            model: a.model ?? null,
+            serial: a.serial ?? null,
+            nickname: a.nickname ?? null,
+            lastMaintenanceDate: a.lastMaintenanceDate ?? null,
+            category: a.Category
+              ? { id: a.Category.id, name: a.Category.name }
+              : a.categoryId
+              ? { id: a.categoryId, name: null }
+              : null,
+          })),
+        }
+      : null;
+
+    return {
+      id: booking.id,
+      status: booking.status,
+      createdAt: booking.createdAt,
+      customer,
+      serviceRequest,
+      inspectionReport, // <- thêm theo đúng schema
+    };
+  } catch (error: any) {
+    if (
+      error instanceof AppError ||
+      error?.code === "P2025" ||
+      (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025")
+    ) {
+      throw error instanceof AppError
+        ? error
+        : new AppError(
+            "Booking not found",
+            [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
+            { bookingId, staffId },
+            404
+          );
+    }
+
+    throw new AppError(
+      "Failed to get booking detail",
+      [{ message: "Repo.GetBookingDetailError", path: ["bookingId", "staffId"] }],
+      { bookingId, staffId, error: error?.message ?? String(error) },
+      500
+    );
+  }
+},
 
 async createInspectionReport(data: any, assetIds?: number[]) {
   try {
