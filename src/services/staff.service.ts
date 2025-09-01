@@ -31,27 +31,34 @@ export const StaffService = {
    * @param query - Query parameters for filtering and pagination
    * @returns Paginated bookings response
    */
-  async getBookingsList(
-    staffId: number,
-    options: PaginationQuery & {
-      status?: string;
-      fromDate?: string;
-      toDate?: string;
-      keyword?: string;
-    } = {},
-  ) {
-    const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT, ...filters } = options;
+// Service layer
+async  getBookingsList(
+  staffId: number,
+  options: PaginationQuery & {
+    status?: string;         // raw string from query
+    fromDate?: string;       // "YYYY-MM-DD" or ISO
+    toDate?: string;         // "YYYY-MM-DD" or ISO
+    keyword?: string;
+  } = {},
+) {
+  const {
+    page = DEFAULT_PAGE,
+    limit = DEFAULT_LIMIT,
+    status,
+    fromDate,
+    toDate,
+    keyword,
+  } = options;
 
-    const sanitizedOptions = {
-      page: Math.max(page, DEFAULT_PAGE),
-      limit: Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT),
-      ...filters,
-    };
+  // sanitize page/limit
+  const safePage = Math.max(page, DEFAULT_PAGE);
+  const safeLimit = Math.min(Math.max(limit, MIN_LIMIT), MAX_LIMIT);
 
-    const { status, ...rest } = sanitizedOptions;
-
-    let bookingStatus: BookingStatus | undefined;
-    if (status && !VALID_BOOKING_STATUSES.has(status as BookingStatus)) {
+  // validate + cast status -> BookingStatus | undefined
+  let bookingStatus: BookingStatus | undefined = undefined;
+  if (status != null && status !== "") {
+    const upper = String(status).toUpperCase().trim() as BookingStatus;
+    if (!VALID_BOOKING_STATUSES.has(upper)) {
       throw new AppError(
         "Invalid booking status",
         [{ message: "Error.InvalidBookingStatus", path: ["status"] }],
@@ -59,9 +66,18 @@ export const StaffService = {
         400,
       );
     }
+    bookingStatus = upper;
+  }
 
-    return StaffRepository.getBookingsList(staffId, bookingStatus, rest);
-  },
+  // forward normalized options
+  return StaffRepository.getBookingsList(staffId, bookingStatus, {
+    page: safePage,
+    limit: safeLimit,
+    fromDate,
+    toDate,
+    keyword: keyword?.trim() || undefined,
+  });
+},
 
   /**
    * Retrieves detailed booking information for staff

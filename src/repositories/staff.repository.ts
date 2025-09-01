@@ -114,159 +114,189 @@ const calculateDaysDifference = (date1: Date, date2: Date): number => {
   );
 };
 
+const toDate = (s?: string | null): Date | null => {
+  if (!s) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return new Date(`${s}T00:00:00`);
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? null : d;
+};
+
+const endOfDayUtc = (d: Date): Date => {
+  // move to end of local day, then use as Date
+  const e = new Date(d);
+  e.setHours(23, 59, 59, 999);
+  return e;
+};
+
 
 export const StaffRepository = {
-  async getBookingsList(
-    staffId: number,
-    status?: BookingStatus,
-    options?: {
-      page?: number;
-      limit?: number;
-      fromDate?: string;
-      toDate?: string;
-      keyword?: string;
-    },
-  ) {
-    const page = options?.page ?? 1;
-    const limit = options?.limit ?? 10;
-    const skip = (page - 1) * limit;
-
-    const where: Prisma.BookingWhereInput = {
-      staffId,
-      ...(status ? { status } : {}),
-      ...(options?.fromDate || options?.toDate
-        ? {
-            createdAt: {
-              ...(options.fromDate ? { gte: new Date(options.fromDate) } : {}),
-              ...(options.toDate ? { lte: new Date(options.toDate) } : {}),
-            },
-          }
-        : {}),
-      ...(options?.keyword
-        ? {
-            OR: [
-              {
-                CustomerProfile: {
-                  OR: [
-                    {
-                      address: {
-                        contains: options.keyword,
-                        mode: "insensitive",
-                      },
-                    },
-                    {
-                      User: {
-                        OR: [
-                          {
-                            name: {
-                              contains: options.keyword,
-                              mode: "insensitive",
-                            },
-                          },
-                          {
-                            phone: {
-                              contains: options.keyword,
-                              mode: "insensitive",
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                },
-              },
-              {
-                ServiceRequest: {
-                  OR: [
-                    {
-                      note: { contains: options.keyword, mode: "insensitive" },
-                    },
-                    {
-                      phoneNumber: {
-                        contains: options.keyword,
-                        mode: "insensitive",
-                      },
-                    },
-                    {
-                      location: {
-                        contains: options.keyword,
-                        mode: "insensitive",
-                      },
-                    },
-                    {
-                      Category: {
-                        name: {
-                          contains: options.keyword,
-                          mode: "insensitive",
-                        },
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          }
-        : {}),
-    };
-
-    const [total, bookings] = await Promise.all([
-      prisma.booking.count({ where }),
-      prisma.booking.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        skip,
-        take: limit,
-        include: {
-          CustomerProfile: {
-            include: {
-              User: { select: { name: true, phone: true } },
-            },
-          },
-          ServiceRequest: {
-            select: {
-              id: true,
-              preferredDate: true,
-              note: true,
-              location: true,
-              phoneNumber: true,
-              status: true,
-              Category: { select: { id: true, name: true } },
-            },
-          },
-        },
-      }),
-    ]);
-
-    return {
-      bookings: bookings.map((b) => ({
-        id: b.id,
-        status: b.status,
-        createdAt: b.createdAt,
-        serviceRequestId: b.serviceRequestId ?? null,
-        customer: {
-          name: b.CustomerProfile?.User?.name ?? null,
-          phone: b.CustomerProfile?.User?.phone ?? null,
-          address: b.CustomerProfile?.address ?? null,
-        },
-        serviceRequest: b.ServiceRequest
-          ? {
-              id: b.ServiceRequest.id,
-              preferredDate: b.ServiceRequest.preferredDate,
-              note: b.ServiceRequest.note,
-              location: b.ServiceRequest.location,
-              phoneNumber: b.ServiceRequest.phoneNumber,
-              status: b.ServiceRequest.status,
-              categoryId: b.ServiceRequest.Category?.id ?? null,
-              categoryName: b.ServiceRequest.Category?.name ?? null,
-            }
-          : null,
-      })),
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
-    };
+async  getBookingsList(
+  staffId: number,
+  status?: BookingStatus,
+  options?: {
+    page?: number;
+    limit?: number;
+    fromDate?: string;
+    toDate?: string;
+    keyword?: string;
   },
+) {
+  // 1) Pagination (clamped)
+  const DEFAULT_PAGE = 1;
+  const DEFAULT_LIMIT = 10;
+  const MIN_LIMIT = 1;
+  const MAX_LIMIT = 100;
+
+  const rawPage = options?.page ?? DEFAULT_PAGE;
+  const rawLimit = options?.limit ?? DEFAULT_LIMIT;
+
+  const page = Math.max(rawPage, DEFAULT_PAGE);
+  const limit = Math.min(Math.max(rawLimit, MIN_LIMIT), MAX_LIMIT);
+  const skip = (page - 1) * limit;
+
+  // 2) Date range (inclusive end-of-day)
+  const from = options?.fromDate ? new Date(options.fromDate) : undefined;
+  const to = options?.toDate ? new Date(options.toDate) : undefined;
+
+  const createdAtRange =
+    from || to
+      ? {
+          createdAt: {
+            ...(from ? { gte: from } : {}),
+            ...(to ? { lte: new Date(to.setHours(23, 59, 59, 999)) } : {}),
+          },
+        }
+      : {};
+
+  // 3) Keyword (trimmed) – search CustomerProfile.User + ServiceRequest + Category + address/phone/name
+  const keyword = (options?.keyword ?? "").trim();
+  const hasKeyword = keyword.length > 0;
+
+  const keywordFilter: Prisma.BookingWhereInput = hasKeyword
+    ? {
+        OR: [
+          // Customer side
+          {
+            CustomerProfile: {
+              address: { contains: keyword, mode: "insensitive" },
+            },
+          },
+          {
+            CustomerProfile: {
+              User: {
+                is: {
+                  name: { contains: keyword, mode: "insensitive" },
+                },
+              },
+            },
+          },
+          {
+            CustomerProfile: {
+              User: {
+                is: {
+                  phone: { contains: keyword, mode: "insensitive" },
+                },
+              },
+            },
+          },
+
+          // Service request side
+          {
+            ServiceRequest: {
+              note: { contains: keyword, mode: "insensitive" },
+            },
+          },
+          {
+            ServiceRequest: {
+              phoneNumber: { contains: keyword, mode: "insensitive" },
+            },
+          },
+          {
+            ServiceRequest: {
+              location: { contains: keyword, mode: "insensitive" },
+            },
+          },
+          {
+            ServiceRequest: {
+              Category: {
+                is: {
+                  name: { contains: keyword, mode: "insensitive" },
+                },
+              },
+            },
+          },
+        ],
+      }
+    : {};
+
+  // 4) Where
+  const where: Prisma.BookingWhereInput = {
+    staffId,
+    ...(status ? { status } : {}),
+    ...createdAtRange,
+    ...keywordFilter,
+  };
+
+  // 5) Query
+  const [total, bookings] = await Promise.all([
+    prisma.booking.count({ where }),
+    prisma.booking.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+      include: {
+        CustomerProfile: {
+          include: {
+            User: { select: { name: true, phone: true } },
+          },
+        },
+        ServiceRequest: {
+          select: {
+            id: true,
+            preferredDate: true,
+            note: true,
+            location: true,
+            phoneNumber: true,
+            status: true,
+            Category: { select: { id: true, name: true } },
+          },
+        },
+      },
+    }),
+  ]);
+
+  // 6) Shape result
+  return {
+    bookings: bookings.map((b) => ({
+      id: b.id,
+      status: b.status,
+      createdAt: b.createdAt,
+      serviceRequestId: b.serviceRequestId ?? null,
+      customer: {
+        name: b.CustomerProfile?.User?.name ?? null,
+        phone: b.CustomerProfile?.User?.phone ?? null,
+        address: b.CustomerProfile?.address ?? null,
+      },
+      serviceRequest: b.ServiceRequest
+        ? {
+            id: b.ServiceRequest.id,
+            preferredDate: b.ServiceRequest.preferredDate,
+            note: b.ServiceRequest.note,
+            location: b.ServiceRequest.location,
+            phoneNumber: b.ServiceRequest.phoneNumber,
+            status: b.ServiceRequest.status,
+            categoryId: b.ServiceRequest.Category?.id ?? null,
+            categoryName: b.ServiceRequest.Category?.name ?? null,
+          }
+        : null,
+    })),
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  };
+},
 
 
 async  getBookingDetail(bookingId: number, staffId: number) {
