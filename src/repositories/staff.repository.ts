@@ -765,9 +765,9 @@ async createInspectionReport(data: any, assetIds?: number[]) {
         new Date(),
       );
 
-      if (hoursPassed > MAX_UPDATE_HOURS) {
+      if (hoursPassed > await MAX_UPDATE_HOURS) {
         throw new AppError(
-          `Inspection report can no longer be updated after ${MAX_UPDATE_HOURS} hours`,
+          `Inspection report can no longer be updated after ${await MAX_UPDATE_HOURS} hours`,
           [{ message: "Error.ReportUpdateTooLate", path: ["id"] }],
           { id, hoursPassed },
           400,
@@ -924,7 +924,7 @@ async createInspectionReport(data: any, assetIds?: number[]) {
             now,
             new Date(preferredDate),
           );
-          if (daysDiff > MAX_DATE_DIFF_DAYS) {
+          if (daysDiff > await MAX_DATE_DIFF_DAYS) {
             throw new AppError(
               "Cannot check in far from preferred date",
               [
@@ -1052,7 +1052,8 @@ async checkOutWorkLogByBookingId(
     const now = new Date();
     const hoursPassed = calculateHoursDifference(new Date(log.checkIn), now);
 
-    if (hoursPassed > MAX_CHECKOUT_HOURS) {
+    // Need to await the Promise to get the actual number value
+    if (hoursPassed > await MAX_CHECKOUT_HOURS) {
       throw new AppError(
         "Check-out expired",
         [{ message: "Error.CheckOutTooLate", path: ["bookingId"] }],
