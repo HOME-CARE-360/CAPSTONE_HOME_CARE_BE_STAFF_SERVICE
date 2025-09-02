@@ -464,138 +464,149 @@ async  getBookingDetail(bookingId: number, staffId: number) {
   }
 },
 
-async createInspectionReport(data: any, assetIds?: number[]) {
+async  createInspectionReport(data: any, assetIds?: number[]) {
   try {
-    return await prisma.$transaction(async (tx) => {
-      // Extract bookingId from the Prisma connect format
-      const bookingId = data.Booking?.connect?.id;
-      
-      if (!bookingId) {
-        throw new AppError(
-          "Booking connection is missing or invalid in inspection report data",
-          [{ message: "Error.CreateInspectionReportBookingConnectError", path: ["Booking.connect.id"] }],
-          { data },
-          400,
-        );
-      }
+    const bookingId = data.Booking?.connect?.id;
 
-      // 1) Chặn trùng report theo bookingId (unique trong schema)
-      const existingReport = await tx.inspectionReport.findUnique({
-        where: { bookingId },
-      });
-      if (existingReport) {
-        throw new AppError(
-          "Inspection report already exists for this booking",
-          [{ message: "Error.InspectionReportExists", path: ["bookingId"] }],
-          { bookingId },
-          400,
-        );
-      }
+    if (!bookingId) {
+      throw new AppError(
+        'Booking connection is missing or invalid in inspection report data',
+        [{ message: 'Error.CreateInspectionReportBookingConnectError', path: ['Booking.connect.id'] }],
+        { data },
+        400,
+      );
+    }
 
-      // 2) Lấy booking + serviceRequest + customer
-      const booking = await tx.booking.findUnique({
-        where: { id: bookingId },
-        include: {
-          ServiceRequest: { select: { id: true } },
-          CustomerProfile: { select: { id: true } },
-        },
-      });
+    // ====================================================================
+    //  PHASE 1: ĐỌC VÀ XÁC THỰC DỮ LIỆU (BÊN NGOÀI TRANSACTION)
+    // ====================================================================
 
-      if (!booking) {
-        throw new AppError(
-          "Booking not found",
-          [{ message: "Error.BookingNotFound", path: ["bookingId"] }],
-          { bookingId },
-          404,
-        );
-      }
+    // 1) Chặn trùng report theo bookingId (unique trong schema)
+    // Dùng `prisma` thay vì `tx`
+    const existingReport = await prisma.inspectionReport.findUnique({
+      where: { bookingId },
+      select: { id: true }, // Chỉ cần lấy id để kiểm tra tồn tại, nhanh hơn
+    });
 
-      if (!booking.ServiceRequest?.id) {
+    if (existingReport) {
+      throw new AppError(
+        'Inspection report already exists for this booking',
+        [{ message: 'Error.InspectionReportExists', path: ['bookingId'] }],
+        { bookingId },
+        400,
+      );
+    }
+
+    // 2) Lấy booking + serviceRequest + customer
+    // Dùng `prisma` thay vì `tx`
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        ServiceRequest: { select: { id: true } },
+        CustomerProfile: { select: { id: true } },
+      },
+    });
+
+    if (!booking) {
+      throw new AppError('Booking not found', [{ message: 'Error.BookingNotFound', path: ['bookingId'] }], { bookingId }, 404);
+    }
+
+    if (!booking.ServiceRequest?.id) {
+      throw new AppError(
+        'Missing ServiceRequest ID for this booking',
+        [{ message: 'Error.MissingServiceRequestId', path: ['bookingId'] }],
+        { bookingId },
+        500,
+      );
+    }
+
+    // 3) Nếu truyền assetIds: kiểm tra quyền sở hữu
+    if (assetIds && assetIds.length > 0) {
+      if (!booking.CustomerProfile?.id) {
         throw new AppError(
-          "Missing ServiceRequest ID for this booking",
-          [{ message: "Error.MissingServiceRequestId", path: ["bookingId"] }],
+          'Missing Customer Profile for this booking',
+          [{ message: 'Error.MissingCustomerProfile', path: ['bookingId'] }],
           { bookingId },
           500,
         );
       }
 
-      // 3) Nếu truyền assetIds: kiểm tra quyền sở hữu
-      if (assetIds && assetIds.length > 0) {
-        // Only validate CustomerProfile when assets are provided
-        if (!booking.CustomerProfile?.id) {
-          throw new AppError(
-            "Missing Customer Profile for this booking",
-            [{ message: "Error.MissingCustomerProfile", path: ["bookingId"] }],
-            { bookingId },
-            500,
-          );
-        }
+      const customerId = booking.CustomerProfile.id;
+      // Dùng `prisma` thay vì `tx`
+      const assets = await prisma.customerAsset.findMany({
+        where: { id: { in: assetIds } },
+        select: { id: true, customerId: true }, // Lấy customerId trực tiếp
+      });
 
-        const customerId = booking.CustomerProfile.id;
-        const assets = await tx.customerAsset.findMany({
-          where: { id: { in: assetIds } },
-          select: { id: true, CustomerProfile: { select: { id: true } } },
-        });
-
-        // Thiếu asset
-        const foundIds = new Set(assets.map((a) => a.id));
-        const notFound = assetIds.filter((id) => !foundIds.has(id));
-        if (notFound.length > 0) {
-          throw new AppError(
-            "Some assets were not found",
-            [{ message: "Error.AssetNotFound", path: ["assetIds"] }],
-            { notFound, assetIds },
-            400,
-          );
-        }
-
-        // Asset không thuộc customer hoặc CustomerProfile is null
-        const invalid = assets.filter(
-          (a) => !a.CustomerProfile?.id || a.CustomerProfile.id !== customerId,
+      const foundIds = new Set(assets.map((a) => a.id));
+      const notFound = assetIds.filter((id) => !foundIds.has(id));
+      if (notFound.length > 0) {
+        throw new AppError(
+          'Some assets were not found',
+          [{ message: 'Error.AssetNotFound', path: ['assetIds'] }],
+          { notFound, assetIds },
+          400,
         );
-        if (invalid.length > 0) {
-          throw new AppError(
-            "Some assets do not belong to the booking's customer",
-            [{ message: "Error.AssetOwnershipInvalid", path: ["assetIds"] }],
-            {
-              invalid: invalid.map((x) => x.id),
-              bookingCustomerId: customerId,
-            },
-            400,
-          );
-        }
       }
 
-      // 4) Tạo report + cập nhật trạng thái ServiceRequest trong cùng transaction
-      const [report] = await Promise.all([
-        tx.inspectionReport.create({
-          data: {
-            ...data, // This now contains properly formatted Prisma relations
-            ...(assetIds && assetIds.length > 0
-              ? {
-                  CustomerAsset: {
-                    connect: assetIds.map((id) => ({ id })),
-                  },
-                }
-              : {}),
+      const invalid = assets.filter((a) => !a.customerId || a.customerId !== customerId);
+      if (invalid.length > 0) {
+        throw new AppError(
+          "Some assets do not belong to the booking's customer",
+          [{ message: 'Error.AssetOwnershipInvalid', path: ['assetIds'] }],
+          {
+            invalid: invalid.map((x) => x.id),
+            bookingCustomerId: customerId,
           },
-        }),
-        tx.serviceRequest.update({
-          where: { id: booking.ServiceRequest.id },
-          data: { status: RequestStatus.ESTIMATED },
-        }),
-      ]);
+          400,
+        );
+      }
+    }
 
-      return report;
-    });
+    // ====================================================================
+    //  PHASE 2: GHI DỮ LIỆU (BÊN TRONG TRANSACTION)
+    //  Transaction giờ đây rất ngắn và nhanh, chỉ chứa 2 lệnh ghi.
+    // ====================================================================
+
+    // Tăng timeout như một biện pháp phòng ngừa bổ sung (tùy chọn nhưng được khuyến nghị)
+    return await prisma.$transaction(
+      async (tx) => {
+        const [report] = await Promise.all([
+          // Thao tác ghi 1: Tạo report
+          tx.inspectionReport.create({
+            data: {
+              ...data,
+              ...(assetIds && assetIds.length > 0
+                ? {
+                    CustomerAsset: {
+                      connect: assetIds.map((id) => ({ id })),
+                    },
+                  }
+                : {}),
+            },
+          }),
+          // Thao tác ghi 2: Cập nhật ServiceRequest
+          tx.serviceRequest.update({
+            where: { id: booking.ServiceRequest!.id }, // Dùng `!` vì đã kiểm tra ở trên
+            data: { status: RequestStatus.ESTIMATED },
+          }),
+        ]);
+
+        return report;
+      },
+      {
+        timeout: 15000, // Tăng timeout lên 15 giây để an toàn hơn
+      },
+    );
   } catch (error) {
-    console.error(error);
+    console.error('Error creating inspection report:', error); // Log lỗi chi tiết hơn
     if (error instanceof AppError) throw error;
 
+    // Gói lỗi gốc vào để dễ debug hơn
     throw new AppError(
-      "Failed to create inspection report",
-      [{ message: "Error.CreateInspectionReportError", path: ["bookingId"] }],
-      { data, error },
+      'Failed to create inspection report',
+      [{ message: 'Error.CreateInspectionReportError', path: ['bookingId'] }],
+      { data, originalError: error },
       500,
     );
   }
